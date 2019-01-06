@@ -11,17 +11,12 @@
         <div class="card-header">
           <i class="fas fa-table"></i>
           ตารางแสดงการทำงานเครื่องสูบน้ำ
-          
-          <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ดาวน์โหลด</button>
-          <div class="dropdown-menu">
-            <a class="dropdown-item" href="#">.PDF</a>
-            <a class="dropdown-item" href="#">.xlsx</a>    
-            </div>       
+     
           </div>
           
         <div class="card-body">
           <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <table class="table table-striped table-bordered dt-responsive nowrap" id="example" width="100%" cellspacing="0">
             <thead>
                 <tr>
                   <th>คนเปิดเครื่องสูบน้ำ</th>

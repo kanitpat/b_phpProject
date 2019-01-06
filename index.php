@@ -176,13 +176,17 @@ if (!$_SESSION["userid"]){  //check session
 $(document).ready(function() {
     var table = $('#example').DataTable( {
        
-        lengthChange: false,
+        // lengthChange: false,
         buttons: ['copy', 'excel' ,'csv', 'pdf', 'print']
     } );
+   
  
     table.buttons().container()
         .appendTo( '#example_wrapper .col-md-6:eq(0)' );
+        
 } );
+
+
 </script>
 
 </html>
