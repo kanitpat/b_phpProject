@@ -73,6 +73,9 @@ if (!$_SESSION["userid"]){  //check session
                               require "charts.php";            
                     if ($page=="ตาราง")
                               require "tables.php";  
+                    if ($page=="edit")
+                              require "edituser.php";  
+                
                 
             
           }
@@ -89,6 +92,9 @@ if (!$_SESSION["userid"]){  //check session
                               require "charts.php";            
                     if ($page=="ตาราง")
                               require "tables.php";  
+                    if ($page=="edit")
+                              require "edituser.php";  
+                
                 
             
           }
