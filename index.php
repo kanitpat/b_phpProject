@@ -48,6 +48,7 @@ if (!$_SESSION["userid"]){  //check session
     <link rel="stylesheet" type="text/css" href="/media/css/site-examples.css?_=19472395a2969da78c8a4c707e72123a">
       
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap4.min.css"> 
+    
     </head>
 
     <body id="page-top">
@@ -172,18 +173,35 @@ if (!$_SESSION["userid"]){  //check session
     <script type="text/javascript" src="/media/js/dynamic.php?comments-page=extensions%2Fbuttons%2Fexamples%2Fstyling%2Fbootstrap4.html" async></script>
     <script type="text/javascript" language="javascript" src="../../../../examples/resources/demo.js"></script>
 
+    <script src="js/vfs_fonts.js"></script>
+
+
 
 
   </div>
 </body>
 
-<script>
+<script type="text/javascript" charset="utf-8">
 
+pdfMake.fonts = {
+   THSarabun: {
+     normal: 'THSarabun.ttf',
+     bold: 'THSarabun-Bold.ttf',
+     italics: 'THSarabun-Italic.ttf',
+     bolditalics: 'THSarabun-BoldItalic.ttf'
+   }
+}
 $(document).ready(function() {
     var table = $('#example').DataTable( {
-       
+        responsive: true,
         // lengthChange: false,
-        buttons: ['copy', 'excel' ,'csv', 'pdf', 'print']
+        buttons: ['copy', 
+        'excel' ,        
+        'pdf',
+        
+        'print' 
+        
+        ]
     } );
    
  

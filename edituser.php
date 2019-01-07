@@ -4,14 +4,13 @@ $_id = $_SESSION['userid'];
                  $sql = "SELECT *
                  FROM users
                  where users.id = '$_id'";
-                $result = mysqli_query($connect,$sql,MYSQLI_STORE_RESULT) or die ("Query error");             
+                $result = mysqli_query($connect,$sql)or die (mysqli_error($connect));            
                 $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
                 
                  $email = $row['email']; 
                  $name = $row['name']; 
                  $lastname = $row['lastname']; 
                  $isadmin = $row['isadmin']; 
-
 ?>  
               
   <!-- Breadcrumbs-->
@@ -25,7 +24,7 @@ $_id = $_SESSION['userid'];
 <div class="card mb-3">
   <div class="card-header">ข้อมูลผู้ใช้งาน</div>
   <div class="card-body">
-    <form method="POST" >
+    <form method="POST" name = "edituser" onSubmit="return edit()" >
     <!-- <form method="POST" action="#"> -->
     <div class="card border-dark">       
           <div class="card-body text-dark">
@@ -46,6 +45,17 @@ $_id = $_SESSION['userid'];
                     <label for="confirm_password">Confirm password</label>
                     <input class="form-control" id="Confirmpassword" name="Confirmpassword" type="password" placeholder="Confirm password">               
                   </div>
+
+                  <div class="col-md-6">
+                    <label for="name">First name</label>
+                    <input class="form-control" id="name" name="name"  value="<?php echo $name ?>" type="text" aria-describedby="nameHelp" placeholder="Enter first name">                
+
+                </div>
+                <div class="col-md-6">
+                    <label for="surname">Last name</label>
+                    <input class="form-control" id="lastname" name="lastname" value="<?php echo $lastname ?>" type="text" aria-describedby="nameHelp" placeholder="Enter last name">
+                            
+                </div>
                 </div>
               </div>
           </div>
@@ -53,16 +63,7 @@ $_id = $_SESSION['userid'];
     <br />
       <div class="form-group">
         <div class="form-row">
-          <div class="col-md-6">
-            <label for="name">First name</label>
-            <input class="form-control" id="name" name="name"  value="<?php echo $name ?>" type="text" aria-describedby="nameHelp" placeholder="Enter first name">                
-
-          </div>
-          <div class="col-md-6">
-            <label for="surname">Last name</label>
-            <input class="form-control" id="lastname" name="lastname" value="<?php echo $lastname ?>" type="text" aria-describedby="nameHelp" placeholder="Enter last name">
-                    
-          </div>
+          
         </div>
       </div> 
      
@@ -75,18 +76,26 @@ $_id = $_SESSION['userid'];
   </div>
 
   <?php    
-
   $valid = true;
-        
-        if(!empty($_POST['password'])){
+
+        if(!empty($_POST['password']))
+        {
             $password = mysqli_escape_string($connect,MD5($_POST['password']));
-        }else $valid = false;
-        if(!empty($_POST['name'])){
+        }
+        else $valid = false;
+
+        if(!empty($_POST['name']))
+        {
             $name = mysqli_escape_string($connect,$_POST['name']);
-        }else $valid = false;    
-        if(!empty($_POST['lastname'])){
+        }
+        else $valid = false;  
+
+        if(!empty($_POST['lastname']))
+        {
             $lastname = mysqli_escape_string($connect,$_POST['lastname']);
-        }else $valid = false;    
+        }
+        else $valid = false;    
+
         if(!empty($_POST['Confirmpassword']))
         {
             if ($_POST["password"] === $_POST["Confirmpassword"])
@@ -94,41 +103,91 @@ $_id = $_SESSION['userid'];
                 // success!
                 $conpassword = mysqli_escape_string($connect,MD5($_POST['Confirmpassword']));
             }
-        else
-        {
-            echo "<script> 
-                        alert ('ท่านใส่ Password ไม่ตรงกัน ');
-                        </script>";
+            else
+            {
+                echo "<script> 
+                            alert ('ท่านใส่ Password ไม่ตรงกัน ');
+                            location.replace('http://localhost/b_phpProject/index.php?cont=edit')</script>";
             }
-        }else $valid = false;
-        if(!empty($_POST['email'])){
-            $email = mysqli_escape_string($connect,$_POST['email']);
-        }else $valid = false;
-
-        if($valid)
-        {
+        }
+        else $valid = false;
+           
+        if($valid == true){
             $date = date("Y-m-d H:i:s");
-            $sql2 = "UPDATE users SET           
+
+            $sql2 = "UPDATE  users SET           
                     password = '$conpassword' ,                  
                     name = '$name',
                     lastname = '$lastname',
                     created_at = '$date',
-                    updated_at ='$date',
+                    updated_at ='$date'
                     WHERE users.id = '$_id' ";
-                     
-            $result2 = mysqli_query($connect, $sql2,MYSQLI_STORE_RESULT) or die('DIE');          
 
+
+            $result2 = mysqli_query($connect, $sql2)or die (mysqli_error($connect));   
+            mysqli_close($connect);
             if($result2)
-            {
-                  echo "<script> alert('แก้ไขข้อมูลเรียบร้อย'); </script>" ;
+            {            
+
+                  echo "<script> alert('แก้ไขข้อมูลเรียบร้อย');
+                  location.replace('http://localhost/b_phpProject/index.php?cont=edit')</script>";
+                  
               }     
             else           
             {
-                  echo "<script> alert('ไม่สามารถแก้ไขข้อมูลได้');</script>";
+                  echo "<script> alert('ไม่สามารถแก้ไขข้อมูลได้');
+                  location.replace('http://localhost/b_phpProject/index.php?cont=edit')</script>";
+                 
             }
-
-
-
 
         }
 ?>
+<script>
+                function edit()
+    {
+        var name = document.forms['edituser']['name'].value;
+        var lastname = document.forms['edituser']['lastname'].value;
+        var password = document.forms['edituser']['password'].value;
+        var Confirmpassword = document.forms['edituser']['Confirmpassword'].value;
+
+       var message = "ยังกรอกข้อมูลไม่ครบ \n";
+       var valid = true;
+       
+       if(name == null || name=='')
+       {
+           valid = false;
+           message = message + " - ไม่ได้กรอก Name !!\n";
+       }
+       
+       if(lastname == null || lastname=='')
+       {
+           valid = false;
+           message = message + (" - ไม่ได้กรอก Lastname !!\n");
+       }
+
+        if(( password=='') && (Confirmpassword !=''))
+       {
+           valid = false;
+           message = message + (" - ไม่ได้กรอก Password !!\n");
+       }
+        if(( Confirmpassword=='') && (password !=''))
+       {
+           valid = false;
+           message = message + (" - ไม่ได้กรอก Confirm password !!\n");
+       }
+       if((password == null || password=='') && (Confirmpassword == null || Confirmpassword ==''))
+       {
+           valid = false;
+           message = message + (" - ไม่ได้กรอก Password และ Confirm password!!\n");
+       }
+       
+       if(valid == false)
+            alert(message);
+            
+       return valid;
+    }
+
+    
+    
+
+    </script>

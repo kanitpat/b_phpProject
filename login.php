@@ -61,7 +61,7 @@ padding : 50px 0;
               <form class="login-form" name='login' method="POST"  onSubmit="return loginnn()">
                   <div class="form-group" >
           <label for="exampleInputEmail1" class="text-uppercase">Email</label>
-          <input type="text" class="form-control" placeholder="Enter Email"   name="email" required autofocus>
+          <input  type="text" class="form-control" placeholder="Enter Email"   name="email" required autofocus>
 
           </div>
           <div class="form-group">
