@@ -199,7 +199,7 @@ padding : 50px 0;
                     $_SESSION['Status'] = $row['isadmin'];
 
                     //echo $_SESSION['u_username'];
-                  header("location:http://localhost/phpproject/index.php?cont=Home");
+                  header("location:http://localhost/b_phpProject/index.php?cont=Home");
 
             }      
             elseif($row["isadmin"]==0){
@@ -208,7 +208,7 @@ padding : 50px 0;
                     $_SESSION['Status'] = $row['isadmin'];
 
                     //echo $_SESSION['u_username'];
-                    header("location:http://localhost/phpproject/index.php?cont=Home");
+                    header("location:http://localhost/b_phpProject/index.php?cont=Home");
 
                   }            
                 }

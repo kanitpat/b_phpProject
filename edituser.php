@@ -10,6 +10,8 @@ $_id = $_SESSION['userid'];
                  $email = $row['email']; 
                  $name = $row['name']; 
                  $lastname = $row['lastname']; 
+                 $isadmin = $row['isadmin']; 
+
 ?>  
               
   <!-- Breadcrumbs-->
@@ -20,7 +22,7 @@ $_id = $_SESSION['userid'];
             <li class="breadcrumb-item active">แก้ไขข้อมูลผู้ใช้งาน</li>
           </ol>
 
-          <div class="card mb-3">
+<div class="card mb-3">
   <div class="card-header">ข้อมูลผู้ใช้งาน</div>
   <div class="card-body">
     <form method="POST" >
@@ -42,7 +44,7 @@ $_id = $_SESSION['userid'];
 
                   <div class="col-md-6">
                     <label for="confirm_password">Confirm password</label>
-                    <input class="form-control" id="confirm_password" name="confirm_password" type="password" placeholder="Confirm password">               
+                    <input class="form-control" id="Confirmpassword" name="Confirmpassword" type="password" placeholder="Confirm password">               
                   </div>
                 </div>
               </div>
@@ -58,14 +60,14 @@ $_id = $_SESSION['userid'];
           </div>
           <div class="col-md-6">
             <label for="surname">Last name</label>
-            <input class="form-control" id="surname" name="lastname" value="<?php echo $lastname ?>" type="text" aria-describedby="nameHelp" placeholder="Enter last name">
+            <input class="form-control" id="lastname" name="lastname" value="<?php echo $lastname ?>" type="text" aria-describedby="nameHelp" placeholder="Enter last name">
                     
           </div>
         </div>
       </div> 
      
-      <input type="hidden" name="_method" value="PUT"> 
-      <input type="submit" value="Submit" class="btn btn-primary">&nbsp;
+      <!-- <input type="hidden" name="_method" value="PUT">  -->
+      <input type="submit" value="บันทึก" class="btn btn-primary">
       <input type="reset" value="Reset" class="btn btn-danger">
 
     </form>
@@ -75,17 +77,22 @@ $_id = $_SESSION['userid'];
   <?php    
 
   $valid = true;
-        if(!empty($_POST['password']))
+        
+        if(!empty($_POST['password'])){
             $password = mysqli_escape_string($connect,MD5($_POST['password']));
-        else 
-            $valid = false;
-
+        }else $valid = false;
+        if(!empty($_POST['name'])){
+            $name = mysqli_escape_string($connect,$_POST['name']);
+        }else $valid = false;    
+        if(!empty($_POST['lastname'])){
+            $lastname = mysqli_escape_string($connect,$_POST['lastname']);
+        }else $valid = false;    
         if(!empty($_POST['Confirmpassword']))
         {
             if ($_POST["password"] === $_POST["Confirmpassword"])
             {
                 // success!
-                $conpassword = mysqli_escape_string($connect,$_POST['Confirmpassword']);
+                $conpassword = mysqli_escape_string($connect,MD5($_POST['Confirmpassword']));
             }
         else
         {
@@ -93,48 +100,35 @@ $_id = $_SESSION['userid'];
                         alert ('ท่านใส่ Password ไม่ตรงกัน ');
                         </script>";
             }
-        }   
-        else 
-            $valid = false;
+        }else $valid = false;
+        if(!empty($_POST['email'])){
+            $email = mysqli_escape_string($connect,$_POST['email']);
+        }else $valid = false;
 
         if($valid)
         {
-            $sql = "SELECT * FROM users
-                      WHERE email = '$email'
-                      AND   password = '$password'";
-            //echo $sql;
-                
-            $result = mysqli_query($connect, $sql, MYSQLI_STORE_RESULT) or die('DIE');
-             $row = mysqli_fetch_assoc($result);
-          if( $row ){      
-            if($row["isadmin"]==1){
-                    $_SESSION['userid'] = $row['id'];
-                    $_SESSION['email'] = $row['email'];
-                    $_SESSION['Status'] = $row['isadmin'];
+            $date = date("Y-m-d H:i:s");
+            $sql2 = "UPDATE users SET           
+                    password = '$conpassword' ,                  
+                    name = '$name',
+                    lastname = '$lastname',
+                    created_at = '$date',
+                    updated_at ='$date',
+                    WHERE users.id = '$_id' ";
+                     
+            $result2 = mysqli_query($connect, $sql2,MYSQLI_STORE_RESULT) or die('DIE');          
 
-                    //echo $_SESSION['u_username'];
-                  header("location:http://localhost/phpproject/index.php?cont=Home");
+            if($result2)
+            {
+                  echo "<script> alert('แก้ไขข้อมูลเรียบร้อย'); </script>" ;
+              }     
+            else           
+            {
+                  echo "<script> alert('ไม่สามารถแก้ไขข้อมูลได้');</script>";
+            }
 
-            }      
-            elseif($row["isadmin"]==0){
-                    $_SESSION['userid'] = $row['id'];
-                    $_SESSION['email'] = $row['email'];
-                    $_SESSION['Status'] = $row['isadmin'];
 
-                    //echo $_SESSION['u_username'];
-                    header("location:http://localhost/phpproject/index.php?cont=Home");
 
-                  }            
-                }
-        else
-                {
-                  echo  " <script>   alert('กรอก Email หรือ Password ผิด'); </script>";
-                }
+
         }
-
-
-
-
-
-
 ?>

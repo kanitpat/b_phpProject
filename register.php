@@ -60,13 +60,13 @@
                 if($result)
                 {
                       echo "<script> alert('Register Complete'); 			
-                      location.replace('http://localhost/phpproject/index.php?cont=Login');			
+                      location.replace('http://localhost/b_phpProject/index.php?cont=Login');			
                       </script>" ;
                   }     
                 else           
                 {
                       echo "<script> alert('ขออภัยไม่มารถเพิ่มสมาชิกได้');
-                      window.location='http://localhost/phpproject/Register.php';</script>";
+                      window.location='http://localhost/b_phpProject/Register.php';</script>";
                 }
 	}	
 	  		
