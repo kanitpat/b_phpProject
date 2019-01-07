@@ -49,6 +49,7 @@ if (!$_SESSION["userid"]){  //check session
       
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap4.min.css"> 
     
+
     </head>
 
     <body id="page-top">
@@ -95,6 +96,8 @@ if (!$_SESSION["userid"]){  //check session
                               require "tables.php";  
                     if ($page=="edit")
                               require "edituser.php";  
+                    if ($page=="ตั้งค่า")
+                              require "adminConfig.php";
                 
                 
             
@@ -173,32 +176,53 @@ if (!$_SESSION["userid"]){  //check session
     <script type="text/javascript" src="/media/js/dynamic.php?comments-page=extensions%2Fbuttons%2Fexamples%2Fstyling%2Fbootstrap4.html" async></script>
     <script type="text/javascript" language="javascript" src="../../../../examples/resources/demo.js"></script>
 
-    <script src="js/vfs_fonts.js"></script>
+    <!-- <script src="js/vfs_fonts.js"></script> -->
 
-
-
+  
 
   </div>
 </body>
 
-<script type="text/javascript" charset="utf-8">
+<script type="text/javascript" >
 
-pdfMake.fonts = {
-   THSarabun: {
-     normal: 'THSarabun.ttf',
-     bold: 'THSarabun-Bold.ttf',
-     italics: 'THSarabun-Italic.ttf',
-     bolditalics: 'THSarabun-BoldItalic.ttf'
-   }
-}
+// pdfMake.fonts = {
+  //  THSarabun: {
+  //    normal: 'THSarabun.ttf',
+  //    bold: 'THSarabun-Bold.ttf',
+  //    italics: 'THSarabun-Italic.ttf',
+  //    bolditalics: 'THSarabun-BoldItalic.ttf'
+  //  }
+// }
 $(document).ready(function() {
     var table = $('#example').DataTable( {
         responsive: true,
         // lengthChange: false,
         buttons: ['copy', 
-        'excel' ,        
-        'pdf',
-        
+        'excel' ,    'pdf',    
+    //     { // กำหนดพิเศษเฉพาะปุ่ม pdf
+    //     "extend": 'pdf', // ปุ่มสร้าง pdf ไฟล์
+    //     "text": 'PDF', // ข้อความที่แสดง
+    //     "pageSize": 'A4',   // ขนาดหน้ากระดาษเป็น A4            
+    //     "customize":function(doc){ // ส่วนกำหนดเพิ่มเติม ส่วนนี้จะใช้จัดการกับ pdfmake
+    //         // กำหนด style หลัก
+    //         doc.defaultStyle = {
+    //             font:'THSarabun',
+    //             fontSize:16                                 
+    //         };
+    //         // กำหนดความกว้างของ header แต่ละคอลัมน์หัวข้อ
+    //         doc.content[1].table.widths = [ 50, 'auto', '*', '*' ];
+    //         doc.styles.tableHeader.fontSize = 16; // กำหนดขนาด font ของ header
+    //         var rowCount = doc.content[1].table.body.length; // หาจำนวนแะวทั้งหมดในตาราง
+    //         // วนลูปเพื่อกำหนดค่าแต่ละคอลัมน์ เช่นการจัดตำแหน่ง
+    //         for (i = 1; i < rowCount; i++) { // i เริ่มที่ 1 เพราะ i แรกเป็นแถวของหัวข้อ
+    //             doc.content[1].table.body[i][0].alignment = 'center'; // คอลัมน์แรกเริ่มที่ 0
+    //             doc.content[1].table.body[i][1].alignment = 'center';
+    //             doc.content[1].table.body[i][2].alignment = 'left';
+    //             doc.content[1].table.body[i][3].alignment = 'right';
+    //         };                                  
+    //         console.log(doc); // เอาไว้ debug ดู doc object proptery เพื่ออ้างอิงเพิ่มเติม
+    //     }
+    // }, // สิ้นสุดกำหนดพิเศษปุ่ม pdf
         'print' 
         
         ]
