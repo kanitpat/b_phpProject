@@ -29,7 +29,11 @@ $waterLevel = implode(",", $waterLevel);
  mysqli_close($connect);
 
 ?>
-
+<div class="card mb-3">
+        <div class="card-header">
+          <i class="fas fa-chart-area"></i>
+          กราฟแสดงระดับน้ำในสวน</div>
+        <div class="card-body">
   <canvas id="myChart" ></canvas>
    <!-- charts -->
    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.js"></script>
@@ -78,3 +82,6 @@ $waterLevel = implode(",", $waterLevel);
         }
     });
     </script>  
+    </div>
+        <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+      </div>
