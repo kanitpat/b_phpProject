@@ -18,10 +18,10 @@ $_id = $_SESSION['userid'];
         <li class="breadcrumb-item active">ตั้งค่าระยะเซนเซอร์</li>
       </ol>
 
- <div class="card mb-3">
+<div class="card mb-3">
   <div class="card-header">แก้ไขการตั้งค่าระยะเซนเซอร์</div>
     <div class="card-body">
-      <form method="POST" name = "edituser" onSubmit="return edit()" >
+      <form method="POST" name = "editsensor" onSubmit="return sensor()" >
       <!-- <form method="POST" action="#"> -->
       <div class="card border-dark">       
             <div class="card-body text-dark">
@@ -29,28 +29,33 @@ $_id = $_SESSION['userid'];
                 <div class="form-group">
                   <div class="form-row">                
                     <div class="col-md-3">
-                      <label for="text">ระยะเซนเซอร์ปัจจุบัน</label>
+                      <label for="text">ระยะเซนเซอร์ปัจจุบัน(ซม.)</label>
                       <input class="form-control" id="text" name="text" value="<?php echo $value ." เซนติเมตร"?>" type="text" disabled>                   
                     </div>
 
                     <div class="col-md-3">
-                      <label for="confirm_password">ระยะเซนเซอร์ที่ต้องการเปลี่ยน</label>
+                      <label for="confirm_password">ระยะเซนเซอร์ที่ต้องการเปลี่ยน(ซม.)</label>
                       <input class="form-control" id="text2" name="text2" type="text" placeholder="ระยะเซนเซอร์">               
                     </div>
 
-                    <div class="col-md-3">
-                      <label for="name">ระดับน้ำในสวนเมื่อตั้งค่าระยะเซนเซอร์</label>
-                      <input class="form-control" id="text3" name="text3"   type="text"  placeholder="ระดับน้ำในสวน" disabled>                
+            <?php 
+            require 'dbconnect.php';
+            $cm_value =  $value/100;
+            $tatol_value = 1.2-$cm_value;        
+            // $tatol_value_m = $tatol_value*100;            
+            ?>  
 
-                  </div>
-                 
+                    <div class="col-md-3">
+                      <label for="name">ระดับน้ำในสวน(ม.)</label>
+                      <input class="form-control" id="text3" name="text3" value ="<?php echo $tatol_value." เมตร" ?>"  type="text"  placeholder="ระดับน้ำในสวน" disabled>                
+
+                  </div>                
                   </div>
                 </div>
             </div>
       </div>
       <br />
-        
-      
+             
         <!-- <input type="hidden" name="_method" value="PUT">  -->
         <input type="submit" value="บันทึก" class="btn btn-primary">
         <input type="reset" value="Reset" class="btn btn-danger">
@@ -58,3 +63,65 @@ $_id = $_SESSION['userid'];
       </form>
     </div>
   </div>
+
+  <?php    
+  $valid = true;
+
+        if(!empty($_POST['text2']))
+        {
+            $text2 = mysqli_escape_string($connect,($_POST['text2']));
+        }
+        else $valid = false;
+
+
+        if($valid == true)
+      {
+          $date = date("Y-m-d");
+          $time = date("H:i:s");
+
+          $strsql = "INSERT INTO  user_activities( `value`, `date`, `time`, `idUsers`) 
+            VALUES 
+            ( '$text2 ', '$date', '$time', 1)";											   
+            $result = mysqli_query($connect,$strsql);        
+            if($result)
+            {            
+
+                  echo "<script> alert('แก้ไขข้อมูลเรียบร้อย');
+                  location.replace('http://localhost/b_phpProject/index.php?cont=ตั้งค่า')</script>";
+                  
+              }     
+            else           
+            {
+                  echo "<script> alert('ไม่สามารถแก้ไขข้อมูลได้');
+                  location.replace('http://localhost/b_phpProject/index.php?cont=ตั้งค่า')</script>";
+                 
+            }
+
+        }
+?>
+<script>
+                function sensor()
+    {
+        var text2 = document.forms['editsensor']['text2'].value;
+
+       var message = "ยังไม่ได้กรอกข้อมูล \n";
+       var valid = true;
+       
+       if(text2 == null || text2=='')
+       {
+           valid = false;
+           message = message + " - ไม่ได้กรอก ระยะเซนเซอร์ !!\n";
+       }
+       
+     
+       
+       if(valid == false)
+            alert(message);
+            
+       return valid;
+    }
+
+    
+    
+
+    </script>

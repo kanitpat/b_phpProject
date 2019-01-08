@@ -109,7 +109,15 @@
                    $address = $process_statuses['address'];
                    $status = $process_statuses['numstatus'];
                    $date = $process_statuses['date'];
-                   $time = $process_statuses['time'];
+                   $time = $process_statuses['time'];    
+                   
+                   $sql3 = "SELECT *
+                  FROM process_statuses
+                  ORDER BY process_statuses.updated_at DESC";
+                  $result3 = mysqli_query($connect,$sql3,MYSQLI_STORE_RESULT) or die ("Query error");    
+                  $row = mysqli_fetch_array($result3,MYSQLI_ASSOC);
+                   $datetime = $row['created_at'];
+
                 ?>
                     <tr>
                       <td><?php echo $name; ?></td>
@@ -125,7 +133,7 @@
             </table>
           </div>
         </div>
-        <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+        <div class="card-footer small text-muted">Updated yesterday at <?php echo $datetime ?></div>
       </div>
 
     </div>
