@@ -61,11 +61,7 @@ $_id = $_SESSION['userid'];
           </div>
     </div>
     <br />
-      <div class="form-group">
-        <div class="form-row">
-          
-        </div>
-      </div> 
+       
      
       <!-- <input type="hidden" name="_method" value="PUT">  -->
       <input type="submit" value="บันทึก" class="btn btn-primary">

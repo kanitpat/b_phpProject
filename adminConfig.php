@@ -18,15 +18,43 @@ $_id = $_SESSION['userid'];
         <li class="breadcrumb-item active">ตั้งค่าระยะเซนเซอร์</li>
       </ol>
 
-<!-- Icon Cards-->
-       <div class="row justify-content-center">
-        <div class="col-4">
-          <div class="card text-white bg-primary o-hidden h-100">
-            <div class="card-body">
-              <div class="card-body-icon">
-              </div>
-              <div class="mr-5">ระดับน้ำในสวนตอนนี้ 
-              <?php echo $value ?></div>
-            </div>          
-          </div>
-        </div>
+ <div class="card mb-3">
+  <div class="card-header">แก้ไขการตั้งค่าระยะเซนเซอร์</div>
+    <div class="card-body">
+      <form method="POST" name = "edituser" onSubmit="return edit()" >
+      <!-- <form method="POST" action="#"> -->
+      <div class="card border-dark">       
+            <div class="card-body text-dark">
+                
+                <div class="form-group">
+                  <div class="form-row">                
+                    <div class="col-md-3">
+                      <label for="text">ระยะเซนเซอร์ปัจจุบัน</label>
+                      <input class="form-control" id="text" name="text" value="<?php echo $value ." เซนติเมตร"?>" type="text" disabled>                   
+                    </div>
+
+                    <div class="col-md-3">
+                      <label for="confirm_password">ระยะเซนเซอร์ที่ต้องการเปลี่ยน</label>
+                      <input class="form-control" id="text2" name="text2" type="text" placeholder="ระยะเซนเซอร์">               
+                    </div>
+
+                    <div class="col-md-3">
+                      <label for="name">ระดับน้ำในสวนเมื่อตั้งค่าระยะเซนเซอร์</label>
+                      <input class="form-control" id="text3" name="text3"   type="text"  placeholder="ระดับน้ำในสวน" disabled>                
+
+                  </div>
+                 
+                  </div>
+                </div>
+            </div>
+      </div>
+      <br />
+        
+      
+        <!-- <input type="hidden" name="_method" value="PUT">  -->
+        <input type="submit" value="บันทึก" class="btn btn-primary">
+        <input type="reset" value="Reset" class="btn btn-danger">
+
+      </form>
+    </div>
+  </div>
