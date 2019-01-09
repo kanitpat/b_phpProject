@@ -79,7 +79,7 @@ padding : 50px 0;
           </div>
 
           </form>
-          <h1><div class="copy-text"> <a href="http://localhost/phpproject/register.php">Register</a></div><h1>
+          <h1><div class="copy-text"> <a href="http://localhost/b_phpProject/register.php">Register</a></div><h1>
           </div>
           <div class="col-md-8 banner-sec">
                   <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">

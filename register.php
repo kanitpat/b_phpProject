@@ -171,7 +171,7 @@ padding : 50px 0;
        <button type="submit" class="btn btn-login float-right">Register</button>
 
 </form>
-<h1><div class="copy-text"> <a href="http://localhost/phpproject/login.php">Login</a></div><h1>
+<h1><div class="copy-text"> <a href="http://localhost/b_phpProject/login.php">Login</a></div><h1>
 		</div>
 		<div class="col-md-8 banner-sec">
             <div id="carouselExampleIndicators" class=" carousel slide" data-ride="carousel">

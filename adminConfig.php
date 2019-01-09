@@ -64,6 +64,66 @@ $_id = $_SESSION['userid'];
     </div>
   </div>
 
+<!-- DataTables Example -->
+<div class="card mb-3">
+        <div class="card-header">
+          <i class="fas fa-table"></i>
+           ประวัติการแก้ไข
+     
+          </div>
+          
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-striped table-bordered dt-responsive nowrap" id="example" width="100%" cellspacing="0">
+            <thead>
+                <tr >
+                  <th>ลำดับที่</th>
+                  <th>ระยะเซนเซอร์(ซม.)</th>
+                  <th>วันที่แก้ไข</th>
+                  <th>เวลาที่แก้ไข</th>
+                </tr>
+              </thead>
+              <tfoot>
+              <tr>
+                  <th>ลำดับที่</th>
+                  <th>ระยะเซนเซอร์(ซม.)</th>
+                  <th>วันที่แก้ไข</th>
+                  <th>เวลาที่แก้ไข</th>
+                </tr>
+              </tfoot>
+
+              <tbody>                
+                <?php 
+                 $sql2 = "SELECT *
+                 FROM user_activities
+                 ORDER BY user_activities.id DESC";
+                $result2 = mysqli_query($connect,$sql2,MYSQLI_STORE_RESULT) or die ("Query error");             
+                while( $user_activities = mysqli_fetch_assoc($result2))  {
+                   $ID = $user_activities['id'];
+                   $value = $user_activities['value'];
+                   $date = $user_activities['date'];
+                   $time = $user_activities['time'];
+                 
+                ?>
+                    <tr>
+                      <td><?php echo $ID; ?></td>
+                      <td><?php echo $value; ?></td>
+                      <td><?php echo $date; ?></td>            
+                      <td><?php echo $time; ?></td>
+                    </tr>                
+        <?php } ?>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+      </div>
+
+    </div>
+    <!-- /.container-fluid -->
+
+
+
   <?php    
   $valid = true;
 

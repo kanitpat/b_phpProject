@@ -38,7 +38,7 @@
                 <div class="dropdown-message small">I've sent the fistribution...</div>
               </a>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item small" href="#">View all messages</a>
+              <a class="dropdown-item small" href="http://localhost/b_phpProject/index.php?cont=ตาราง">View all messages</a>
             </div>
   </li>
   <li class="nav-item dropdown no-arrow mx-1">  
