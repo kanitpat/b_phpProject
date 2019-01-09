@@ -3,7 +3,7 @@ require 'dbconnect.php';
 $valid = true;
 
 if (!empty($_POST['password'])) {
-    $password = mysqli_escape_string($connect, $_POST['password']);
+    $password = mysqli_escape_string($connect, md5($_POST['password']));
 } else {
     $valid = false;
 }
@@ -49,7 +49,7 @@ if ($valid == true) {
     $date = date('Y-m-d H:i:s');
     $strsql = "INSERT INTO  users( `email`, `password`, `name`, `lastname`, `api_token`, `isadmin`, `created_at`, `updated_at`)
             VALUES
-            ( '$email', MD5('$password'), '$name', '$lastName',Null,'0','$date','$date')";
+            ( '$email', ('$password'), '$name', '$lastName',Null,'0','$date','$date')";
     $result = mysqli_query($connect, $strsql);
 
     if ($result) {

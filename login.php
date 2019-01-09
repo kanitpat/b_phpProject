@@ -51,7 +51,7 @@ padding : 50px 0;
 
 </head>
 <body>
-              
+
           <div class="login-block" >
 
           <div class="container">
@@ -93,30 +93,30 @@ padding : 50px 0;
             <img class="d-block img-fluid" src="https://scontent.fbkk2-7.fna.fbcdn.net/v/t1.0-9/20994067_1744260595587634_8990168459990914537_n.png?_nc_cat=106&_nc_ht=scontent.fbkk2-7.fna&oh=7168324e24379bd495b2028e27a53e84&oe=5C710793" alt="First slide">
             <div class="carousel-caption d-none d-md-block">
               <div class="banner-text">
-              </div>	
+              </div>
           </div>
           </div>
           <div class="carousel-item">
             <img class="d-block img-fluid" src="https://scontent.fbkk2-7.fna.fbcdn.net/v/t1.0-9/22310395_1787739394573087_6465279703412267286_n.jpg?_nc_cat=106&_nc_ht=scontent.fbkk2-7.fna&oh=653e4d052fcaa7f25972f65605b85d05&oe=5C7BDF63" alt="Second slide">
             <div class="carousel-caption d-none d-md-block">
-              <div class="banner-text">     
-              </div>	
+              <div class="banner-text">
+              </div>
           </div>
           </div>
           <div class="carousel-item">
             <img class="d-block img-fluid" src="https://scontent.fbkk2-7.fna.fbcdn.net/v/t1.0-9/302255_322072437806464_671318486_n.jpg?_nc_cat=111&_nc_ht=scontent.fbkk2-7.fna&oh=023056346e627670be09458db21ded54&oe=5C7488B6" alt="Third slide">
             <div class="carousel-caption d-none d-md-block">
-              <div class="banner-text">                 
-              </div>	
+              <div class="banner-text">
+              </div>
           </div>
-          </div>  
-        
-                  </div>	   
-              
           </div>
-          
+
+                  </div>
+
           </div>
-        
+
+          </div>
+
           </div>
           </div>
 
@@ -141,26 +141,26 @@ padding : 50px 0;
     {
        var email = document.forms['login']['email'].value;
        var password = document.forms['login']['password'].value;
-      
+
 
        var message = "ยังกรอกข้อมูลไม่ครบ \n";
        var valid = true;
-       
+
        if(email == null || email=='')
        {
            valid = false;
            message = message + " - ไม่ได้กรอก Email !!\n";
        }
-       
+
        if(password == null || password=='')
        {
            valid = false;
            message = message + (" - ไม่ได้กรอก Password !!\n");
        }
-       
+
        if(valid == false)
             alert(message);
-            
+
        return valid;
     }
 
@@ -168,59 +168,50 @@ padding : 50px 0;
 </body>
 </html>
 
-<?php    
-    require "dbconnect.php";
+<?php
+require 'dbconnect.php';
 
-  $valid = true;
-        
-        if(!empty($_POST['email']))
-        {
-            $email = mysqli_escape_string($connect,$_POST['email']);
-        }else  $valid = false;
-        
-         if(!empty($_POST['password']))
-        {
-            $password = mysqli_escape_string($connect,MD5($_POST['password']));
-        }else  $valid = false;
-        
-        if($valid)
-        {
-            $sql = "SELECT * FROM users
+$valid = true;
+
+if (!empty($_POST['email'])) {
+    $email = mysqli_escape_string($connect, $_POST['email']);
+} else {
+    $valid = false;
+}
+
+if (!empty($_POST['password'])) {
+    $password = mysqli_escape_string($connect, md5($_POST['password']));
+} else {
+    $valid = false;
+}
+
+if ($valid) {
+    $sql = "SELECT * FROM users
                       WHERE email = '$email'
                       AND   password = '$password'";
-            //echo $sql;
-                
-            $result = mysqli_query($connect, $sql, MYSQLI_STORE_RESULT) or die('DIE');
-             $row = mysqli_fetch_assoc($result);
-          if( $row ){      
-            if($row["isadmin"]==1){
-                    $_SESSION['userid'] = $row['id'];
-                    $_SESSION['email'] = $row['email'];
-                    $_SESSION['Status'] = $row['isadmin'];
+    //echo $sql;
 
-                    //echo $_SESSION['u_username'];
-                  header("location:http://localhost/b_phpProject/index.php?cont=Home");
+    $result = mysqli_query($connect, $sql, MYSQLI_STORE_RESULT) or die('DIE');
+    $row = mysqli_fetch_assoc($result);
+    if ($row) {
+        if ($row['isadmin'] == 1) {
+            $_SESSION['userid'] = $row['id'];
+            $_SESSION['email'] = $row['email'];
+            $_SESSION['Status'] = $row['isadmin'];
 
-            }      
-            elseif($row["isadmin"]==0){
-                    $_SESSION['userid'] = $row['id'];
-                    $_SESSION['email'] = $row['email'];
-                    $_SESSION['Status'] = $row['isadmin'];
+            //echo $_SESSION['u_username'];
+            header('location:http://localhost/b_phpProject/index.php?cont=Home');
+        } elseif ($row['isadmin'] == 0) {
+            $_SESSION['userid'] = $row['id'];
+            $_SESSION['email'] = $row['email'];
+            $_SESSION['Status'] = $row['isadmin'];
 
-                    //echo $_SESSION['u_username'];
-                    header("location:http://localhost/b_phpProject/index.php?cont=Home");
-
-                  }            
-                }
-        else
-                {
-                  echo  " <script>   alert('กรอก Email หรือ Password ผิด'); </script>";
-                }
+            //echo $_SESSION['u_username'];
+            header('location:http://localhost/b_phpProject/index.php?cont=Home');
         }
-
-
-
-
-
+    } else {
+        echo " <script>   alert('กรอก Email หรือ Password ผิด'); </script>";
+    }
+}
 
 ?>

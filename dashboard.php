@@ -132,8 +132,6 @@ $waterLevel = implode(',', $waterLevel);
         <div class="card-header">
           <i class="fas fa-table"></i>
           ตารางแสดงการทำงานเครื่องสูบน้ำ
-
-
           </div>
 
         <div class="card-body">
