@@ -83,9 +83,7 @@ $waterLevel = implode(',', $waterLevel);
     var myChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: [<?php echo $date; ?>
-
-            ],
+            labels: [<?php echo $date; ?>],
             datasets: [{
                 label: 'ระดับน้ำในสวน',
                 data: [<?php echo $waterLevel; ?>
