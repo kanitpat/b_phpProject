@@ -143,7 +143,7 @@ if (!$_SESSION['userid']) { //check session
     <script type="text/javascript" src="/media/js/site.js?_=5e8f232afab336abc1a1b65046a73460"></script>
     <script type="text/javascript" src="/media/js/dynamic.php?comments-page=extensions%2Fbuttons%2Fexamples%2Fstyling%2Fbootstrap4.html" async></script>
     <script type="text/javascript" language="javascript" src="../../../../examples/resources/demo.js"></script>
-   <!-- font thai -->    
+   <!-- font thai -->
     <script src="js/pdfmake.min.js"></script>
     <script src="js/vfs_fonts.js"></script>
     <script type="text/javascript" language="่json" src="//cdn.datatables.net/plug-ins/1.10.19/i18n/Thai.json"></script>
@@ -186,10 +186,10 @@ $(document).ready(function() {
                   },
 
         // lengthChange: false,
-        buttons: 
+        buttons:
         [
             'copy',
-            'excel' ,   
+            'excel' ,
             'pdf',
             'print'
         ]
