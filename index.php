@@ -177,6 +177,7 @@ if (!$_SESSION["userid"]){  //check session
     <script type="text/javascript" language="javascript" src="../../../../examples/resources/demo.js"></script>
    
     <!-- <script src="js/vfs_fonts.js"></script> -->
+    <script type="text/javascript" language="่json" src="//cdn.datatables.net/plug-ins/1.10.19/i18n/Thai.json"></script>
 
   
 
@@ -196,6 +197,15 @@ if (!$_SESSION["userid"]){  //check session
 $(document).ready(function() {
     var table = $('#example').DataTable( {
         responsive: true,
+        "oLanguage": {
+                    "sLengthMenu": "แสดง _MENU_ เร็คคอร์ด ต่อหน้า",
+                    "sZeroRecords": "ไม่เจอข้อมูลที่ค้นหา",
+                    "sInfo": "แสดง _START_ ถึง _END_ ของ _TOTAL_ เร็คคอร์ด",
+                    "sInfoEmpty": "แสดง 0 ถึง 0 ของ 0 เร็คคอร์ด",
+                    "sInfoFiltered": "(จากเร็คคอร์ดทั้งหมด _MAX_ เร็คคอร์ด)",
+                    "sSearch": "ค้นหา :"
+            },
+            
         // lengthChange: false,
         buttons: ['copy', 
         'excel' ,    'pdf',    
