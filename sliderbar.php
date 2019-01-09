@@ -1,9 +1,8 @@
  <!-- Sidebar -->
  <?php
- 
-  if($_SESSION['Status'] == 0){
 
-	?>			
+  if ($_SESSION['Status'] == 0) {
+      ?>			
  <ul class="sidebar navbar-nav ">
     <li class="nav-item ">
       <a class="nav-link" href="http://localhost/b_phpProject/index.php?cont=Dashboard">
@@ -24,9 +23,8 @@
             <span>ตาราง</span></a>
         </li>
   </ul>
-        <?php }
-      
-    else{
+        <?php
+  } else {
         ?>
 
         <ul class="sidebar navbar-nav ">
@@ -57,6 +55,6 @@
   </ul>
 
 <?php
-      }
-      
+    }
+
       ?>

@@ -1,18 +1,15 @@
 <?php
-require "dbconnect.php";
+require 'dbconnect.php';
 session_start();
 
-if (!$_SESSION["userid"]){  //check session
- 
-  Header("Location: login.php"); 
-
-}else{
-  $sql = "SELECT *
+if (!$_SESSION['userid']) { //check session
+    header('Location: login.php');
+} else {
+    $sql = 'SELECT *
   FROM waters
-  ORDER BY id DESC";
-  $result = mysqli_query($connect,$sql,MYSQLI_STORE_RESULT) or die ("Query error");
-  $waters = mysqli_fetch_assoc($result);
-?>
+  ORDER BY id DESC';
+    $result = mysqli_query($connect, $sql, MYSQLI_STORE_RESULT) or die('Query error');
+    $waters = mysqli_fetch_assoc($result); ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -23,7 +20,7 @@ if (!$_SESSION["userid"]){  //check session
     <meta name="description" content="">
     <meta name="author" content="">
     <title>ระบบช่วยสนับสนุนเครื่องสูบน้ำสวนวัฒนาเพาะพันธุ์มะพร้าว</title>
-    
+
       <!-- Bootstrap core CSS-->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
@@ -44,9 +41,9 @@ if (!$_SESSION["userid"]){  //check session
 
     <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="http://www.datatables.net/rss.xml">
     <link rel="stylesheet" type="text/css" href="/media/css/site-examples.css?_=19472395a2969da78c8a4c707e72123a">
-      
-    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap4.min.css"> 
-    
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap4.min.css">
+
     </head>
 
     <body id="page-top">
@@ -59,38 +56,48 @@ if (!$_SESSION["userid"]){  //check session
   <div id="content-wrapper">
     <div class="container-fluid">
       <?php
-        //login user
-              if(!empty($_GET['cont'])&&  $_SESSION['Status'] == 0){                 
-                  $page = mysqli_escape_string($connect,$_GET['cont']);
-                   
-                    if ($page=="Home")
-                              require 'dashboard.php';                              
-                    if ($page=="Dashboard")
-                              require 'dashboard.php';
-                    if($page == "กราฟ")
-                              require "charts.php";            
-                    if ($page=="ตาราง")
-                              require "tables.php";  
-                    if ($page=="edit")
-                              require "edituser.php";              
-          }
-        //login admin
-             else{                 
-                  $page = mysqli_escape_string($connect,$_GET['cont']);                  
-                    if ($page=="Home")
-                              require 'dashboard.php';                              
-                    if ($page=="Dashboard")
-                              require 'dashboard.php';
-                    if($page == "กราฟ")
-                              require "charts.php";            
-                    if ($page=="ตาราง")
-                              require "tables.php";  
-                    if ($page=="edit")
-                              require "edituser.php";  
-                    if ($page=="ตั้งค่า")
-                              require "adminConfig.php";         
-          }
-      ?>
+//login user
+    if (!empty($_GET['cont']) && $_SESSION['Status'] == 0) {
+        $page = mysqli_escape_string($connect, $_GET['cont']);
+
+        if ($page == 'Home') {
+            require 'dashboard.php';
+        }
+        if ($page == 'Dashboard') {
+            require 'dashboard.php';
+        }
+        if ($page == 'กราฟ') {
+            require 'charts.php';
+        }
+        if ($page == 'ตาราง') {
+            require 'tables.php';
+        }
+        if ($page == 'edit') {
+            require 'edituser.php';
+        }
+    }
+    //login admin
+    else {
+        $page = mysqli_escape_string($connect, $_GET['cont']);
+        if ($page == 'Home') {
+            require 'dashboard.php';
+        }
+        if ($page == 'Dashboard') {
+            require 'dashboard.php';
+        }
+        if ($page == 'กราฟ') {
+            require 'charts.php';
+        }
+        if ($page == 'ตาราง') {
+            require 'tables.php';
+        }
+        if ($page == 'edit') {
+            require 'edituser.php';
+        }
+        if ($page == 'ตั้งค่า') {
+            require 'adminConfig.php';
+        }
+    } ?>
       <?php require 'footer.php'; ?>
   </div>
   <!-- /.content-wrapper -->
@@ -178,17 +185,17 @@ $(document).ready(function() {
                   },
 
         // lengthChange: false,
-        buttons: ['copy', 
-        'excel' ,    'pdf',    
+        buttons: ['copy',
+        'excel' ,    'pdf',
     //     { // กำหนดพิเศษเฉพาะปุ่ม pdf
     //     "extend": 'pdf', // ปุ่มสร้าง pdf ไฟล์
     //     "text": 'PDF', // ข้อความที่แสดง
-    //     "pageSize": 'A4',   // ขนาดหน้ากระดาษเป็น A4            
+    //     "pageSize": 'A4',   // ขนาดหน้ากระดาษเป็น A4
     //     "customize":function(doc){ // ส่วนกำหนดเพิ่มเติม ส่วนนี้จะใช้จัดการกับ pdfmake
     //         // กำหนด style หลัก
     //         doc.defaultStyle = {
     //             font:'THSarabun',
-    //             fontSize:16                                 
+    //             fontSize:16
     //         };
     //         // กำหนดความกว้างของ header แต่ละคอลัมน์หัวข้อ
     //         doc.content[1].table.widths = [ 50, 'auto', '*', '*' ];
@@ -200,19 +207,19 @@ $(document).ready(function() {
     //             doc.content[1].table.body[i][1].alignment = 'center';
     //             doc.content[1].table.body[i][2].alignment = 'left';
     //             doc.content[1].table.body[i][3].alignment = 'right';
-    //         };                                  
+    //         };
     //         console.log(doc); // เอาไว้ debug ดู doc object proptery เพื่ออ้างอิงเพิ่มเติม
     //     }
     // }, // สิ้นสุดกำหนดพิเศษปุ่ม pdf
-        'print' 
-        
+        'print'
+
         ]
     } );
-   
- 
+
+
     table.buttons().container()
         .appendTo( '#example_wrapper .col-md-6:eq(0)' );
-        
+
 } );
 
 
@@ -220,4 +227,5 @@ $(document).ready(function() {
 
 </html>
 
-<?php } ?>
+<?php
+}?>

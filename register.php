@@ -1,82 +1,72 @@
-<?php 
-    require "dbconnect.php";
-      $valid = true;
-      
-      if(!empty($_POST['password']))
-           $password = mysqli_escape_string($connect,$_POST['password']);
-      else 
-            $valid = false;
+<?php
+require 'dbconnect.php';
+$valid = true;
 
-      if(!empty($_POST['Confirmpassword']))
-      {
-          if ($_POST["password"] === $_POST["Confirmpassword"])
-          {
-            // success!
-            $conpassword = mysqli_escape_string($connect,$_POST['Confirmpassword']);
-          }
-        else
-        {
-          echo "<script> 
+if (!empty($_POST['password'])) {
+    $password = mysqli_escape_string($connect, $_POST['password']);
+} else {
+    $valid = false;
+}
+
+if (!empty($_POST['Confirmpassword'])) {
+    if ($_POST['password'] === $_POST['Confirmpassword']) {
+        // success!
+        $conpassword = mysqli_escape_string($connect, $_POST['Confirmpassword']);
+    } else {
+        echo "<script>
 		              alert ('ท่านใส่ Password ไม่ตรงกัน ');
 		              </script>";
-        }
-      }   
-       else 
-             $valid = false;
-      
-      if(!empty($_POST['name']))
-           $name = mysqli_escape_string($connect,$_POST['name']);
-      else 
-            $valid = false;
-      if(!empty($_POST['lastName']))
-          $lastName = mysqli_escape_string($connect,$_POST['lastName']);
-       else 
-             $valid = false;
-                     
-      if(!empty($_POST['email']) )
-      {      	  
-          // check if e-mail address is well-formed
-            if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL))
-            {
-                  $valid = false; 
-                  echo "<script> 
+    }
+} else {
+    $valid = false;
+}
+
+if (!empty($_POST['name'])) {
+    $name = mysqli_escape_string($connect, $_POST['name']);
+} else {
+    $valid = false;
+}
+
+if (!empty($_POST['lastName'])) {
+    $lastName = mysqli_escape_string($connect, $_POST['lastName']);
+} else {
+    $valid = false;
+}
+
+if (!empty($_POST['email'])) {
+    // check if e-mail address is well-formed
+    if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+        $valid = false;
+        echo "<script>
                         alert ('ท่านใส่อีเมล์ไม่ถูกต้อง ตัวอย่าง (somsi007@hotmail.com) ');
                         </script>";
-            }
-            else
-            {
-              $email = mysqli_escape_string($connect,$_POST['email']);}
-            
-            }          
-            
-      if($valid == true)
-      {
-            $date = date("Y-m-d H:i:s");
-            $strsql = "INSERT INTO  users( `email`, `password`, `name`, `lastname`, `api_token`, `isadmin`, `created_at`, `updated_at`) 
-            VALUES 
-            ( '$email', MD5('$password'), '$name', '$lastName',Null,'0','$date','$date')";											   
-            $result = mysqli_query($connect,$strsql);        
+    } else {
+        $email = mysqli_escape_string($connect, $_POST['email']);
+    }
+}
 
-                if($result)
-                {
-                      echo "<script> alert('Register Complete'); 			
-                      location.replace('http://localhost/b_phpProject/index.php?cont=Login');			
-                      </script>" ;
-                  }     
-                else           
-                {
-                      echo "<script> alert('ขออภัยไม่มารถเพิ่มสมาชิกได้');
+if ($valid == true) {
+    $date = date('Y-m-d H:i:s');
+    $strsql = "INSERT INTO  users( `email`, `password`, `name`, `lastname`, `api_token`, `isadmin`, `created_at`, `updated_at`)
+            VALUES
+            ( '$email', MD5('$password'), '$name', '$lastName',Null,'0','$date','$date')";
+    $result = mysqli_query($connect, $strsql);
+
+    if ($result) {
+        echo "<script> alert('Register Complete');
+                      location.replace('http://localhost/b_phpProject/index.php?cont=Login');
+                      </script>";
+    } else {
+        echo "<script> alert('ขออภัยไม่มารถเพิ่มสมาชิกได้');
                       window.location='http://localhost/b_phpProject/Register.php';</script>";
-                }
-	}	
-	  		
-            ?>
+    }
+}
+
+?>
 
 <!DOCTYPE html>
 <html>
-   
-
-<head> 
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -122,7 +112,7 @@ padding : 50px 0;
 
 
 </head>
-<?php   $name=$lastName=$email = "";  ?>
+<?php $name = $lastName = $email = ''; ?>
 <body>
     <div class="login-block" >
     <div class="container">
@@ -133,31 +123,31 @@ padding : 50px 0;
 		    <form class="login-form" method ="POST" onSubmit="return register()"  >
             <div class="form-group" >
     <label for="exampleInputEmail1" class="text-uppercase">Email</label>
-    <input type="text" class="form-control" name="email" value="<?php echo $email;?>" placeholder="Enter Email"  required autofocus>
-       
+    <input type="text" class="form-control" name="email" value="<?php echo $email; ?>" placeholder="Enter Email"  required autofocus>
+
   </div>
   <div class="form-group">
     <label for="exampleInputPassword1" class="text-uppercase">Password</label>
     <input type="password" class="form-control" placeholder="Enter Password" name="password" required >
-   
+
 </div>
-  
+
   <div class="form-group">
     <label for="exampleInputConfirmPassword1" class="text-uppercase">Confirm Password</label>
     <input type="password" class="form-control" placeholder="Enter Password" name="Confirmpassword" required >
-   
+
 </div>
-  
+
   <div class="form-group">
     <label for="exampleInputname" class="text-uppercase">Name</label>
-    <input type="text" class="form-control" name="name" value="<?php echo $name;?>"  placeholder="Enter Name"  required >
-   
+    <input type="text" class="form-control" name="name" value="<?php echo $name; ?>"  placeholder="Enter Name"  required >
+
 </div>
 
  <div class="form-group">
     <label for="exampleInputname" class="text-uppercase">LastName</label>
-    <input type="text" class="form-control" name="lastName"  value="<?php echo $lastName;?>" placeholder="Enter Name" required >
-    
+    <input type="text" class="form-control" name="lastName"  value="<?php echo $lastName; ?>" placeholder="Enter Name" required >
+
 </div>
 
     <div class="form-check">
@@ -165,7 +155,7 @@ padding : 50px 0;
       <input type="checkbox" class="form-check-input" name="remember">
       <small>Remember Me</small>
     </label>
-    
+
   </div>
     <input type="hidden" name="_token" >
        <button type="submit" class="btn btn-login float-right">Register</button>
@@ -185,27 +175,27 @@ padding : 50px 0;
       <img class="d-block img-fluid" src="https://scontent.fbkk2-7.fna.fbcdn.net/v/t1.0-9/20994067_1744260595587634_8990168459990914537_n.png?_nc_cat=106&_nc_ht=scontent.fbkk2-7.fna&oh=7168324e24379bd495b2028e27a53e84&oe=5C710793" alt="First slide">
       <div class="carousel-caption d-none d-md-block">
         <div class="banner-text">
-        </div>	
+        </div>
   </div>
     </div>
     <div class="carousel-item">
       <img class="d-block img-fluid" src="https://scontent.fbkk2-7.fna.fbcdn.net/v/t1.0-9/22310395_1787739394573087_6465279703412267286_n.jpg?_nc_cat=106&_nc_ht=scontent.fbkk2-7.fna&oh=653e4d052fcaa7f25972f65605b85d05&oe=5C7BDF63" alt="First slide">
       <div class="carousel-caption d-none d-md-block">
         <div class="banner-text">
-            
-        </div>	
+
+        </div>
     </div>
     </div>
     <div class="carousel-item">
       <img class="d-block img-fluid" src="https://scontent.fbkk2-7.fna.fbcdn.net/v/t1.0-9/302255_322072437806464_671318486_n.jpg?_nc_cat=111&_nc_ht=scontent.fbkk2-7.fna&oh=023056346e627670be09458db21ded54&oe=5C7488B6" alt="First slide">
       <div class="carousel-caption d-none d-md-block">
         <div class="banner-text">
-            
-        </div>	
+
+        </div>
     </div>
   </div>
-            </div>	   
-		    
+            </div>
+
 		</div>
 	</div>
 </div>
@@ -226,5 +216,5 @@ padding : 50px 0;
     <!-- Custom scripts for this page-->
     <script src="{{ asset('js/sb-admin-datatables.min.js') }}"></script>
 </body>
- 
+
 </html>
