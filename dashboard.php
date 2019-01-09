@@ -67,7 +67,6 @@ $waterLevel = implode(',', $waterLevel);
           </div>
         </div>
       </div>
-      </div>
 
       <!-- Area Chart Example-->
       <div class="card mb-3">
@@ -78,7 +77,6 @@ $waterLevel = implode(',', $waterLevel);
         <canvas id="myChart" ></canvas>
    <!-- charts -->
    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.js"></script>
-
 
     <script>
     var ctx = document.getElementById("myChart").getContext('2d');
