@@ -60,8 +60,7 @@ if (!$_SESSION["userid"]){  //check session
     <div class="container-fluid">
       <?php
         //login user
-              if(!empty($_GET['cont'])&&  $_SESSION['Status'] == 0){
-                  
+              if(!empty($_GET['cont'])&&  $_SESSION['Status'] == 0){                 
                   $page = mysqli_escape_string($connect,$_GET['cont']);
                    
                     if ($page=="Home")
@@ -77,8 +76,7 @@ if (!$_SESSION["userid"]){  //check session
           }
         //login admin
              else{                 
-                  $page = mysqli_escape_string($connect,$_GET['cont']);
-                   
+                  $page = mysqli_escape_string($connect,$_GET['cont']);                  
                     if ($page=="Home")
                               require 'dashboard.php';                              
                     if ($page=="Dashboard")
@@ -126,24 +124,19 @@ if (!$_SESSION["userid"]){  //check session
      <!-- Bootstrap core JavaScript-->
      <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
     <!-- Core plugin JavaScript-->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
     <!-- Page level plugin JavaScript-->
     <script src="vendor/chart.js/Chart.min.js"></script>
    <script src="vendor/datatables/jquery.dataTables.js"></script>
    <script src="vendor/datatables/dataTables.bootstrap4.js"></script>
-
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin.min.js"></script>
-
     <!-- Demo scripts for this page-->
     <script src="js/demo/chart-area-demo.js"></script>
     <script src="js/demo/chart-bar-demo.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
     <script src="js/demo/datatables-demo.js"></script>
-
     <!-- scripts for dowload this page-->
     <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
@@ -162,7 +155,6 @@ if (!$_SESSION["userid"]){  //check session
     <script type="text/javascript" src="/media/js/site.js?_=5e8f232afab336abc1a1b65046a73460"></script>
     <script type="text/javascript" src="/media/js/dynamic.php?comments-page=extensions%2Fbuttons%2Fexamples%2Fstyling%2Fbootstrap4.html" async></script>
     <script type="text/javascript" language="javascript" src="../../../../examples/resources/demo.js"></script>
-   
     <!-- <script src="js/vfs_fonts.js"></script> -->
     <script type="text/javascript" language="่json" src="//cdn.datatables.net/plug-ins/1.10.19/i18n/Thai.json"></script>
 
