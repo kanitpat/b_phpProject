@@ -22,6 +22,12 @@ $waterLevel = implode(",", $waterLevel);
 
 ?>
 <!-- Breadcrumbs-->
+<style type="text/css">
+.card.mb-3 .card-body .table-responsive #example {
+	text-align: center;
+}
+</style>
+
 <ol class="breadcrumb">
         <li class="breadcrumb-item">
           <a href="http://localhost/b_phpProject/index.php?cont=Home">Dashboard</a>
@@ -45,34 +51,24 @@ $waterLevel = implode(",", $waterLevel);
 
         <div class="col-xl-3 col-sm-6 mb-3">
           <div class="card text-white bg-warning o-hidden h-100">
-            <div class="card-body">
-              <div class="card-body-icon">
-              </div>
+            <div class="card-body">             
               <div class="mr-5">ปุ่มเปิด-ปิดเครื่องสูบน้ำ</div>       
-                <div class="toggle_radio">
-                  <input type="radio" class="toggle_option" id="first_toggle" name="toggle_option">
-                  <input type="radio" checked class="toggle_option" id="second_toggle" name="toggle_option">
-                  <input type="radio" class="toggle_option" id="third_toggle" name="toggle_option">
-                  <label for="first_toggle"><p>เปิด</p></label>
-                  <label for="second_toggle"><p>ปิด</p></label>  
-                  <div class="toggle_option_slider">
-                  </div>
+              <button type="button"  data-toggle="modal" data-target="#turnonModal" class="btn btn-success" >เปิด</button>
+              <button type="button" data-toggle="modal" data-target="#turnoofModal"class="btn btn-danger">ปิด </button>
             </div>                
           </div>
         </div>
-      </div>
-      
-        <div class="col-xl-3 col-sm-6 mb-3">
+
+         <div class="col-xl-3 col-sm-6 mb-3">
           <div class="card text-white bg-success o-hidden h-100">
-            <div class="card-body">
-              <div class="card-body-icon">
-              </div>
+            <div class="card-body">           
               <div class="mr-5">การคำนายล่วงหน้า</div>
             </div>
           </div>
         </div>
       </div>
-
+      </div>
+     
       <!-- Area Chart Example-->
       <div class="card mb-3">
         <div class="card-header">

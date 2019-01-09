@@ -1,4 +1,10 @@
   <!-- Breadcrumbs-->
+<style type="text/css">
+.card.mb-3 .card-body .table-responsive #example {
+	text-align: center;
+}
+</style>
+
   <ol class="breadcrumb">
             <li class="breadcrumb-item">
               <a href="http://localhost/b_phpProject/index.php?cont=Home">Dashboard</a>

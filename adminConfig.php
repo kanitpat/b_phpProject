@@ -11,6 +11,15 @@ $_id = $_SESSION['userid'];
                   $time = $row['time']; 
 ?>  
 <!-- Breadcrumbs-->
+<style type="text/css">
+.card.mb-3 .card-body .table-responsive #example tbody tr td {
+	text-align: center;
+}
+.card.mb-3 .card-body .table-responsive #example {
+	text-align: center;
+}
+</style>
+
 <ol class="breadcrumb">
         <li class="breadcrumb-item">
           <a href="http://localhost/b_phpProject/index.php?cont=Home">Dashboard</a>
@@ -74,18 +83,18 @@ $_id = $_SESSION['userid'];
           
         <div class="card-body">
           <div class="table-responsive">
-            <table class="table table-striped table-bordered dt-responsive nowrap" id="example" width="100%" cellspacing="0">
+                  <table class="table table-striped table-bordered dt-responsive nowrap" id="example" width="968" cellspacing="0">
             <thead>
                 <tr >
-                  <th>ลำดับที่</th>
-                  <th>ระยะเซนเซอร์(ซม.)</th>
-                  <th>วันที่แก้ไข</th>
-                  <th>เวลาที่แก้ไข</th>
+                  <th width="101">ลำดับที่</th>
+                  <th width="174">ระยะเซนเซอร์(ซม.)</th>
+                  <th width="235">วันที่แก้ไข</th>
+                  <th width="448">เวลาที่แก้ไข</th>
                 </tr>
               </thead>
               <tfoot>
               <tr>
-                  <th>ลำดับที่</th>
+                  <th height="21">ลำดับที่</th>
                   <th>ระยะเซนเซอร์(ซม.)</th>
                   <th>วันที่แก้ไข</th>
                   <th>เวลาที่แก้ไข</th>
@@ -106,11 +115,11 @@ $_id = $_SESSION['userid'];
                  
                 ?>
                     <tr>
-                      <td><?php echo $ID; ?></td>
+                      <td bgcolor="#FFFFFF"><?php echo $ID; ?></td>
                       <td><?php echo $value; ?></td>
                       <td><?php echo $date; ?></td>            
                       <td><?php echo $time; ?></td>
-                    </tr>                
+                </tr>                
         <?php } ?>
               </tbody>
             </table>
