@@ -132,8 +132,8 @@ if (!$_SESSION['userid']) { //check session
     <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.bootstrap4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script> -->
     <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.colVis.min.js"></script>
@@ -143,20 +143,21 @@ if (!$_SESSION['userid']) { //check session
     <script type="text/javascript" src="/media/js/site.js?_=5e8f232afab336abc1a1b65046a73460"></script>
     <script type="text/javascript" src="/media/js/dynamic.php?comments-page=extensions%2Fbuttons%2Fexamples%2Fstyling%2Fbootstrap4.html" async></script>
     <script type="text/javascript" language="javascript" src="../../../../examples/resources/demo.js"></script>
-    <!-- <script src="js/vfs_fonts.js"></script> -->
+   <!-- font thai -->    
+    <script src="js/pdfmake.min.js"></script>
+    <script src="js/vfs_fonts.js"></script>
     <script type="text/javascript" language="่json" src="//cdn.datatables.net/plug-ins/1.10.19/i18n/Thai.json"></script>
   </div>
 </body>
 
 <script type="text/javascript" >
-
 // pdfMake.fonts = {
-  //  THSarabun: {
-  //    normal: 'THSarabun.ttf',
-  //    bold: 'THSarabun-Bold.ttf',
-  //    italics: 'THSarabun-Italic.ttf',
-  //    bolditalics: 'THSarabun-BoldItalic.ttf'
-  //  }
+//    THSarabun: {
+//      normal: 'THSarabun.ttf',
+//      bold: 'THSarabun-Bold.ttf',
+//      italics: 'THSarabun-Italic.ttf',
+//      bolditalics: 'THSarabun-BoldItalic.ttf'
+//    }
 // }
 $(document).ready(function() {
     var table = $('#example').DataTable( {
@@ -185,34 +186,12 @@ $(document).ready(function() {
                   },
 
         // lengthChange: false,
-        buttons: ['copy',
-        'excel' ,    'pdf',
-    //     { // กำหนดพิเศษเฉพาะปุ่ม pdf
-    //     "extend": 'pdf', // ปุ่มสร้าง pdf ไฟล์
-    //     "text": 'PDF', // ข้อความที่แสดง
-    //     "pageSize": 'A4',   // ขนาดหน้ากระดาษเป็น A4
-    //     "customize":function(doc){ // ส่วนกำหนดเพิ่มเติม ส่วนนี้จะใช้จัดการกับ pdfmake
-    //         // กำหนด style หลัก
-    //         doc.defaultStyle = {
-    //             font:'THSarabun',
-    //             fontSize:16
-    //         };
-    //         // กำหนดความกว้างของ header แต่ละคอลัมน์หัวข้อ
-    //         doc.content[1].table.widths = [ 50, 'auto', '*', '*' ];
-    //         doc.styles.tableHeader.fontSize = 16; // กำหนดขนาด font ของ header
-    //         var rowCount = doc.content[1].table.body.length; // หาจำนวนแะวทั้งหมดในตาราง
-    //         // วนลูปเพื่อกำหนดค่าแต่ละคอลัมน์ เช่นการจัดตำแหน่ง
-    //         for (i = 1; i < rowCount; i++) { // i เริ่มที่ 1 เพราะ i แรกเป็นแถวของหัวข้อ
-    //             doc.content[1].table.body[i][0].alignment = 'center'; // คอลัมน์แรกเริ่มที่ 0
-    //             doc.content[1].table.body[i][1].alignment = 'center';
-    //             doc.content[1].table.body[i][2].alignment = 'left';
-    //             doc.content[1].table.body[i][3].alignment = 'right';
-    //         };
-    //         console.log(doc); // เอาไว้ debug ดู doc object proptery เพื่ออ้างอิงเพิ่มเติม
-    //     }
-    // }, // สิ้นสุดกำหนดพิเศษปุ่ม pdf
-        'print'
-
+        buttons: 
+        [
+            'copy',
+            'excel' ,   
+            'pdf',
+            'print'
         ]
     } );
 

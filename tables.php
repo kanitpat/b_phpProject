@@ -46,31 +46,34 @@
 
               <tbody>                
                 <?php 
-                 $sql2 = "SELECT *
+                 $sql2 = 'SELECT *
                  FROM process_statuses
                   JOIN users ON process_statuses.idUsers = users.id
                   JOIN pumps ON process_statuses.idPumps = pumps.id 
                   JOIN statuses ON process_statuses.idStatus = statuses.id 
-                  JOIN waters ON process_statuses.idWaters = waters.id ORDER BY process_statuses.id DESC";
-                $result2 = mysqli_query($connect,$sql2,MYSQLI_STORE_RESULT) or die ("Query error");             
-                while( $process_statuses = mysqli_fetch_assoc($result2))  {
-                   $name = $process_statuses['name'];
-                   $waterlevel = $process_statuses['waterLevel'];
-                   $address = $process_statuses['address'];
-                   $status = $process_statuses['numstatus'];
-                   $date = $process_statuses['date'];
-                   $time = $process_statuses['time'];
-                ?>
+                  JOIN waters ON process_statuses.idWaters = waters.id ORDER BY process_statuses.id DESC';
+                $result2 = mysqli_query($connect, $sql2, MYSQLI_STORE_RESULT) or die('Query error');
+                while ($process_statuses = mysqli_fetch_assoc($result2)) {
+                    $name = $process_statuses['name'];
+                    $waterlevel = $process_statuses['waterLevel'];
+                    $address = $process_statuses['address'];
+                    $status = $process_statuses['numstatus'];
+                    $date = $process_statuses['date'];
+                    $time = $process_statuses['time']; ?>
                     <tr>
                       <td><?php echo $name; ?></td>
                       <td><?php echo $waterlevel; ?></td>
                       <td><?php echo $address; ?></td>
-                      <td><?php if($status==1){?> <span class="badge badge-success">เปิด</span> <?php }
-                      else{ ?> <span class="badge badge-danger">ปิด</span> <?php } ?></td>
+                      <td><?php if ($status == 1) {
+                        ?> <span class="badge badge-success">เปิด</span> <?php
+                    } else {
+                        ?> <span class="badge badge-danger">ปิด</span> <?php
+                    } ?></td>
                       <td><?php echo $date; ?></td>
                       <td><?php echo $time; ?></td>
                     </tr>                
-        <?php } ?>
+        <?php
+                } ?>
               </tbody>
             </table>
           </div>
