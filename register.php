@@ -155,7 +155,7 @@ padding : 50px 0;
     <div class="form-check">
     <label class="form-check-label">
       <input type="checkbox" class="form-check-input" name="remember">
-      <small>Remember Me</small>
+      <small>จำข้อมูลการล็อกอินไว้</small>
     </label>
 
   </div>

@@ -56,24 +56,35 @@ padding : 50px 0;
           <div class="row">
           <div class="col-md-4 login-sec">
               <h2 class="text-center">Login</h2>
-              <form class="login-form" name='login' method="POST"  onSubmit="return loginnn() chk_form()">
+              <form class="login-form" name='login' id='login' method="POST"  >
 
                   <div class="form-group" >
                     <label for="exampleInputEmail1" class="text-uppercase">Email</label>
-                    <input  type="text" class="form-control" placeholder="Enter Email"   name="email" required autofocus>
+                    <input  type="text" class="form-control" placeholder="Enter Email"  id="texemail"  name="texemail"
+                    value ="<?php if (isset($_COOKIE['email'])) {
+    echo $_COOKIE['email'];
+}?>" required autofocus>
                     </div>
 
                     <div class="form-group">
                     <label for="exampleInputPassword1" class="text-uppercase">Password</label>
-                    <input type="password" class="form-control" placeholder="Enter Password" name="password" required >
+                    <input type="password" class="form-control" placeholder="Enter Password" id="texpassword" name="texpassword"
+                    value="<?php if (isset($_COOKIE['password'])) {
+    echo $_COOKIE['password'];
+}?>" required >
                     </div>
 
                     <div class="form-check">
                     <label class="form-check-label">
-                        <input type="checkbox" class="form-check-input" name="remember">
-                        <small>Remember Me</small>
+                        <input type="checkbox" class="form-check-input" name="remember" id="remember" <?php if (isset($_COOKIE['email'])) {
+    ?> checked <?php
+}?>/>
+                        <small>จำข้อมูลการล็อกอินไว้</small>
                     </label>
-                    <button type="submit" class="btn btn-login float-right">login</button>
+                    <button type="submit" name = "submit" class="btn btn-login float-right">login</button>
+                    <p><?php if (isset($msg)) {
+        echo $msg;
+    }?></p>
                     </div>
                     </form>
 
@@ -128,53 +139,6 @@ padding : 50px 0;
     <script src="js/demo/chart-bar-demo.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
     <script src="js/demo/datatables-demo.js"></script>
-
-    <script>
-                function loginnn()
-    {
-       var email = document.forms['login']['email'].value;
-       var password = document.forms['login']['password'].value;
-
-
-       var message = "ยังกรอกข้อมูลไม่ครบ \n";
-       var valid = true;
-
-       if(email == null || email=='')
-       {
-           valid = false;
-           message = message + " - ไม่ได้กรอก Email !!\n";
-       }
-
-       if(password == null || password=='')
-       {
-           valid = false;
-           message = message + (" - ไม่ได้กรอก Password !!\n");
-       }
-
-       if(valid == false)
-            alert(message);
-
-       return valid;
-    }
-    
-    function chk_form(){
-    var j_keep_login=document.form1.keep_login;
-    var i_username=document.form1.username.value;
-    var i_password=document.form1.password.value;
-    if(j_keep_login.checked==true){
-        var days=10; // กำหนดจำนวนวันที่ต้องการให้จำค่า
-        var date = new Date();
-        date.setTime(date.getTime()+(days*24*60*60*1000));
-        var expires = "; expires="+date.toGMTString();
-        document.cookie = "CK_username=" +i_username+ "; expires=" + expires + "; path=/";
-        document.cookie = "CK_password=" +i_password+ "; expires=" + expires + "; path=/";
-    }else{
-        var expires="";
-        document.cookie = "CK_username="+expires+";-1;path=/";
-        document.cookie = "CK_password="+expires+";-1;path=/";      
-    }
-}
-    </script>
 </body>
 </html>
 
@@ -182,15 +146,36 @@ padding : 50px 0;
 require 'dbconnect.php';
 $valid = true;
 
-if (!empty($_POST['email'])) {
-    $email = mysqli_escape_string($connect, $_POST['email']);
+if (!empty($_POST['texemail'])) {
+    $email = mysqli_escape_string($connect, $_POST['texemail']);
 } else {
     $valid = false;
 }
-if (!empty($_POST['password'])) {
-    $password = mysqli_escape_string($connect, md5($_POST['password']));
+if (!empty($_POST['texpassword'])) {
+    $password = mysqli_escape_string($connect, md5($_POST['texpassword']));
 } else {
     $valid = false;
+}
+
+if (isset($_POST['submit'])) {
+    $sql_remember = "SELECT * FROM users WHERE email = '$email' AND password = '$password'";
+    $query_remember = mysqli_query($connect, $sql_remember, MYSQLI_STORE_RESULT) or die('DIE');
+    $res = mysqli_fetch_assoc($query_remember);
+    if ($res) {
+        if (!empty($_POST['remember'])) {
+            setcookie('email', $email, time() + (10 * 365 * 24 * 60 * 60));
+            setcookie('password', $password, time() + (10 * 365 * 24 * 60 * 60));
+        } else {
+            if (isset($_COOKIE['email'])) {
+                setcookie('email', '');
+            }
+            if (isset($_COOKIE['password'])) {
+                setcookie('password', '');
+            }
+        }
+    } else {
+        $msg = 'Invalid Username or Password';
+    }
 }
 if ($valid) {
     $sql = "SELECT * FROM users
