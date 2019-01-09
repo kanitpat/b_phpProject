@@ -14,6 +14,8 @@ if (!$_SESSION['userid']) { //check session
 <!DOCTYPE html>
 <html lang="en">
     <head>
+    <link rel="icon" type="image/png" href="https://sv1.picz.in.th/images/2019/01/10/9nEctk.png" />
+    <!-- <link rel="icon" href="img/favicon.ico" type="image/x-icon">  -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -111,7 +113,7 @@ if (!$_SESSION['userid']) { //check session
     <?php require 'Modal.php'; ?>
      <!-- Bootstrap core JavaScript-->
      <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- Core plugin JavaScript-->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
     <!-- Page level plugin JavaScript-->
