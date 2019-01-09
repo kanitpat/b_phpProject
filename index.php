@@ -12,8 +12,6 @@ if (!$_SESSION["userid"]){  //check session
   ORDER BY id DESC";
   $result = mysqli_query($connect,$sql,MYSQLI_STORE_RESULT) or die ("Query error");
   $waters = mysqli_fetch_assoc($result);
-
- 
 ?>
 
 <!DOCTYPE html>
@@ -49,7 +47,6 @@ if (!$_SESSION["userid"]){  //check session
       
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap4.min.css"> 
     
-
     </head>
 
     <body id="page-top">
@@ -76,14 +73,10 @@ if (!$_SESSION["userid"]){  //check session
                     if ($page=="ตาราง")
                               require "tables.php";  
                     if ($page=="edit")
-                              require "edituser.php";  
-                
-                
-            
+                              require "edituser.php";              
           }
         //login admin
-             else{
-                  
+             else{                 
                   $page = mysqli_escape_string($connect,$_GET['cont']);
                    
                     if ($page=="Home")
@@ -97,15 +90,9 @@ if (!$_SESSION["userid"]){  //check session
                     if ($page=="edit")
                               require "edituser.php";  
                     if ($page=="ตั้งค่า")
-                              require "adminConfig.php";
-                
-                
-            
+                              require "adminConfig.php";         
           }
       ?>
-
-
-
       <?php require 'footer.php'; ?>
   </div>
   <!-- /.content-wrapper -->
