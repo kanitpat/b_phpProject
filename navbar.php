@@ -1,5 +1,4 @@
 <a class="navbar-brand mr-1" href="index.html">สวนวัฒนาเพาะพันธุ์มะพร้าว</a>
-
 <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
   <i class="fas fa-bars"></i>
 </button>
@@ -7,7 +6,7 @@
 <!-- Navbar Search -->
 <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
   <div class="input-group">
-    <input type="text" class="form-control" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+    <input type="text" class="form-control" placeholder="ค้นหา" aria-label="Search" aria-describedby="basic-addon2">
     <div class="input-group-append">
       <button class="btn btn-primary" type="button">
         <i class="fas fa-search"></i>
@@ -24,7 +23,7 @@
       <span class="badge badge-danger">9+</span>
     </a>
     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="alertsDropdown">
-        <h6 class="dropdown-header">New Messages:</h6>
+        <h6 class="dropdown-header">ข้อความใหม่ : </h6>
         <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="#"> 
             <strong>David Miller</strong>
@@ -38,7 +37,7 @@
                 <div class="dropdown-message small">I've sent the fistribution...</div>
               </a>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item small" href="http://localhost/b_phpProject/index.php?cont=ตาราง">View all messages</a>
+              <a class="dropdown-item small" href="http://localhost/b_phpProject/index.php?cont=ตาราง">ดูเพิ่มเติม</a>
             </div>
   </li>
   <li class="nav-item dropdown no-arrow mx-1">  
@@ -49,7 +48,7 @@
         <i class="fas fa-user-circle fa-fw"></i>
       </a>
       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-        <a class="dropdown-item" href="http://localhost/b_phpProject/index.php?cont=edit"><?php echo $_SESSION['email']?></a>
+        <a class="dropdown-item" href="http://localhost/b_phpProject/index.php?cont=edit"><?php echo $_SESSION['email']; ?></a>
         <div class="dropdown-divider"></div>
         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
       </div>
