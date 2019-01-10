@@ -2,6 +2,59 @@
 ob_start();
 session_start();
 ?>
+<?php
+require 'dbconnect.php';
+$valid = true;
+
+if (!empty($_POST['texemail'])) {
+    $email = mysqli_escape_string($connect, $_POST['texemail']);
+} else {
+    $valid = false;
+}
+if (!empty($_POST['texpassword'])) {
+    $password = mysqli_escape_string($connect, md5($_POST['texpassword']));
+} else {
+    $valid = false;
+}
+if ($valid) {
+    if (isset($_POST['submit'])) {
+        $sql_remember = "SELECT * FROM users WHERE email = '$email' AND password = '$password'";
+        $query_remember = mysqli_query($connect, $sql_remember, MYSQLI_STORE_RESULT) or die('DIE');
+        $row = mysqli_fetch_assoc($query_remember);
+        // echo $sql_remember;
+        if ($row) {
+            if (!empty($_POST['remember'])) {
+                setcookie('email', $email, time() + (10 * 365 * 24 * 60 * 60));
+                setcookie('password', $password, time() + (10 * 365 * 24 * 60 * 60));
+            // echo $email;
+            } elseif (empty($_POST['remember'])) {
+                if (isset($_COOKIE['email'])) {
+                    setcookie('email', '');
+                }
+                if (isset($_COOKIE['password'])) {
+                    setcookie('password', '');
+                }
+            }
+            // เข้าระบบ
+            if ($row['isadmin'] == 1) {
+                $_SESSION['userid'] = $row['id'];
+                $_SESSION['email'] = $row['email'];
+                $_SESSION['Status'] = $row['isadmin'];
+                //echo $_SESSION['u_username'];
+                header('location:http://localhost/b_phpProject/index.php?cont=Home');
+            } elseif ($row['isadmin'] == 0) {
+                $_SESSION['userid'] = $row['id'];
+                $_SESSION['email'] = $row['email'];
+                $_SESSION['Status'] = $row['isadmin'];
+                //echo $_SESSION['u_username'];
+                header('location:http://localhost/b_phpProject/index.php?cont=Home');
+            }
+        } else {
+            echo " <script>   alert('กรอก Email หรือ Password ผิด'); </script>";
+        }
+    }
+}
+?>
 <html>
 <head>
 
@@ -68,10 +121,7 @@ padding : 50px 0;
 
                     <div class="form-group">
                     <label for="exampleInputPassword1" class="text-uppercase">Password</label>
-                    <input type="password" class="form-control" placeholder="Enter Password" id="texpassword" name="texpassword"
-                    value="<?php if (isset($_COOKIE['password'])) {
-    echo $_COOKIE['password'];
-}?>" required >
+                    <input type="password" class="form-control" placeholder="Enter Password" id="texpassword" name="texpassword" required >
                     </div>
 
                     <div class="form-check">
@@ -82,9 +132,6 @@ padding : 50px 0;
                         <small>จำข้อมูลการล็อกอินไว้</small>
                     </label>
                     <button type="submit" name = "submit" class="btn btn-login float-right">login</button>
-                    <p><?php if (isset($msg)) {
-        echo $msg;
-    }?></p>
                     </div>
                     </form>
 
@@ -141,68 +188,3 @@ padding : 50px 0;
     <script src="js/demo/datatables-demo.js"></script>
 </body>
 </html>
-
-<?php
-require 'dbconnect.php';
-$valid = true;
-
-if (!empty($_POST['texemail'])) {
-    $email = mysqli_escape_string($connect, $_POST['texemail']);
-} else {
-    $valid = false;
-}
-if (!empty($_POST['texpassword'])) {
-    $password = mysqli_escape_string($connect, md5($_POST['texpassword']));
-} else {
-    $valid = false;
-}
-
-if (isset($_POST['submit'])) {
-    $sql_remember = "SELECT * FROM users WHERE email = '$email' AND password = '$password'";
-    $query_remember = mysqli_query($connect, $sql_remember, MYSQLI_STORE_RESULT) or die('DIE');
-    $res = mysqli_fetch_assoc($query_remember);
-    if ($res) {
-        if (!empty($_POST['remember'])) {
-            setcookie('email', $email, time() + (10 * 365 * 24 * 60 * 60));
-            setcookie('password', $password, time() + (10 * 365 * 24 * 60 * 60));
-        } else {
-            if (isset($_COOKIE['email'])) {
-                setcookie('email', '');
-            }
-            if (isset($_COOKIE['password'])) {
-                setcookie('password', '');
-            }
-        }
-    } else {
-        $msg = 'Invalid Username or Password';
-    }
-}
-if ($valid) {
-    $sql = "SELECT * FROM users
-                      WHERE email = '$email'
-                      AND   password = '$password'";
-    //echo $sql;
-    $result = mysqli_query($connect, $sql, MYSQLI_STORE_RESULT) or die('DIE');
-    $row = mysqli_fetch_assoc($result);
-    if ($row) {
-        if ($row['isadmin'] == 1) {
-            $_SESSION['userid'] = $row['id'];
-            $_SESSION['email'] = $row['email'];
-            $_SESSION['Status'] = $row['isadmin'];
-
-            //echo $_SESSION['u_username'];
-            header('location:http://localhost/b_phpProject/index.php?cont=Home');
-        } elseif ($row['isadmin'] == 0) {
-            $_SESSION['userid'] = $row['id'];
-            $_SESSION['email'] = $row['email'];
-            $_SESSION['Status'] = $row['isadmin'];
-
-            //echo $_SESSION['u_username'];
-            header('location:http://localhost/b_phpProject/index.php?cont=Home');
-        }
-    } else {
-        echo " <script>   alert('กรอก Email หรือ Password ผิด'); </script>";
-    }
-}
-
-?>
