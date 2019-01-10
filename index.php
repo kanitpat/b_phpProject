@@ -9,8 +9,11 @@ if (!$_SESSION['userid']) { //check session
   FROM waters
   ORDER BY id DESC';
     $result = mysqli_query($connect, $sql, MYSQLI_STORE_RESULT) or die('Query error');
-    $waters = mysqli_fetch_assoc($result); ?>
+    $waters = mysqli_fetch_assoc($result);
 
+    //*** Update Last Stay in Login System
+    $sqlusers = "UPDATE users SET updated_at = NOW() WHERE id = '".$_SESSION['userid']."' ";
+    $queryusers = mysqli_query($connect, $sqlusers); ?>
 <!DOCTYPE html>
 <html lang="en">
     <head>

@@ -36,18 +36,72 @@ if ($valid) {
                 }
             }
             // เข้าระบบ
+            //Setting
+            $lineapi = 'eIUiqHOHmcPIEOC5uetSxY1lOTfEBubHDI7yz9qy8Zf';
+            date_default_timezone_set('Asia/Bangkok');
+            //line Send
+            $chOne = curl_init();
+            curl_setopt($chOne, CURLOPT_URL, 'https://notify-api.line.me/api/notify');
+            // SSL USE
+            curl_setopt($chOne, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($chOne, CURLOPT_SSL_VERIFYPEER, 0);
+            //POST
+            curl_setopt($chOne, CURLOPT_POST, 1);
+            // Message
+
+            //*** Session
             if ($row['isadmin'] == 1) {
                 $_SESSION['userid'] = $row['id'];
                 $_SESSION['email'] = $row['email'];
                 $_SESSION['Status'] = $row['isadmin'];
                 //echo $_SESSION['u_username'];
                 header('location:http://localhost/b_phpProject/index.php?cont=Home');
+                curl_setopt($chOne, CURLOPT_POSTFIELDS, "message=$email เข้าสู่ระบบ");
+                //ถ้าต้องการใส่รุป ให้ใส่ 2 parameter imageThumbnail และimageFullsize
+                //curl_setopt( $chOne, CURLOPT_POSTFIELDS, "message=$mms&imageThumbnail=http://plusquotes.com/images/quotes-img/surprise-happy-birthday-gifts-5.jpg&imageFullsize=http://plusquotes.com/images/quotes-img/surprise-happy-birthday-gifts-5.jpg&stickerPackageId=1&stickerId=100");
+                // follow redirects
+                curl_setopt($chOne, CURLOPT_FOLLOWLOCATION, 1);
+                //ADD header array
+                $headers = array('Content-type: application/x-www-form-urlencoded', 'Authorization: Bearer '.$lineapi.'');
+                curl_setopt($chOne, CURLOPT_HTTPHEADER, $headers);
+                //RETURN
+                curl_setopt($chOne, CURLOPT_RETURNTRANSFER, 1);
+                $result = curl_exec($chOne);
+                //Check error
+                if (curl_error($chOne)) {
+                    echo 'error:'.curl_error($chOne);
+                } else {
+                    $result_ = json_decode($result, true);
+                    echo 'status : '.$result_['status'];
+                    echo 'message : '.$result_['message'];
+                }
+                //Close connect
+                curl_close($chOne);
             } elseif ($row['isadmin'] == 0) {
                 $_SESSION['userid'] = $row['id'];
                 $_SESSION['email'] = $row['email'];
                 $_SESSION['Status'] = $row['isadmin'];
                 //echo $_SESSION['u_username'];
                 header('location:http://localhost/b_phpProject/index.php?cont=Home');
+                curl_setopt($chOne, CURLOPT_POSTFIELDS, "message=$email เข้าสู่ระบบ");
+                // follow redirects
+                curl_setopt($chOne, CURLOPT_FOLLOWLOCATION, 1);
+                //ADD header array
+                $headers = array('Content-type: application/x-www-form-urlencoded', 'Authorization: Bearer '.$lineapi.'');
+                curl_setopt($chOne, CURLOPT_HTTPHEADER, $headers);
+                //RETURN
+                curl_setopt($chOne, CURLOPT_RETURNTRANSFER, 1);
+                $result = curl_exec($chOne);
+                //Check error
+                if (curl_error($chOne)) {
+                    echo 'error:'.curl_error($chOne);
+                } else {
+                    $result_ = json_decode($result, true);
+                    echo 'status : '.$result_['status'];
+                    echo 'message : '.$result_['message'];
+                }
+                //Close connect
+                curl_close($chOne);
             }
         } else {
             echo " <script>   alert('กรอก Email หรือ Password ผิด'); </script>";
@@ -108,7 +162,7 @@ padding : 50px 0;
           <div class="container">
           <div class="row">
           <div class="col-md-4 login-sec">
-              <h2 class="text-center">Login</h2>
+              <h2 class="text-center">เข้าสู่ระบบ</h2>
               <form class="login-form" name='login' id='login' method="POST"  >
 
                   <div class="form-group" >
@@ -120,7 +174,7 @@ padding : 50px 0;
                     </div>
 
                     <div class="form-group">
-                    <label for="exampleInputPassword1" class="text-uppercase">Password</label>
+                    <label for="exampleInputPassword1" class="text-uppercase">รหัสผ่าน</label>
                     <input type="password" class="form-control" placeholder="Enter Password" id="texpassword" name="texpassword" required >
                     </div>
 
@@ -131,11 +185,11 @@ padding : 50px 0;
 }?>/>
                         <small>จำข้อมูลการล็อกอินไว้</small>
                     </label>
-                    <button type="submit" name = "submit" class="btn btn-login float-right">login</button>
+                    <button type="submit" name = "submit" class="btn btn-login float-right">เข้าสู่ระบบ</button>
                     </div>
                     </form>
 
-                    <h1><div class="copy-text"> <a href="http://localhost/b_phpProject/register.php">Register</a></div><h1>
+                    <h1><div class="copy-text"> <a href="http://localhost/b_phpProject/register.php">ลงทะเบียน</a></div><h1>
             </div>
 
             <div class="col-md-8 banner-sec">

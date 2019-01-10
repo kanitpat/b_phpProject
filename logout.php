@@ -1,8 +1,8 @@
 <?php
     session_start();
-    unset ( $_SESSION['u_username'] );
-    unset ( $_SESSION['u_id'] );
-    session_destroy();
-    header("location:login.php");
+    unset($_SESSION['userid']);
+    unset($_SESSION['email']);
+    unset($_SESSION['Status']);
 
-?>
+    session_destroy();
+    header('location:login.php');

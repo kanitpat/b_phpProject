@@ -7,7 +7,6 @@ if (!empty($_POST['password'])) {
 } else {
     $valid = false;
 }
-
 if (!empty($_POST['Confirmpassword'])) {
     if ($_POST['password'] === $_POST['Confirmpassword']) {
         // success!
@@ -20,19 +19,16 @@ if (!empty($_POST['Confirmpassword'])) {
 } else {
     $valid = false;
 }
-
 if (!empty($_POST['name'])) {
     $name = mysqli_escape_string($connect, $_POST['name']);
 } else {
     $valid = false;
 }
-
-if (!empty($_POST['lastName'])) {
-    $lastName = mysqli_escape_string($connect, $_POST['lastName']);
+if (!empty($_POST['lastname'])) {
+    $lastname = mysqli_escape_string($connect, $_POST['lastname']);
 } else {
     $valid = false;
 }
-
 if (!empty($_POST['email'])) {
     // check if e-mail address is well-formed
     if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
@@ -46,19 +42,54 @@ if (!empty($_POST['email'])) {
 }
 
 if ($valid == true) {
-    $date = date('Y-m-d H:i:s');
-    $strsql = "INSERT INTO  users( `email`, `password`, `name`, `lastname`, `api_token`, `isadmin`, `created_at`, `updated_at`)
+    if (isset($_POST['submit'])) {
+        $date = date('Y-m-d H:i:s');
+        $strsql = "INSERT INTO  users( `email`, `password`, `name`, `lastname`, `api_token`, `isadmin`, `created_at`, `updated_at`)
             VALUES
-            ( '$email', ('$password'), '$name', '$lastName',Null,'0','$date','$date')";
-    $result = mysqli_query($connect, $strsql);
+            ( '$email', ('$password'), '$name', '$lastname',Null,'0','$date','$date')";
 
-    if ($result) {
-        echo "<script> alert('Register Complete');
+        $sql_remember = "SELECT * 
+        FROM users 
+        WHERE email = '$email' 
+        AND password = '$password'
+        AND name = '$name'
+        AND lastname = '$lastname'";
+
+        $result = mysqli_query($connect, $strsql);
+        // echo $result;
+        $query_remember = mysqli_query($connect, $sql_remember, MYSQLI_STORE_RESULT) or die('DIE');
+        // $row = mysqli_fetch_assoc($query_remember);
+        // if ($row) {
+        if (!empty($_POST['remember'])) {
+            setcookie('email', $email, time() + (10 * 365 * 24 * 60 * 60));
+            setcookie('password', $password, time() + (10 * 365 * 24 * 60 * 60));
+            setcookie('name', $name, time() + (10 * 365 * 24 * 60 * 60));
+            setcookie('lastname', $lastname, time() + (10 * 365 * 24 * 60 * 60));
+        // echo $email;
+        } elseif (empty($_POST['remember'])) {
+            if (isset($_COOKIE['email'])) {
+                setcookie('email', '');
+            }
+            if (isset($_COOKIE['password'])) {
+                setcookie('password', '');
+            }
+            if (isset($_COOKIE['name'])) {
+                setcookie('name', '');
+            }
+            if (isset($_COOKIE['lastname'])) {
+                setcookie('lastname', '');
+            }
+        }
+        // เข้า login page
+        if ($result) {
+            echo "<script> alert('Register Complete');
                       location.replace('http://localhost/b_phpProject/index.php?cont=Login');
                       </script>";
-    } else {
-        echo "<script> alert('ขออภัยไม่มารถเพิ่มสมาชิกได้');
+        // }
+        } else {
+            echo "<script> alert('ขออภัยไม่มารถเพิ่มสมาชิกได้');
                       window.location='http://localhost/b_phpProject/Register.php';</script>";
+        }
     }
 }
 
@@ -114,56 +145,63 @@ padding : 50px 0;
 
 
 </head>
-<?php $name = $lastName = $email = ''; ?>
 <body>
     <div class="login-block" >
     <div class="container">
 	<div class="row">
 		<div class="col-md-4 login-sec">
-		    <h2 class="text-center">Register</h2>
+		    <h2 class="text-center">ลงทะเบียน</h2>
 
 		    <form class="login-form" method ="POST" onSubmit="return register()"  >
             <div class="form-group" >
     <label for="exampleInputEmail1" class="text-uppercase">Email</label>
-    <input type="text" class="form-control" name="email" value="<?php echo $email; ?>" placeholder="Enter Email"  required autofocus>
+    <input type="text" class="form-control" name="email" value ="<?php if (isset($_COOKIE['email'])) {
+    echo $_COOKIE['email'];
+}?>" placeholder="กรอก Email"  required autofocus>
 
   </div>
   <div class="form-group">
-    <label for="exampleInputPassword1" class="text-uppercase">Password</label>
-    <input type="password" class="form-control" placeholder="Enter Password" name="password" required >
-
+    <label for="exampleInputPassword1" class="text-uppercase">รหัสผ่าน</label>
+    <input type="password" class="form-control" placeholder="กรอกรหัสผ่าน" name="password" required >
 </div>
 
   <div class="form-group">
-    <label for="exampleInputConfirmPassword1" class="text-uppercase">Confirm Password</label>
-    <input type="password" class="form-control" placeholder="Enter Password" name="Confirmpassword" required >
-
+    <label for="exampleInputConfirmPassword1" class="text-uppercase">ยืนยันรหัสผ่าน</label>
+    <input type="password" class="form-control" placeholder="กรอกรหัสผ่านอีกครั้ง" name="Confirmpassword" required >
 </div>
 
   <div class="form-group">
-    <label for="exampleInputname" class="text-uppercase">Name</label>
-    <input type="text" class="form-control" name="name" value="<?php echo $name; ?>"  placeholder="Enter Name"  required >
+    <label for="exampleInputname" class="text-uppercase">ชื่อ</label>
+    <input type="text" class="form-control" name="name" 
+    value ="<?php if (isset($_COOKIE['name'])) {
+    echo $_COOKIE['name'];
+} ?>"  placeholder="กรอกชื่อ"  required >
 
 </div>
 
  <div class="form-group">
-    <label for="exampleInputname" class="text-uppercase">LastName</label>
-    <input type="text" class="form-control" name="lastName"  value="<?php echo $lastName; ?>" placeholder="Enter Name" required >
+    <label for="exampleInputname" class="text-uppercase">นามสกุล</label>
+    <input type="text" class="form-control" name="lastname"  
+    value ="<?php if (isset($_COOKIE['lastname'])) {
+    echo $_COOKIE['lastname'];
+} ?>" placeholder="กรอกนามกุล" required >
 
 </div>
 
     <div class="form-check">
     <label class="form-check-label">
-      <input type="checkbox" class="form-check-input" name="remember">
+      <input type="checkbox" class="form-check-input" name="remember" <?php if (isset($_COOKIE['email'])) {
+    ?> checked <?php
+} ?> >
       <small>จำข้อมูลการล็อกอินไว้</small>
     </label>
 
   </div>
     <input type="hidden" name="_token" >
-       <button type="submit" class="btn btn-login float-right">Register</button>
+       <button type="submit" name="submit" class="btn btn-login float-right">ลงทะเบียน</button>
 
 </form>
-<h1><div class="copy-text"> <a href="http://localhost/b_phpProject/login.php">Login</a></div><h1>
+<h1><div class="copy-text"> <a href="http://localhost/b_phpProject/login.php">เข้าสู่ระบบ</a></div><h1>
 		</div>
 		<div class="col-md-8 banner-sec">
             <div id="carouselExampleIndicators" class=" carousel slide" data-ride="carousel">
