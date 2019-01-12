@@ -62,12 +62,13 @@ $waterLevel = implode(',', $waterLevel);
          <div class="col-xl-3 col-sm-6 mb-3">
           <div class="card text-white bg-success o-hidden h-100">
             <div class="card-body">
-              <div class="mr-5">การคำนายล่วงหน้า</div>
+              <div class="mr-5">การคำนายล่วงหน้า
+              </div>
             </div>
           </div>
         </div>
       </div>
-
+      <div id="openweathermap-widget-16"></div>
       <!-- Area Chart Example-->
       <div class="card mb-3">
         <div class="card-header">
@@ -198,8 +199,5 @@ while ($process_statuses = mysqli_fetch_assoc($result2)) {
         <div class="card-footer small text-muted">Updated yesterday at <?php echo $datetime; ?></div>
       </div>
 
-    </div>
-    <!-- /.container-fluid -->
-
-
+   
 
