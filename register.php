@@ -46,7 +46,7 @@ if ($valid == true) {
         $date = date('Y-m-d H:i:s');
         $strsql = "INSERT INTO  users( `email`, `password`, `name`, `lastname`, `api_token`, `isadmin`, `created_at`, `updated_at`)
             VALUES
-            ( '$email', ('$password'), '$name', '$lastname',Null,'0','$date','$date')";
+            ( '$email', ('$password'), '$name', '$lastname',Null,'0',NOW(),NOW())";
 
         $sql_remember = "SELECT * 
         FROM users 

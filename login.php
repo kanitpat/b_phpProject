@@ -55,7 +55,7 @@ if ($valid) {
                 $_SESSION['email'] = $row['email'];
                 $_SESSION['Status'] = $row['isadmin'];
                 //echo $_SESSION['u_username'];
-                header('location:http://localhost/b_phpProject/index.php?cont=Home');
+                header('location:http://localhost/b_phpProject/index.php?cont=Dashboard');
                 curl_setopt($chOne, CURLOPT_POSTFIELDS, "message=$email เข้าสู่ระบบ");
                 //ถ้าต้องการใส่รุป ให้ใส่ 2 parameter imageThumbnail และimageFullsize
                 //curl_setopt( $chOne, CURLOPT_POSTFIELDS, "message=$mms&imageThumbnail=http://plusquotes.com/images/quotes-img/surprise-happy-birthday-gifts-5.jpg&imageFullsize=http://plusquotes.com/images/quotes-img/surprise-happy-birthday-gifts-5.jpg&stickerPackageId=1&stickerId=100");
@@ -82,7 +82,7 @@ if ($valid) {
                 $_SESSION['email'] = $row['email'];
                 $_SESSION['Status'] = $row['isadmin'];
                 //echo $_SESSION['u_username'];
-                header('location:http://localhost/b_phpProject/index.php?cont=Home');
+                header('location:http://localhost/b_phpProject/index.php?cont=Dashboard');
                 curl_setopt($chOne, CURLOPT_POSTFIELDS, "message=$email เข้าสู่ระบบ");
                 // follow redirects
                 curl_setopt($chOne, CURLOPT_FOLLOWLOCATION, 1);

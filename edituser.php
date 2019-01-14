@@ -98,8 +98,8 @@ if ($valid == true) {
     $sql2 = "UPDATE  users SET               
                     name = '$name',
                     lastname = '$lastname',
-                    created_at = '$date',
-                    updated_at ='$date'
+                    created_at = NOW(),
+                    updated_at = NOW()
                     WHERE users.id = '$_id' ";
     $result2 = mysqli_query($connect, $sql2) or die(mysqli_error($connect));
     mysqli_close($connect);
@@ -133,8 +133,8 @@ if ($validpass == true) {
     $date = date('Y-m-d H:i:s');
     $sqlpass = "UPDATE  users SET
                     password = '$conpassword' ,              
-                    created_at = '$date',
-                    updated_at ='$date'
+                    created_at = NOW(),
+                    updated_at = NOW()
                     WHERE users.id = '$_id' ";
 
     $result_pass = mysqli_query($connect, $sqlpass) or die(mysqli_error($connect));

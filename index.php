@@ -65,9 +65,9 @@ if (!$_SESSION['userid']) { //check session
     if (!empty($_GET['cont']) && $_SESSION['Status'] == 0) {
         $page = mysqli_escape_string($connect, $_GET['cont']);
 
-        if ($page == 'Home') {
-            require 'dashboard.php';
-        }
+        // if ($page == 'Home') {
+        //     require 'dashboard.php';
+        // }
         if ($page == 'Dashboard') {
             require 'dashboard.php';
         }
@@ -84,9 +84,7 @@ if (!$_SESSION['userid']) { //check session
     //login admin
     else {
         $page = mysqli_escape_string($connect, $_GET['cont']);
-        if ($page == 'Home') {
-            require 'dashboard.php';
-        }
+
         if ($page == 'Dashboard') {
             require 'dashboard.php';
         }
