@@ -1,5 +1,5 @@
-<?php require 'dbconnect.php'; ?>
-
+<?php require 'dbconnect.php';
+header('refresh: 10;'); ?>
 <?php
 
 $sql_count = 'SELECT  count(*)
@@ -31,7 +31,7 @@ if ((!empty($_GET['sensor'])) || (!empty($_GET['message']))) {
     $result_page = mysqli_query($connect, $sql_page, MYSQLI_STORE_RESULT) or die(mysqli_error($connect));
     if ($result_page) {
         $num = 0; ?>
-      <span class="badge badge-danger"><?php ++$num; ?></span>   <?php
+      <span class="badge badge-danger"><?php echo $num++; ?></span>   <?php
     }
 }?>
     </a>
@@ -46,13 +46,16 @@ while ($noti = mysqli_fetch_assoc($query_noti)) {
     $sensor = $noti['sensor'];
     $status_water = $noti['status_water'];
     $date = $noti['date'];
-    $time = $noti['time']; ?>
+    $time = $noti['time'];
+    $time = date('g:i a', strtotime($time)); ?>
+
         <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="#">
             <strong>สวนวัฒนา</strong>
-                <span class="small float-right text-muted"><?php $date; ?></span>
-                <div class="dropdown-message small">Hey there! This new veen...</div>
-              </a>
+                <div class="dropdown-message small"><?php echo $status_water.'เหลือ '.(200 - $sensor).' ซม.'; ?></div>
+                           <span class="small float-right text-muted"><?php echo $time; ?></span>
+
+            </a>
              <?php
 }?>
               <div class="dropdown-divider"></div>
