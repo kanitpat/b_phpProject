@@ -15,33 +15,8 @@
   </div>
 </form>
 
-<!-- Navbar -->
-<ul class="navbar-nav ml-auto ml-md-0">
-  <li class="nav-item dropdown no-arrow mx-1">
-    <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <i class="fas fa-bell fa-fw"></i>
-      <span class="badge badge-danger">9+</span>
-    </a>
-    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="alertsDropdown">
-        <h6 class="dropdown-header">ข้อความใหม่ : </h6>
-        <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#"> 
-            <strong>David Miller</strong>
-                <span class="small float-right text-muted">11:21 AM</span>
-                <div class="dropdown-message small">Hey there! This new veen...</div>
-              </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">
-                <strong>John Doe</strong>
-                <span class="small float-right text-muted">11:21 AM</span>
-                <div class="dropdown-message small">I've sent the fistribution...</div>
-              </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item small" href="http://localhost/b_phpProject/index.php?cont=ตาราง">ดูเพิ่มเติม</a>
-            </div>
-  </li>
-  <li class="nav-item dropdown no-arrow mx-1">  
-  </li>
+<?php require 'addNotiLine.php'; ?>
+
    <!-- user menu -->
    <li class="nav-item dropdown no-arrow">
       <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
