@@ -44,7 +44,7 @@ $waterLevel = implode(',', $waterLevel);
               <div class="card-body-icon">
               </div>
               <div class="mr-5">ระดับน้ำในสวนตอนนี้
-              <?php echo $waters['waterLevel']; ?></div>
+              <?php echo $waters['waterLevel'].' เซนติเมตร'; ?></div>
             </div>
           </div>
         </div>
@@ -137,7 +137,7 @@ $waterLevel = implode(',', $waterLevel);
             <thead>
                 <tr>
                   <th>คนเปิดเครื่องสูบน้ำ</th>
-                  <th>ระดับน้ำในสวน(เมตร)</th>
+                  <th>ระดับน้ำในสวน(เซนติเมตร)</th>
                   <th>สถานที่เครื่องสูบน้ำ</th>
                   <th>สถานะเครื่องสูบน้ำ</th>
                   <th>วันที่</th>
@@ -147,7 +147,7 @@ $waterLevel = implode(',', $waterLevel);
               <tfoot>
               <tr>
                   <th>คนเปิดเครื่องสูบน้ำ</th>
-                  <th>ระดับน้ำในสวน(เมตร)</th>
+                  <th>ระดับน้ำในสวน(เซนติเมตร)</th>
                   <th>สถานที่เครื่องสูบน้ำ</th>
                   <th>สถานะเครื่องสูบน้ำ</th>
                   <th>วันที่</th>
