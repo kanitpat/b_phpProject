@@ -27,7 +27,6 @@ $waterLevel = implode(',', $waterLevel);
 	text-align: center;
 }
 </style>
-
 <ol class="breadcrumb">
         <li class="breadcrumb-item">
           <a href="http://localhost/b_phpProject/index.php?cont=Home">Dashboard</a>
@@ -108,7 +107,6 @@ $waterLevel = implode(',', $waterLevel);
                 borderWidth: 1
             }]
         },
-
         options: {
             scales: {
                 yAxes: [{
@@ -166,7 +164,6 @@ $waterLevel = implode(',', $waterLevel);
                   <th>เวลา</th>
                 </tr>
               </tfoot>
-
               <tbody>
                 <?php
 $sql2 = 'SELECT *
