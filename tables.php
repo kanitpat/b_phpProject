@@ -59,7 +59,9 @@
                     $address = $process_statuses['address'];
                     $status = $process_statuses['numstatus'];
                     $date = $process_statuses['date'];
-                    $time = $process_statuses['time']; ?>
+                    $date = date('d-M-Y', strtotime($date));
+                    $time = $process_statuses['time'];
+                    $time = date('g:i a', strtotime($time)); ?>
                     <tr>
                       <td><?php echo $name; ?></td>
                       <td><?php echo $waterlevel; ?></td>
@@ -78,7 +80,7 @@
             </table>
           </div>
         </div>
-        <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+        <div class="card-footer small text-muted">Updated <?php echo $date; ?> at <?php echo $time; ?></div>
       </div>
 
     </div>

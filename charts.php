@@ -14,18 +14,18 @@ FROM waters
 GROUP BY date DESC
 ";
 $result = mysqli_query($connect, $query);
-$resultchart = mysqli_query($connect, $query);  
- 
+$resultchart = mysqli_query($connect, $query);
+
 //for chart
 $date = array();
 $waterLevel = array();
- 
-while($rs = mysqli_fetch_array($resultchart)){ 
-  $date[] = "\"".$rs['date']."\""; 
-  $waterLevel[] = "\"".$rs['waterLevel']."\""; 
+
+while ($rs = mysqli_fetch_array($resultchart)) {
+    $date[] = '"'.$rs['date'].'"';
+    $waterLevel[] = '"'.$rs['waterLevel'].'"';
 }
-$date = implode(",", $date); 
-$waterLevel = implode(",", $waterLevel); 
+$date = implode(',', $date);
+$waterLevel = implode(',', $waterLevel);
  mysqli_close($connect);
 
 ?>
@@ -44,12 +44,12 @@ $waterLevel = implode(",", $waterLevel);
     var myChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: [<?php echo $date;?>
+            labels: [<?php echo $date; ?>
         
             ],
             datasets: [{
                 label: 'ระดับน้ำในสวน',
-                data: [<?php echo $waterLevel;?>
+                data: [<?php echo $waterLevel; ?>
                 ],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',

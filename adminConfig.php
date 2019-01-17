@@ -1,14 +1,14 @@
 <?php 
 require 'dbconnect.php';
 $_id = $_SESSION['userid'];
-                 $sql = "SELECT *
+                 $sql = 'SELECT *
                  FROM user_activities
-                 ORDER BY user_activities.id DESC";
-                $result = mysqli_query($connect,$sql)or die (mysqli_error($connect));            
-                $row = mysqli_fetch_array($result,MYSQLI_ASSOC);              
-                  $value = $row['value']; 
-                  $date = $row['date']; 
-                  $time = $row['time']; 
+                 ORDER BY user_activities.id DESC';
+                $result = mysqli_query($connect, $sql) or die(mysqli_error($connect));
+                $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+                  $value = $row['value'];
+                  $date = $row['date'];
+                  $time = $row['time'];
 ?>  
 <!-- Breadcrumbs-->
 <style type="text/css">
@@ -39,7 +39,7 @@ $_id = $_SESSION['userid'];
                   <div class="form-row">                
                     <div class="col-md-3">
                       <label for="text">ระยะเซนเซอร์ปัจจุบัน(ซม.)</label>
-                      <input class="form-control" id="text" name="text" value="<?php echo $value ." เซนติเมตร"?>" type="text" disabled>                   
+                      <input class="form-control" id="text" name="text" value="<?php echo $value.' เซนติเมตร'; ?>" type="text" disabled>                   
                     </div>
 
                     <div class="col-md-3">
@@ -49,14 +49,14 @@ $_id = $_SESSION['userid'];
 
             <?php 
             require 'dbconnect.php';
-            $cm_value =  $value/100;
-            $tatol_value = 1.2-$cm_value;        
-            // $tatol_value_m = $tatol_value*100;            
+            // $cm_value = $value / 100;
+            $tatol_value = 200 - $value;
+            // $tatol_value_m = $tatol_value*100;
             ?>  
 
                     <div class="col-md-3">
-                      <label for="name">ระดับน้ำในสวน(ม.)</label>
-                      <input class="form-control" id="text3" name="text3" value ="<?php echo $tatol_value." เมตร" ?>"  type="text"  placeholder="ระดับน้ำในสวน" disabled>                
+                      <label for="name">ระดับน้ำในสวนโดยประมาณ(ซม.)</label>
+                      <input class="form-control" id="text3" name="text3" value ="<?php echo $tatol_value.' ซม.'; ?>"  type="text"  placeholder="ระดับน้ำในสวน" disabled>                
 
                   </div>                
                   </div>
@@ -86,7 +86,7 @@ $_id = $_SESSION['userid'];
                   <table class="table table-striped table-bordered dt-responsive nowrap" id="example" width="968" cellspacing="0">
             <thead>
                 <tr >
-                  <th width="101">ลำดับที่</th>
+                  <!-- <th width="101">ลำดับที่</th> -->
                   <th width="174">ระยะเซนเซอร์(ซม.)</th>
                   <th width="235">วันที่แก้ไข</th>
                   <th width="448">เวลาที่แก้ไข</th>
@@ -94,7 +94,7 @@ $_id = $_SESSION['userid'];
               </thead>
               <tfoot>
               <tr>
-                  <th height="21">ลำดับที่</th>
+                  <!-- <th height="21">ลำดับที่</th> -->
                   <th>ระยะเซนเซอร์(ซม.)</th>
                   <th>วันที่แก้ไข</th>
                   <th>เวลาที่แก้ไข</th>
@@ -103,29 +103,30 @@ $_id = $_SESSION['userid'];
 
               <tbody>                
                 <?php 
-                 $sql2 = "SELECT *
+                 $sql2 = 'SELECT *
                  FROM user_activities
-                 ORDER BY user_activities.id DESC";
-                $result2 = mysqli_query($connect,$sql2,MYSQLI_STORE_RESULT) or die ("Query error");             
-                while( $user_activities = mysqli_fetch_assoc($result2))  {
-                   $ID = $user_activities['id'];
-                   $value = $user_activities['value'];
-                   $date = $user_activities['date'];
-                   $time = $user_activities['time'];
-                 
-                ?>
+                 ORDER BY `user_activities`.`date` DESC';
+                $result2 = mysqli_query($connect, $sql2, MYSQLI_STORE_RESULT) or die('Query error');
+                while ($user_activities = mysqli_fetch_assoc($result2)) {
+                    $ID = $user_activities['id'];
+                    $value = $user_activities['value'];
+                    $date = $user_activities['date'];
+                    $time = $user_activities['time'];
+                    $date = date('d-M-Y', strtotime($date));
+                    $time = date('g:i a', strtotime($time)); ?>
                     <tr>
-                      <td bgcolor="#FFFFFF"><?php echo $ID; ?></td>
+                      <!-- <td bgcolor="#FFFFFF"><?php echo $ID; ?></td> -->
                       <td><?php echo $value; ?></td>
                       <td><?php echo $date; ?></td>            
                       <td><?php echo $time; ?></td>
                 </tr>                
-        <?php } ?>
+        <?php
+                } ?>
               </tbody>
             </table>
           </div>
         </div>
-        <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+        <div class="card-footer small text-muted">Updated <?php echo $date; ?> at <?php echo $time; ?></div>
       </div>
 
     </div>
@@ -133,39 +134,27 @@ $_id = $_SESSION['userid'];
 
 
 
-  <?php    
+  <?php 
   $valid = true;
 
-        if(!empty($_POST['text2']))
-        {
-            $text2 = mysqli_escape_string($connect,($_POST['text2']));
+        if (!empty($_POST['text2'])) {
+            $text2 = mysqli_escape_string($connect, ($_POST['text2']));
+        } else {
+            $valid = false;
         }
-        else $valid = false;
 
-
-        if($valid == true)
-      {
-          $date = date("Y-m-d");
-          $time = date("H:i:s");
-
-          $strsql = "INSERT INTO  user_activities( `value`, `date`, `time`, `idUsers`) 
+        if ($valid == true) {
+            $strsql = "INSERT INTO  user_activities( `value`, `date`, `time`, `idUsers`) 
             VALUES 
-            ( '$text2 ', '$date', '$time', 1)";											   
-            $result = mysqli_query($connect,$strsql);        
-            if($result)
-            {            
-
-                  echo "<script> alert('แก้ไขข้อมูลเรียบร้อย');
+            ( '$text2 ', NOW(), NOW(), 1)";
+            $result = mysqli_query($connect, $strsql);
+            if ($result) {
+                echo "<script> alert('แก้ไขข้อมูลเรียบร้อย');
                   location.replace('http://localhost/b_phpProject/index.php?cont=ตั้งค่า')</script>";
-                  
-              }     
-            else           
-            {
-                  echo "<script> alert('ไม่สามารถแก้ไขข้อมูลได้');
+            } else {
+                echo "<script> alert('ไม่สามารถแก้ไขข้อมูลได้');
                   location.replace('http://localhost/b_phpProject/index.php?cont=ตั้งค่า')</script>";
-                 
             }
-
         }
 ?>
 <script>

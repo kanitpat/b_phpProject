@@ -121,7 +121,19 @@ $waterLevel = implode(',', $waterLevel);
     });
     </script>
         </div>
-        <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+        <?php 
+        $sql_water = 'SELECT *
+                  FROM waters
+                  ORDER BY waters.date DESC';
+    $result_waters = mysqli_query($connect, $sql_water, MYSQLI_STORE_RESULT) or die('Query error');
+    $row = mysqli_fetch_array($result_waters, MYSQLI_ASSOC);
+    $date = $row['date'];
+    $date = date('d-M-Y', strtotime($date));
+    $time = $row['time'];
+    $time = date('g:i a', strtotime($time));
+        ?>
+
+        <div class="card-footer small text-muted">Updated <?php echo  $date; ?> at <?php echo  $time; ?></div>
       </div>
 
       <!-- DataTables Example -->
@@ -170,14 +182,16 @@ while ($process_statuses = mysqli_fetch_assoc($result2)) {
     $address = $process_statuses['address'];
     $status = $process_statuses['numstatus'];
     $date = $process_statuses['date'];
+    $date = date('d-M-Y', strtotime($date));
     $time = $process_statuses['time'];
-
+    $time = date('g:i a', strtotime($time));
     $sql3 = 'SELECT *
                   FROM process_statuses
                   ORDER BY process_statuses.updated_at DESC';
     $result3 = mysqli_query($connect, $sql3, MYSQLI_STORE_RESULT) or die('Query error');
     $row = mysqli_fetch_array($result3, MYSQLI_ASSOC);
-    $datetime = $row['created_at']; ?>
+    $datetime = $row['created_at'];
+    $datetime = date('d-M-Y', strtotime($datetime)); ?>
                     <tr>
                       <td><?php echo $name; ?></td>
                       <td><?php echo $waterlevel; ?></td>
@@ -196,7 +210,7 @@ while ($process_statuses = mysqli_fetch_assoc($result2)) {
             </table>
           </div>
         </div>
-        <div class="card-footer small text-muted">Updated yesterday at <?php echo $datetime; ?></div>
+        <div class="card-footer small text-muted">Updated <?php echo $datetime; ?> at <?php echo $time; ?>  </div>
       </div>
 
    
