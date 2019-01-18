@@ -14,7 +14,12 @@ if (!empty($_POST['Confirmpassword'])) {
     } else {
         echo "<script>
 		              alert ('ท่านใส่ Password ไม่ตรงกัน ');
-		              </script>";
+                      location.replace('http://localhost/b_phpProject/Register.php');
+        </script>";
+        // exit();
+        // echo "<script>
+        // location.replace('http://localhost/b_phpProject/Register.php');
+        // </script>";
     }
 } else {
     $valid = false;
@@ -44,51 +49,63 @@ if (!empty($_POST['email'])) {
 if ($valid == true) {
     if (isset($_POST['submit'])) {
         $date = date('Y-m-d H:i:s');
-        $strsql = "INSERT INTO  users( `email`, `password`, `name`, `lastname`, `api_token`, `isadmin`, `created_at`, `updated_at`)
-            VALUES
-            ( '$email', ('$password'), '$name', '$lastname',Null,'0',NOW(),NOW())";
-
-        $sql_remember = "SELECT * 
+        // เช็คอีเมลซ้ำไหม
+        $sql_chk_email = "SELECT * 
+        FROM users 
+        WHERE email = '$email' ";
+        $query_email = mysqli_query($connect, $sql_chk_email);
+        if ((mysqli_num_rows($query_email) >= 1)) {
+            echo "<script> alert('ขออภัย Email ซ้ำ');
+                      window.location='http://localhost/b_phpProject/Register.php';</script>";
+            exit();
+        } else {
+            // echo 'Email ผ่าน';
+            $sql_remember = "SELECT * 
         FROM users 
         WHERE email = '$email' 
         AND password = '$password'
         AND name = '$name'
         AND lastname = '$lastname'";
 
-        $result = mysqli_query($connect, $strsql);
-        // echo $result;
-        $query_remember = mysqli_query($connect, $sql_remember, MYSQLI_STORE_RESULT) or die('DIE');
-        // $row = mysqli_fetch_assoc($query_remember);
-        // if ($row) {
-        if (!empty($_POST['remember'])) {
-            setcookie('email', $email, time() + (10 * 365 * 24 * 60 * 60));
-            setcookie('password', $password, time() + (10 * 365 * 24 * 60 * 60));
-            setcookie('name', $name, time() + (10 * 365 * 24 * 60 * 60));
-            setcookie('lastname', $lastname, time() + (10 * 365 * 24 * 60 * 60));
-        // echo $email;
-        } elseif (empty($_POST['remember'])) {
-            if (isset($_COOKIE['email'])) {
-                setcookie('email', '');
+            $strsql = "INSERT INTO  users( `email`, `password`, `name`, `lastname`, `api_token`, `isadmin`, `created_at`, `updated_at`)
+            VALUES
+            ( '$email', ('$password'), '$name', '$lastname',Null,'0',NOW(),NOW())";
+
+            $result = mysqli_query($connect, $strsql);
+            // echo $result;
+            $query_remember = mysqli_query($connect, $sql_remember, MYSQLI_STORE_RESULT) or die('DIE');
+            // $row = mysqli_fetch_assoc($query_remember);
+            // if ($row) {
+            if (!empty($_POST['remember'])) {
+                setcookie('email', $email, time() + (10 * 365 * 24 * 60 * 60));
+                setcookie('password', $password, time() + (10 * 365 * 24 * 60 * 60));
+            // setcookie('name', $name, time() + (10 * 365 * 24 * 60 * 60));
+                // setcookie('lastname', $lastname, time() + (10 * 365 * 24 * 60 * 60));
+            // echo $email;
+            } elseif (empty($_POST['remember'])) {
+                if (isset($_COOKIE['email'])) {
+                    setcookie('email', '');
+                }
+                if (isset($_COOKIE['password'])) {
+                    setcookie('password', '');
+                }
+                // if (isset($_COOKIE['name'])) {
+                //     setcookie('name', '');
+                // }
+                // if (isset($_COOKIE['lastname'])) {
+                //     setcookie('lastname', '');
+                // }
             }
-            if (isset($_COOKIE['password'])) {
-                setcookie('password', '');
-            }
-            if (isset($_COOKIE['name'])) {
-                setcookie('name', '');
-            }
-            if (isset($_COOKIE['lastname'])) {
-                setcookie('lastname', '');
-            }
-        }
-        // เข้า login page
-        if ($result) {
-            echo "<script> alert('ลงทะเบียนสำเร็จ');
+            // เข้า login page
+            if ($result) {
+                echo "<script> alert('ลงทะเบียนสำเร็จ');
                       location.replace('http://localhost/b_phpProject/index.php?cont=Login');
                       </script>";
-        // }
-        } else {
-            echo "<script> alert('ขออภัยไม่มารถเพิ่มสมาชิกได้');
+            // }
+            } else {
+                echo "<script> alert('ขออภัยไม่มารถเพิ่มสมาชิกได้');
                       window.location='http://localhost/b_phpProject/Register.php';</script>";
+            }
         }
     }
 }
@@ -173,18 +190,14 @@ padding : 50px 0;
   <div class="form-group">
     <label for="exampleInputname" class="text-uppercase">ชื่อ</label>
     <input type="text" class="form-control" name="name" 
-    value ="<?php if (isset($_COOKIE['name'])) {
-    echo $_COOKIE['name'];
-} ?>"  placeholder="กรอกชื่อ"  required >
+     placeholder="กรอกชื่อ"  required >
 
 </div>
 
  <div class="form-group">
     <label for="exampleInputname" class="text-uppercase">นามสกุล</label>
     <input type="text" class="form-control" name="lastname"  
-    value ="<?php if (isset($_COOKIE['lastname'])) {
-    echo $_COOKIE['lastname'];
-} ?>" placeholder="กรอกนามกุล" required >
+    placeholder="กรอกนามกุล" required >
 
 </div>
 
@@ -193,7 +206,7 @@ padding : 50px 0;
       <input type="checkbox" class="form-check-input" name="remember" <?php if (isset($_COOKIE['email'])) {
     ?> checked <?php
 } ?> >
-      <small>จำข้อมูลการล็อกอินไว้</small>
+      <small>จำข้อมูลการลงทะเบียนไว้</small>
     </label>
 
   </div>
