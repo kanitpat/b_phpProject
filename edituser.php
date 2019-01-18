@@ -35,11 +35,11 @@ $isadmin = $row['isadmin'];
               <div class="form-group">
                 <div class="form-row">
                   <div class="col-md-6">
-                    <label for="name">First name</label>
+                    <label for="name">ชื่อ</label>
                     <input class="form-control" id="name" name="name"  value="<?php echo $name; ?>" type="text" aria-describedby="nameHelp" placeholder="Enter first name">
                 </div>
                 <div class="col-md-6">
-                    <label for="surname">Last name</label>
+                    <label for="surname">นามสกุล</label>
                     <input class="form-control" id="lastname" name="lastname" value="<?php echo $lastname; ?>" type="text" aria-describedby="nameHelp" placeholder="Enter last name">
 
                 </div>
@@ -60,13 +60,13 @@ $isadmin = $row['isadmin'];
               <div class="form-group">
                 <div class="form-row">
                     <div class="col-md-6">
-                        <label for="password">New Password</label>
-                        <input class="form-control" id="password" name="password" type="password" placeholder="New Password">
+                        <label for="password">รหัสผ่านใหม่</label>
+                        <input class="form-control" id="password" name="password" type="password" placeholder="รหัสผ่านใหม่">
                     </div>
 
                     <div class="col-md-6">
-                        <label for="confirm_password">Confirm password</label>
-                        <input class="form-control" id="Confirmpassword" name="Confirmpassword" type="password" placeholder="Confirm password">
+                        <label for="confirm_password">ยืนยันรหัสผ่าน</label>
+                        <input class="form-control" id="Confirmpassword" name="Confirmpassword" type="password" placeholder="ยืนยันรหัสผ่าน">
                         </div>
                     </div>
                 </div>

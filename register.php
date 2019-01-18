@@ -82,7 +82,7 @@ if ($valid == true) {
         }
         // เข้า login page
         if ($result) {
-            echo "<script> alert('Register Complete');
+            echo "<script> alert('ลงทะเบียนสำเร็จ');
                       location.replace('http://localhost/b_phpProject/index.php?cont=Login');
                       </script>";
         // }

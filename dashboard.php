@@ -4,7 +4,7 @@ require 'dbconnect.php';
 $query = "
 SELECT  waterLevel, DATE_FORMAT(date, '%D%M%Y') AS date
 FROM waters
-GROUP BY date DESC
+GROUP BY id DESC
 ";
 $result = mysqli_query($connect, $query);
 $resultchart = mysqli_query($connect, $query);
@@ -43,7 +43,15 @@ $waterLevel = implode(',', $waterLevel);
               <div class="card-body-icon">
               </div>
               <div class="mr-5">ระดับน้ำในสวนตอนนี้
-              <?php echo $waters['waterLevel'].' เซนติเมตร'; ?></div>
+              <?php echo $waters['waterLevel'].' เซนติเมตร';
+              $waters = $waters['waterLevel'];
+              if ($waters > 120) {
+                  echo ' เสี่ยงน้ำท่วมสวน';
+              } if ($waters < 50) {
+                  echo ' เสี่ยงน้ำแห้ง';
+              } if (($waters > 50) && ($waters < 120)) {
+                  echo ' ระดับน้ำปกติ';
+              }?></div>
             </div>
           </div>
         </div>
@@ -67,6 +75,8 @@ $waterLevel = implode(',', $waterLevel);
           </div>
         </div>
       </div>
+
+
       <div id="openweathermap-widget-16"></div>
       <!-- Area Chart Example-->
       <div class="card mb-3">
@@ -171,7 +181,7 @@ $sql2 = 'SELECT *
                   JOIN users ON process_statuses.idUsers = users.id
                   JOIN pumps ON process_statuses.idPumps = pumps.id
                   JOIN statuses ON process_statuses.idStatus = statuses.id
-                  JOIN waters ON process_statuses.idWaters = waters.id ORDER BY process_statuses.date DESC';
+                  JOIN waters ON process_statuses.idWaters = waters.id ORDER BY process_statuses.id DESC';
 $result2 = mysqli_query($connect, $sql2, MYSQLI_STORE_RESULT) or die('Query error');
 while ($process_statuses = mysqli_fetch_assoc($result2)) {
     $name = $process_statuses['name'];

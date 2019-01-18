@@ -11,8 +11,7 @@ require 'dbconnect.php';
 $query = "
 SELECT  waterLevel, DATE_FORMAT(date, '%D%M%Y') AS date
 FROM waters 
-GROUP BY date DESC
-";
+GROUP BY id DESC";
 $result = mysqli_query($connect, $query);
 $resultchart = mysqli_query($connect, $query);
 
