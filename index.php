@@ -165,6 +165,7 @@ if (!$_SESSION['userid']) { //check session
 $(document).ready(function() {
     var table = $('#example').DataTable( {
         responsive: true,
+        "order": [],
         "oLanguage": {
                     "sProcessing":     "กำลังดำเนินการ...",
                     "sInfoPostFix":    "",

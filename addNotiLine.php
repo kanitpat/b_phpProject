@@ -12,10 +12,9 @@ $count_old = $count;
 //   for ($num = 0; $num <= 10; ++$num) {
 //   }
 
-if ((!empty($_GET['sensor'])) && (!empty($_GET['message'])) && (!empty($_GET['cont']))) {
+if ((!empty($_GET['sensor'])) && (!empty($_GET['message']))) {
     $sensor = $_GET['sensor'];
     $message = $_GET['message'];
-    $line = $_GET['cont'];
 
     $waterLevel = 200 - $sensor;
     $sql_page = "INSERT INTO `notiline`(`sensor`, `status_water`, `date`, `time`)

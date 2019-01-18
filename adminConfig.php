@@ -105,7 +105,7 @@ $_id = $_SESSION['userid'];
                 <?php 
                  $sql2 = 'SELECT *
                  FROM user_activities
-                 ORDER BY `user_activities`.`date` DESC';
+                 ORDER BY user_activities.date  DESC';
                 $result2 = mysqli_query($connect, $sql2, MYSQLI_STORE_RESULT) or die('Query error');
                 while ($user_activities = mysqli_fetch_assoc($result2)) {
                     $ID = $user_activities['id'];
