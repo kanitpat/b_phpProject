@@ -15,7 +15,7 @@ $isadmin = $row['isadmin'];
   <!-- Breadcrumbs-->
   <ol class="breadcrumb">
             <li class="breadcrumb-item">
-              <a href="http://localhost/b_phpProject/index.php?cont=Home">Dashboard</a>
+              <a href="http://localhost/b_phpProject/index.php?cont=Dashboard">Dashboard</a>
             </li>
             <li class="breadcrumb-item active">แก้ไขข้อมูลผู้ใช้งาน</li>
           </ol>
