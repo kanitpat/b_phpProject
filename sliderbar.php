@@ -1,8 +1,8 @@
  <!-- Sidebar -->
  <?php
 
-  if ($_SESSION['Status'] == 0) {
-      ?>			
+if ($_SESSION['Status'] == 0) {
+    ?>
  <ul class="sidebar navbar-nav ">
     <li class="nav-item ">
       <a class="nav-link" href="http://localhost/b_phpProject/index.php?cont=Dashboard">
@@ -10,7 +10,7 @@
         <span>Dashboard</span>
       </a>
     </li>
-   
+
     <li class="nav-item ">
       <a class="nav-link" href="http://localhost/b_phpProject/index.php?cont=กราฟ">
         <i class="fas fa-fw fa-chart-area"></i>
@@ -24,8 +24,9 @@
         </li>
   </ul>
         <?php
-  } else {
-        ?>
+// admin
+} else {
+    ?>
 
         <ul class="sidebar navbar-nav ">
     <li class="nav-item ">
@@ -34,7 +35,7 @@
         <span>Dashboard</span>
       </a>
     </li>
-   
+
     <li class="nav-item ">
       <a class="nav-link" href="http://localhost/b_phpProject/index.php?cont=กราฟ">
         <i class="fas fa-fw fa-chart-area"></i>
@@ -51,10 +52,15 @@
           <a class="nav-link" href="http://localhost/b_phpProject/index.php?cont=ตั้งค่า">
             <i class="fa fa-fw fa-wrench"></i>
             <span>ตั้งค่าระยะเซนเซอร์</span></a>
-        </li>    
+        </li>
+    <li class="nav-item">
+          <a class="nav-link" href="http://localhost/b_phpProject/index.php?cont=สมาชิก">
+            <i class="fa fa-fw fa-user"></i>
+            <span>เพิ่มสมาชิก</span></a>
+        </li>
   </ul>
 
 <?php
-    }
+}
 
-      ?>
+?>

@@ -49,6 +49,10 @@ if (!$_SESSION['userid']) { //check session
 
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap4.min.css">
 
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+
+
     </head>
 
     <body id="page-top">
@@ -89,7 +93,7 @@ if (!$_SESSION['userid']) { //check session
             require 'dashboard.php';
         }
         if ($page == 'กราฟ') {
-            require 'charts.php';
+            require 'chart_test.php';
         }
         if ($page == 'ตาราง') {
             require 'tables.php';
@@ -99,6 +103,9 @@ if (!$_SESSION['userid']) { //check session
         }
         if ($page == 'ตั้งค่า') {
             require 'adminConfig.php';
+        }
+        if ($page == 'สมาชิก') {
+            require 'addusers.php';
         }
     } ?>
       <?php require 'footer.php'; ?>
@@ -150,22 +157,19 @@ if (!$_SESSION['userid']) { //check session
     <script src="js/pdfmake.min.js"></script>
     <script src="js/vfs_fonts.js"></script>
     <script type="text/javascript" language="่json" src="//cdn.datatables.net/plug-ins/1.10.19/i18n/Thai.json"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   </div>
 </body>
 
 <script type="text/javascript" >
-// pdfMake.fonts = {
-//    THSarabun: {
-//      normal: 'THSarabun.ttf',
-//      bold: 'THSarabun-Bold.ttf',
-//      italics: 'THSarabun-Italic.ttf',
-//      bolditalics: 'THSarabun-BoldItalic.ttf'
-//    }
-// }
+
 $(document).ready(function() {
     var table = $('#example').DataTable( {
         responsive: true,
         "order": [],
+        // "pageLength": 5,
+        // "lengthMenu": [ 5, 25, 50, 75, 100 ],
         "oLanguage": {
                     "sProcessing":     "กำลังดำเนินการ...",
                     "sInfoPostFix":    "",

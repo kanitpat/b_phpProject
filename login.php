@@ -167,7 +167,7 @@ padding : 50px 0;
 
                   <div class="form-group" >
                     <label for="exampleInputEmail1" class="text-uppercase">Email</label>
-                    <input  type="text" class="form-control" placeholder="Enter Email"  id="texemail"  name="texemail"
+                    <input  type="text" class="form-control" placeholder="กรอก Email"  id="texemail"  name="texemail"
                     value ="<?php if (isset($_COOKIE['email'])) {
     echo $_COOKIE['email'];
 }?>" required autofocus>
@@ -175,7 +175,7 @@ padding : 50px 0;
 
                     <div class="form-group">
                     <label for="exampleInputPassword1" class="text-uppercase">รหัสผ่าน</label>
-                    <input type="password" class="form-control" placeholder="Enter Password" id="texpassword" name="texpassword" required >
+                    <input type="password" class="form-control" placeholder="กรอกรหัสผ่าน" id="texpassword" name="texpassword" required >
                     </div>
 
                     <div class="form-check">
@@ -189,7 +189,7 @@ padding : 50px 0;
                     </div>
                     </form>
 
-                    <h1><div class="copy-text"> <a href="http://localhost/b_phpProject/register.php">ลงทะเบียน</a></div><h1>
+                    <!-- <h1><div class="copy-text"> <a href="http://localhost/b_phpProject/register.php">ลงทะเบียน</a></div><h1> -->
             </div>
 
             <div class="col-md-8 banner-sec">
