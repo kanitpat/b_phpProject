@@ -28,25 +28,6 @@ $today = isset($_POST['datepickerS']) ? $_POST['datepickerS'] : (new DateTime())
 $date2 = date('Y-m-d', strtotime($today));
 $formatResult = ": $date2";
 
-$query = "
-SELECT  waterLevel, DATE_FORMAT(date, '%D%M%Y') AS date
-FROM waters
-GROUP BY id DESC";
-$result = mysqli_query($connect, $query);
-$resultchart = mysqli_query($connect, $query);
-
-//for chart
-$date = array();
-$waterLevel = array();
-
-while ($rs = mysqli_fetch_array($resultchart)) {
-    $date[] = '"'.$rs['date'].'"';
-    $waterLevel[] = '"'.$rs['waterLevel'].'"';
-}
-$date = implode(',', $date);
-$waterLevel = implode(',', $waterLevel);
-mysqli_close($connect);
-
 ?>
 
 <div class="card mb-3">
@@ -83,8 +64,7 @@ mysqli_close($connect);
 
                       <div class="docs-datepicker">
           <div class="input-group">
-            <input type="text" class="form-control docs-date" name="datepickerS" id="datepickerS" placeholder="<?php echo date('d-m-Y'); ?>" value="<?php $date2; ?>"
-           >
+            <input type="text" class="form-control docs-date" name="datepickerS" id="datepickerS" placeholder="<?php echo date('d-m-Y'); ?>" value="<?php $date2; ?>">
 
             <div class="input-group-append">
               <button type="button" class="btn btn-outline-secondary docs-datepicker-trigger" disabled="">
@@ -114,7 +94,7 @@ mysqli_close($connect);
                   <div class="col-md-3">
                   <label for="text"></label>
                   <div class="input-group">
-                                     <input type="submit" value="search" class="btn btn-primary"> 
+                                     <input type="submit" name = "submit" value="search" class="btn btn-primary"> 
                                   
                                       </div>
                                      </div>
@@ -141,8 +121,31 @@ if (isset($_POST['submit'])) {
     $date2 = date('Y-m-d', strtotime($today));
 
     //$date_start = date('Y-m-d', strtotime($_POST['datepickerS']));
+    $date_S = $_POST['datepickerS'];
+    $date_E = $_POST['datepickerE'];
+    $newS = date('Y-m-d', strtotime($date_S));
+    $newE = date('Y-m-d', strtotime($date_E));
+    // WHERE member_date BETWEEN date('YYYY-MM-DD') AND date('YYYY-MM-DD')//  DATE_FORMAT(date, '%D%M%Y') AS date
+    // echo '  s '.$date_S.'  E   '.$date_E;
+    echo '  Ns '.$newS.'  NE   '.$newE;
 
-    echo '1'.$date2;
+    $query = "
+SELECT  waterLevel
+FROM waters WHERE date BETWEEN $newS AND $newE 
+GROUP BY id DESC";
+    $resultchart = mysqli_query($connect, $query);
+
+    //for chart
+    $date = array();
+    $waterLevel = array();
+
+    while ($rs = mysqli_fetch_array($resultchart)) {
+        $date[] = '"'.$rs['date'].'"';
+        $waterLevel[] = '"'.$rs['waterLevel'].'"';
+    }
+    $date = implode(',', $date);
+    $waterLevel = implode(',', $waterLevel);
+    mysqli_close($connect);
 }
 //     echo '1'.$date_start;
  else {
