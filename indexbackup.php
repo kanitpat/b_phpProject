@@ -94,8 +94,8 @@ if (!$_SESSION['userid']) { //check session
             require 'dashboard.php';
         }
         if ($page == 'กราฟ') {
-            require 'chart_test.php';
-            // require 'index2.html';
+            //require 'chart_test.php';
+            require 'index2.html';
         }
         if ($page == 'ตาราง') {
             require 'tables.php';
@@ -122,7 +122,7 @@ if (!$_SESSION['userid']) { //check session
     <!-- All Modal-->
     <?php require 'Modal.php'; ?>
      <!-- Bootstrap core JavaScript-->
-    <!-- <script src="vendor/jquery/jquery.min.js"></script> -->
+    <script src="vendor/jquery/jquery.min.js"></script>
      <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- Core plugin JavaScript-->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
@@ -138,7 +138,7 @@ if (!$_SESSION['userid']) { //check session
     <script src="js/demo/chart-pie-demo.js"></script>
     <script src="js/demo/datatables-demo.js"></script>
     <!-- scripts for dowload this page-->
-    <!-- <script src="https://code.jquery.com/jquery-3.3.1.js"></script> -->
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>

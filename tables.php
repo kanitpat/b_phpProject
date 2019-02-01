@@ -46,6 +46,16 @@
 
               <tbody>                
                 <?php 
+
+                $sql3 = 'SELECT *
+                    FROM process_statuses
+                    ORDER BY process_statuses.updated_at DESC';
+                    $result3 = mysqli_query($connect, $sql3, MYSQLI_STORE_RESULT) or die('Query error');
+                    $row = mysqli_fetch_array($result3, MYSQLI_ASSOC);
+                    $datetime = $row['created_at'];
+                    $time = $row['created_at'];
+                    $newtime = date('g:i a', strtotime($time));
+                    $datetime = date('d-M-Y', strtotime($datetime));
                  $sql2 = 'SELECT *
                  FROM process_statuses
                   JOIN users ON process_statuses.idUsers = users.id
@@ -59,9 +69,9 @@
                     $address = $process_statuses['address'];
                     $status = $process_statuses['numstatus'];
                     $date = $process_statuses['date'];
-                    $date = date('d-M-Y', strtotime($date));
+                    $newdate = date('d-M-Y', strtotime($date));
                     $time = $process_statuses['time'];
-                    $time = date('g:i a', strtotime($time)); ?>
+                    $newtime = date('g:i a', strtotime($time)); ?> 
                     <tr>
                       <td><?php echo $name; ?></td>
                       <td><?php echo $waterlevel; ?></td>
@@ -71,8 +81,8 @@
                     } else {
                         ?> <span class="badge badge-danger">ปิด</span> <?php
                     } ?></td>
-                      <td><?php echo $date; ?></td>
-                      <td><?php echo $time; ?></td>
+                      <td><?php echo $newdate; ?></td>
+                      <td><?php echo $newtime; ?></td>
                     </tr>                
         <?php
                 } ?>
@@ -80,8 +90,13 @@
             </table>
           </div>
         </div>
-        <div class="card-footer small text-muted">Updated <?php echo $date; ?> at <?php echo $time; ?></div>
+        <div class="card-footer small text-muted">Updated <?php echo $datetime; ?> at <?php echo $newtime; ?></div>
+     
       </div>
 
     </div>
     <!-- /.container-fluid -->
+  
+    <!-- // script datatable -->
+      <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+      <script src="vendor/jquery/jquery.min.js"></script>

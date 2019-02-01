@@ -217,8 +217,9 @@ while ($process_statuses = mysqli_fetch_assoc($result2)) {
             </table>
           </div>
         </div>
-        <div class="card-footer small text-muted">Updated <?php echo $datetime; ?> at <?php echo $time; ?>  </div>
+        <div class="card-footer small text-muted">Updated <?php echo $date; ?> at <?php echo $time; ?>  </div>
       </div>
 
    
-
+      <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+      <script src="vendor/jquery/jquery.min.js"></script>

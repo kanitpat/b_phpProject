@@ -1,5 +1,12 @@
-<head>    
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<head>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="datepicker-master/css/datepicker.css">
+  <link rel="stylesheet" href="datepicker-master/css/main.css">
+
 </head>
 <!-- Breadcrumbs-->
 <ol class="breadcrumb">
@@ -9,12 +16,21 @@
             <li class="breadcrumb-item active">กราฟ</li>
            test
           </ol>
-<?php 
+<?php
 require 'dbconnect.php';
+
+$DATETIME_Z = date_default_timezone_set('Asia/Bangkok');
+
+$self = isset($_SERVER['PHP_SELF']) ? $_SERVER['PHP_SELF'] : '#';
+
+$now = date('Y-m-d');
+$today = isset($_POST['datepickerS']) ? $_POST['datepickerS'] : (new DateTime())->format('Y-m-d');
+$date2 = date('Y-m-d', strtotime($today));
+$formatResult = ": $date2";
 
 $query = "
 SELECT  waterLevel, DATE_FORMAT(date, '%D%M%Y') AS date
-FROM waters 
+FROM waters
 GROUP BY id DESC";
 $result = mysqli_query($connect, $query);
 $resultchart = mysqli_query($connect, $query);
@@ -29,7 +45,7 @@ while ($rs = mysqli_fetch_array($resultchart)) {
 }
 $date = implode(',', $date);
 $waterLevel = implode(',', $waterLevel);
- mysqli_close($connect);
+mysqli_close($connect);
 
 ?>
 
@@ -37,41 +53,135 @@ $waterLevel = implode(',', $waterLevel);
         <div class="card-header">
           <i class="fas fa-chart-area"></i>
           กราฟแสดงระดับน้ำในสวน</div>
-        <div class="card-body">
+  <!--      <div class="card-body">
         <div id="update-nav">
-  <div id="range-selector">
+   <div id="range-selector">
     <input type="button" id="1m" class="period ui-button" value="1m" />
     <input type="button" id="3m" class="period ui-button" value="3m"/>
     <input type="button" id="6m" class="period ui-button" value="6m"/>
     <input type="button" id="1y" class="period ui-button" value="1y"/>
     <input type="button" id="all" class="period ui-button" value="All"/>
-  </div>
-  <input type="text" name="daterange" value="01/01/2018 - 01/15/2018" />
+  </div> -->
 
   <!-- <div id="date-selector">
       From:<input type="text" id="fromDate" class="ui-widget">
       To:<input type="text" id="toDate" class="ui-widget">
   </div> -->
 
+  <div class="card-body">
+
+
+
+       <form method="POST" action="<?php $self; ?>" autocomplete="off" >
+      <div class="card border-dark">
+            <div class="card-body text-dark">
+
+                <div class="form-group">
+                  <div class="form-row">
+                    <div class="col-md-3">
+                      <label for="text">Start Date:</label>
+
+                      <div class="docs-datepicker">
+          <div class="input-group">
+            <input type="text" class="form-control docs-date" name="datepickerS" id="datepickerS" placeholder="<?php echo date('d-m-Y'); ?>" value="<?php $date2; ?>"
+           >
+
+            <div class="input-group-append">
+              <button type="button" class="btn btn-outline-secondary docs-datepicker-trigger" disabled="">
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+          <div class="docs-datepicker-container"></div>
+        </div>
+           </div>
+
+                    <div class="col-md-3">
+                      <label for="text">End Date:</label>
+
+                      <div class="docs-datepicker">
+          <div class="input-group">
+            <input type="text" class="form-control docs-date" name="datepickerE" id="datepickerE" placeholder="<?php echo date('d-m-Y'); ?>" value="<?php date('d-m-Y'); ?>" >
+            <div class="input-group-append">
+              <button type="button" class="btn btn-outline-secondary docs-datepicker-trigger" disabled="">
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+          <div class="docs-datepicker-container"></div>
+        </div>
+          </div>
+                  <div class="col-md-3">
+                  <label for="text"></label>
+                  <div class="input-group">
+                                     <input type="submit" value="search" class="btn btn-primary"> 
+                                  
+                                      </div>
+                                     </div>
+                </div>
+            </div>
+
+      </div>
+      <br>
+
+        <!-- <input type="hidden" name="_method" value="PUT">  -->
+
+
+
+
+
+      </form>
+      
+
+      <?php
+
+
+if (isset($_POST['submit'])) {
+    $today = isset($_POST['datepickerS']) ? $_POST['datepickerS'] : (new DateTime())->format('Y-m-d');
+    $date2 = date('Y-m-d', strtotime($today));
+
+    //$date_start = date('Y-m-d', strtotime($_POST['datepickerS']));
+
+    echo '1'.$date2;
+}
+//     echo '1'.$date_start;
+ else {
+     echo '1s';
+ }
+
+// echo date_default_timezone_get();
+
+// if (($_POST['datepickerS']) != '') {
+//     $dd = date('Y-m-d', strtotime($_POST['datepickerS']));
+
+//     echo 'rrr'.$dd;
+// }
+
+?>
+
+    </div>
 
   </div>
+
   <canvas id="myChart" ></canvas>
    <!-- charts -->
+
    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.js"></script>
    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-   <!-- <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-   <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"></script>
-   <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
 
-    <script>
+   <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+   <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"></script>
+   <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> 
+
+  <script>
     var ctx = document.getElementById("myChart").getContext('2d');
     var myChart = new Chart(ctx, {
         type: 'line',
         data: {
             labels: [<?php echo $date; ?>
-        
+
             ],
             datasets: [{
                 label: 'ระดับน้ำในสวน',
@@ -96,7 +206,7 @@ $waterLevel = implode(',', $waterLevel);
                 borderWidth: 1
             }]
         },
-       
+
         options: {
             scales: {
                 yAxes: [{
@@ -108,69 +218,36 @@ $waterLevel = implode(',', $waterLevel);
         }
     });
 
-    $(function() {
-  $('input[name="daterange"]').daterangepicker({
-    opens: 'left'
-  }, function(start, end, label) {
-    console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-  });
-});
-
-// $.getJSON("https://api.myjson.com/bins/i62nr", function(chartData) {
-// 	for(var i = 0; i < chartData.GetStockTimeSeriesResult.TimeSeriesItems.length; i++){  	
-// 		var timeStamp = chartData.GetStockTimeSeriesResult.TimeSeriesItems[i].TimeStamp.match(/\.*[0-9]+/);
-//     var timeZone = chartData.GetStockTimeSeriesResult.TimeSeriesItems[i].TimeStamp.match(/\.*-[0-9]+/);    
-//   	dps.push({ x: new Date(parseInt(timeStamp[0]) + parseInt(timeZone[0])), y: parseFloat(chartData.GetStockTimeSeriesResult.TimeSeriesItems[i].Price)});
-//   }
-//   chart.render();
     
-//   var axisXMin = chart.axisX[0].get("minimum");
-//   var axisXMax = chart.axisX[0].get("maximum");
 
-//   $( function() {
-//     $("#fromDate").val(CanvasJS.formatDate(axisXMin, "D MMM YYYY"));
-//     $("#toDate").val(CanvasJS.formatDate(axisXMax, "D MMM YYYY"));
-//     $("#fromDate").datepicker({dateFormat: "d M yy"});
-//     $("#toDate").datepicker({dateFormat: "d M yy"});
+
+    $('#datepickerS').datepicker({
+        dateFormat: "dd-mm-yy"
+   
+  });
+
+  
+  $('#datepickerE').datepicker({
+        dateFormat: "dd-mm-yy"
+   
+  });
+
+//   $('#datepickerE').datepicker({
+//    format: "dd-mm-yy",
+//    startDate: '-1y -1m',
+//    endDate: '+2m +10d'
 //   });
 
-//   $("#date-selector").change(function() {
-//     var minValue = $("#fromDate").val();
-//     var maxValue = $("#toDate").val();
+  
+  </script>
 
-//     if(new Date(minValue).getTime() < new Date(maxValue).getTime()) {  
-//       chart.axisX[0].set("minimum", new Date(minValue));
-//       chart.axisX[0].set("maximum", new Date(maxValue));
-//     }  
-//   });
-
-//   $(".period").click(function() {
-//     var period = this.id;  
-//     var minValue;
-//     minValue = new Date(axisXMax);
-
-//     switch(period) {
-//       case "1m":
-//         minValue.setMonth(minValue.getMonth() - 1);
-//         break;
-//       case "3m":
-//         minValue.setMonth(minValue.getMonth() - 3);
-//         break;
-//       case "6m":
-//         minValue.setMonth(minValue.getMonth() - 6);
-//         break;
-//       case "1y":
-//         minValue.setYear(minValue.getFullYear() - 1);
-//         break;
-//       default:
-//         minValue = axisXMin;
-//     }
-
-//     chart.axisX[0].set("minimum", new Date(minValue));  
-//     chart.axisX[0].set("maximum", new Date(axisXMax));
-//   });
-// });
-    </script>  
     </div>
         <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
       </div>
+
+
+
+      <!-- Scripts -->
+      <script src="datepicker-master/js/datepicker.js"></script>
+
+  <script src="datepicker-master/js/main.js"></script>
