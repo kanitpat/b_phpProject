@@ -50,22 +50,16 @@ $formatResult = ": $date2";
   </div> -->
 
   <div class="card-body">
-
-
-
-       <form method="POST" action="<?php $self; ?>" autocomplete="off" >
+       <form method="POST" name = "chartinput" action="<?php $self; ?>" autocomplete="off"  onSubmit="return chart()" >
       <div class="card border-dark">
             <div class="card-body text-dark">
-
                 <div class="form-group">
                   <div class="form-row">
                     <div class="col-md-3">
-                      <label for="text">Start Date:</label>
-
+                      <label for="text">วัน/เดือน/ปีเริ่มต้น:</label>
                       <div class="docs-datepicker">
           <div class="input-group">
-            <input type="text" class="form-control docs-date" name="datepickerS" id="datepickerS" placeholder="<?php echo date('d-m-Y'); ?>" value="<?php $date2; ?>">
-
+            <input type="text" class="form-control docs-date" name="datepickerS" id="datepickerS" placeholder="เลือกวันที่" value="" >
             <div class="input-group-append">
               <button type="button" class="btn btn-outline-secondary docs-datepicker-trigger" disabled="">
                 <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -75,13 +69,11 @@ $formatResult = ": $date2";
           <div class="docs-datepicker-container"></div>
         </div>
            </div>
-
                     <div class="col-md-3">
-                      <label for="text">End Date:</label>
-
+                      <label for="text">วัน/เดือน/ปีสิ้นสุด:</label>
                       <div class="docs-datepicker">
           <div class="input-group">
-            <input type="text" class="form-control docs-date" name="datepickerE" id="datepickerE" placeholder="<?php echo date('d-m-Y'); ?>" value="<?php date('d-m-Y'); ?>" >
+            <input type="text" class="form-control docs-date" name="datepickerE" id="datepickerE" placeholder="เลือกวันที่">
             <div class="input-group-append">
               <button type="button" class="btn btn-outline-secondary docs-datepicker-trigger" disabled="">
                 <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -94,8 +86,8 @@ $formatResult = ": $date2";
                   <div class="col-md-3">
                   <label for="text"></label>
                   <div class="input-group">
-                                     <input type="submit" name = "submit" value="search" class="btn btn-primary"> 
-                                  
+                                     <input type="submit" name = "submit" value="search" class="btn btn-primary">
+
                                       </div>
                                      </div>
                 </div>
@@ -103,18 +95,8 @@ $formatResult = ": $date2";
 
       </div>
       <br>
-
-        <!-- <input type="hidden" name="_method" value="PUT">  -->
-
-
-
-
-
       </form>
-      
-
       <?php
-
 
 if (isset($_POST['submit'])) {
     $today = isset($_POST['datepickerS']) ? $_POST['datepickerS'] : (new DateTime())->format('Y-m-d');
@@ -126,15 +108,15 @@ if (isset($_POST['submit'])) {
     $newS = date('Y-m-d', strtotime($date_S));
     $newE = date('Y-m-d', strtotime($date_E));
     // WHERE member_date BETWEEN date('YYYY-MM-DD') AND date('YYYY-MM-DD')//  DATE_FORMAT(date, '%D%M%Y') AS date
-    // echo '  s '.$date_S.'  E   '.$date_E;
-    echo '  Ns '.$newS.'  NE   '.$newE;
-
-    $query = "
-SELECT  waterLevel
-FROM waters WHERE date BETWEEN $newS AND $newE 
+    // echo '  s '.$date_S.'  E   '.$date_E;   WHERE date BETWEEN $newS AND $newE
+    echo ' ช่วงเวลาวันที่ : '.$date_S.'  ถึง   '.$date_E;
+    $query =
+        "SELECT DATE_FORMAT(date, '%D%M%Y')AS date,waterLevel
+FROM `waters`
+WHERE date BETWEEN '$newS' and '$newE'
 GROUP BY id DESC";
-    $resultchart = mysqli_query($connect, $query);
-
+    $resultchart = mysqli_query($connect, $query) or die(mysqli_error($connect));
+    // echo  "Q: $query";
     //for chart
     $date = array();
     $waterLevel = array();
@@ -142,28 +124,36 @@ GROUP BY id DESC";
     while ($rs = mysqli_fetch_array($resultchart)) {
         $date[] = '"'.$rs['date'].'"';
         $waterLevel[] = '"'.$rs['waterLevel'].'"';
+
+        // echo ':-'.$rs['date'];
     }
     $date = implode(',', $date);
     $waterLevel = implode(',', $waterLevel);
     mysqli_close($connect);
 }
 //     echo '1'.$date_start;
- else {
-     echo '1s';
- }
+else {
+    $query =
+    "SELECT DATE_FORMAT(date, '%D%M%Y')AS date,waterLevel
+FROM `waters`
+GROUP BY id DESC";
+    $resultchart = mysqli_query($connect, $query) or die(mysqli_error($connect));
+    // echo  "Q: $query";
+    //for chart
+    $date = array();
+    $waterLevel = array();
 
-// echo date_default_timezone_get();
+    while ($rs = mysqli_fetch_array($resultchart)) {
+        $date[] = '"'.$rs['date'].'"';
+        $waterLevel[] = '"'.$rs['waterLevel'].'"';
 
-// if (($_POST['datepickerS']) != '') {
-//     $dd = date('Y-m-d', strtotime($_POST['datepickerS']));
-
-//     echo 'rrr'.$dd;
-// }
-
+        // echo ':-'.$rs['date'];
+    }
+    $date = implode(',', $date);
+    $waterLevel = implode(',', $waterLevel);
+    mysqli_close($connect);
+}
 ?>
-
-    </div>
-
   </div>
 
   <canvas id="myChart" ></canvas>
@@ -172,11 +162,11 @@ GROUP BY id DESC";
    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.js"></script>
    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script> -->
 
    <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
    <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"></script>
-   <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> 
+   <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
   <script>
     var ctx = document.getElementById("myChart").getContext('2d');
@@ -221,18 +211,18 @@ GROUP BY id DESC";
         }
     });
 
-    
+
 
 
     $('#datepickerS').datepicker({
         dateFormat: "dd-mm-yy"
-   
+
   });
 
-  
+
   $('#datepickerE').datepicker({
         dateFormat: "dd-mm-yy"
-   
+
   });
 
 //   $('#datepickerE').datepicker({
@@ -241,7 +231,7 @@ GROUP BY id DESC";
 //    endDate: '+2m +10d'
 //   });
 
-  
+
   </script>
 
     </div>
@@ -254,3 +244,30 @@ GROUP BY id DESC";
       <script src="datepicker-master/js/datepicker.js"></script>
 
   <script src="datepicker-master/js/main.js"></script>
+
+  <script>
+                function chart()
+    {
+        var va_s = document.forms['chartinput']['datepickerS'].value;
+        var va_e= document.forms['chartinput']['datepickerE'].value;
+      
+       var message = "ยังไม่ได้กรอกข้อมูล \n";
+       var valid = true;
+
+       if(va_s == null || va_s=='')
+       {
+           valid = false;
+           message = message + " - ไม่ได้กรอก วัน/เดือน/ปีเริ่มต้น!!\n";
+       }
+    
+       if(va_e == null || va_e=='')
+       {
+           valid = false;
+           message = message + " - ไม่ได้กรอก วัน/เดือน/ปีสิ้นสุด!!\n";
+       }
+       if(valid == false){
+            alert(message);
+       }
+       return valid;
+    }
+    </script>
