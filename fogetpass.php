@@ -1,6 +1,8 @@
 <?php
 ob_start();
 session_start();
+error_reporting(-1);
+ini_set('display_errors', 'true');
 ?>
 <?php
 require 'dbconnect.php';
@@ -11,104 +13,69 @@ if (!empty($_POST['texemail'])) {
 } else {
     $valid = false;
 }
-if (!empty($_POST['texpassword'])) {
-    $password = mysqli_escape_string($connect, ($_POST['texpassword']));
+if (!empty($_POST['texemail'])) {
+    $email = mysqli_escape_string($connect, $_POST['texemail']);
 } else {
     $valid = false;
 }
+
 if ($valid) {
-    $trnfer_password = base64_encode('$password');
-    // $trnfer_password = md5('$password');
-
-    echo $trnfer_password;
     if (isset($_POST['submit'])) {
-        $sql_remember = "SELECT * FROM users WHERE email = '$email' AND password = '$trnfer_password'";
-        $query_remember = mysqli_query($connect, $sql_remember, MYSQLI_STORE_RESULT) or die(mysqli_error($connect));
-        $row = mysqli_fetch_assoc($query_remember);
+        $sql_forget = "SELECT * FROM users WHERE email = '$email' ";
+        $query = mysqli_query($connect, $sql_forget, MYSQLI_STORE_RESULT) or die(mysqli_error($connect));
+        $row = mysqli_fetch_assoc($query);
         // echo $sql_remember;
+        //เจอ
         if ($row) {
-            if (!empty($_POST['remember'])) {
-                setcookie('email', $email, time() + (10 * 365 * 24 * 60 * 60));
-                setcookie('password', $password, time() + (10 * 365 * 24 * 60 * 60));
-            // echo $email;
-            } elseif (empty($_POST['remember'])) {
-                if (isset($_COOKIE['email'])) {
-                    setcookie('email', '');
-                }
-                if (isset($_COOKIE['password'])) {
-                    setcookie('password', '');
-                }
-            }
-            // เข้าระบบ
-            //Setting
-            $lineapi = 'eIUiqHOHmcPIEOC5uetSxY1lOTfEBubHDI7yz9qy8Zf';
-            date_default_timezone_set('Asia/Bangkok');
-            //line Send
-            $chOne = curl_init();
-            curl_setopt($chOne, CURLOPT_URL, 'https://notify-api.line.me/api/notify');
-            // SSL USE
-            curl_setopt($chOne, CURLOPT_SSL_VERIFYHOST, 0);
-            curl_setopt($chOne, CURLOPT_SSL_VERIFYPEER, 0);
-            //POST
-            curl_setopt($chOne, CURLOPT_POST, 1);
-            // Message
+            $to = 'demo@localhost.com'; /// email ที่จะส่งหาแต่ละคน
+            $to_user = 'ผู้ใช้ Demo';
+            $subject = 'ข้อมูลผู้ใช้งาน';
+            $from_user = 'wattana@localhost.com';
+            // ให้รองรับการแสดงภาษาไทยในโปรแกรม อ่านอีเมล
+            $to_user = '=?UTF-8?B?'.base64_encode($to_user).'?=';
+            $from_user = '=?UTF-8?B?'.base64_encode($from_user).'?=';
+            $subject = '=?UTF-8?B?'.base64_encode($subject).'?=';
+            $body = 'รายละเอียดข้อมูลผู้ใช้งาน <br>';
+            $body .= 'Email : '.$row['email'].'<br>';
+            $body .= 'Password : '.$row['password'].'<br>';
 
-            //*** Session
-            if ($row['isadmin'] == 1) {
-                $_SESSION['userid'] = $row['id'];
-                $_SESSION['email'] = $row['email'];
-                $_SESSION['Status'] = $row['isadmin'];
-                //echo $_SESSION['u_username'];
-                header('location:http://localhost/b_phpProject/index.php?cont=Dashboard');
-                curl_setopt($chOne, CURLOPT_POSTFIELDS, "message=$email เข้าสู่ระบบ");
-                //ถ้าต้องการใส่รุป ให้ใส่ 2 parameter imageThumbnail และimageFullsize
-                //curl_setopt( $chOne, CURLOPT_POSTFIELDS, "message=$mms&imageThumbnail=http://plusquotes.com/images/quotes-img/surprise-happy-birthday-gifts-5.jpg&imageFullsize=http://plusquotes.com/images/quotes-img/surprise-happy-birthday-gifts-5.jpg&stickerPackageId=1&stickerId=100");
-                // follow redirects
-                curl_setopt($chOne, CURLOPT_FOLLOWLOCATION, 1);
-                //ADD header array
-                $headers = array('Content-type: application/x-www-form-urlencoded', 'Authorization: Bearer '.$lineapi.'');
-                curl_setopt($chOne, CURLOPT_HTTPHEADER, $headers);
-                //RETURN
-                curl_setopt($chOne, CURLOPT_RETURNTRANSFER, 1);
-                $result = curl_exec($chOne);
-                //Check error
-                if (curl_error($chOne)) {
-                    echo 'error:'.curl_error($chOne);
-                } else {
-                    $result_ = json_decode($result, true);
-                    echo 'status : '.$result_['status'];
-                    echo 'message : '.$result_['message'];
-                }
-                //Close connect
-                curl_close($chOne);
-            } elseif ($row['isadmin'] == 0) {
-                $_SESSION['userid'] = $row['id'];
-                $_SESSION['email'] = $row['email'];
-                $_SESSION['Status'] = $row['isadmin'];
-                //echo $_SESSION['u_username'];
-                header('location:http://localhost/b_phpProject/index.php?cont=Dashboard');
-                curl_setopt($chOne, CURLOPT_POSTFIELDS, "message=$email เข้าสู่ระบบ");
-                // follow redirects
-                curl_setopt($chOne, CURLOPT_FOLLOWLOCATION, 1);
-                //ADD header array
-                $headers = array('Content-type: application/x-www-form-urlencoded', 'Authorization: Bearer '.$lineapi.'');
-                curl_setopt($chOne, CURLOPT_HTTPHEADER, $headers);
-                //RETURN
-                curl_setopt($chOne, CURLOPT_RETURNTRANSFER, 1);
-                $result = curl_exec($chOne);
-                //Check error
-                if (curl_error($chOne)) {
-                    echo 'error:'.curl_error($chOne);
-                } else {
-                    $result_ = json_decode($result, true);
-                    echo 'status : '.$result_['status'];
-                    echo 'message : '.$result_['message'];
-                }
-                //Close connect
-                curl_close($chOne);
+            $headers   = array();
+            $headers[] = 'MIME-Version: 1.0';
+            $headers[] = 'Content-type: text/html; charset=UTF-8';
+            $headers[] = "To: $to_user <$to>";
+            $headers[] = "From: $from_user <postmaster@localhost.com>";
+            //$headers[] = "Cc: Name CC <postmaster@localhost.com>";
+            //$headers[] = "Bcc: Name BCC <postmaster@localhost.com>";
+            //$headers[] = "Reply-To: Postmaster <postmaster@localhost.com>";
+            $headers[] = "Subject: $subject";
+            $headers[] = 'X-Mailer: PHP/'.phpversion();
+            if (mail($to, $subject, $body, implode("\r\n", $headers))) {
+                // echo 'ส่งอีเมลเรียบร้อยแล้ว!';
+                echo "<script> alert('ส่งอีเมลเรียบร้อยแล้ว!');
+                location.replace('http://localhost/b_phpProject/fogetpass.php');
+                </script>";
+            } else {
+                // echo 'เกิดข้อผิดพลาด...';
+                echo "<script> alert('เกิดข้อผิดพลาด...!');
+                location.replace('http://localhost/b_phpProject/fogetpass.php');
+                </script>";
             }
-        } else {
-            echo " <script>   alert('กรอก Email หรือ Password ผิด'); </script>";
+            // $strTo = $row['email'];
+            // $strSubject = 'ข้อมูลรหัสผ่านของคุณ';
+            // $strHeader = "Content-type: text/html; charset=windows-874\n"; // or UTF-8 //
+            // $strHeader .= "From: wattana@hotmail.com\nReply-To: wattana@hotmail.com";
+            // $strMessage = '';
+            // $strMessage .= 'Welcome : '.$row['name'].'<br>';
+            // $strMessage .= 'Email : '.$row['email'].'<br>';
+            // $strMessage .= 'Password : '.$row['password'].'<br>';
+            // $strMessage .= '=================================<br>';
+            // $strMessage .= 'wattana.Com<br>';
+            // $flgSend = mail($strTo, $strSubject, $strMessage, $strHeader);
+        } else {//ไม่เจอข้อมูล
+            echo "<script> alert('ไม่เจอ Email ผู้ใช้งาน');
+            location.replace('http://localhost/b_phpProject/fogetpass.php');
+            </script>";
+            // mysqli_close();
         }
     }
 }
@@ -166,34 +133,19 @@ padding : 50px 0;
           <div class="container">
           <div class="row">
           <div class="col-md-4 login-sec">
-              <h2 class="text-center">เข้าสู่ระบบ</h2>
-              <form class="login-form" name='login' id='login' method="POST"  >
+              <h2 class="text-center">ลืมรหัสผ่าน</h2>
+              <form class="login-form" name='forget' id='forget' method="POST"  >
 
                   <div class="form-group" >
                     <label for="exampleInputEmail1" class="text-uppercase">Email</label>
-                    <input  type="text" class="form-control" placeholder="กรอก Email"  id="texemail"  name="texemail"
-                    value ="<?php if (isset($_COOKIE['email'])) {
-    echo $_COOKIE['email'];
-}?>" required autofocus>
-                    </div>
-
-                    <div class="form-group">
-                    <label for="exampleInputPassword1" class="text-uppercase">รหัสผ่าน</label>
-                    <input type="password" class="form-control" placeholder="กรอกรหัสผ่าน" id="texpassword" name="texpassword" required >
-                    </div>
-
-                    <div class="form-check">
-                    <label class="form-check-label">
-                        <input type="checkbox" class="form-check-input" name="remember" id="remember" <?php if (isset($_COOKIE['email'])) {
-    ?> checked <?php
-}?>/>
-                        <small>จำข้อมูลการล็อกอินไว้</small>
-                    </label>
-                    <button type="submit" name = "submit" class="btn btn-login float-right">เข้าสู่ระบบ</button>
+                    <input  type="text" class="form-control" placeholder="กรอก Email"  id="texemail"  name="texemail" required autofocus>
+                    </div>               
+                    <div class="form-check">              
+                    <button type="submit" name = "submit" class="btn btn-login float-right">ส่งรหัสผ่าน</button>
                     </div>
                     </form>
+                    <h1><div class="copy-text"> <a href="http://localhost/b_phpProject/login.php">เข้าสู่ระบบ</a></div><h1>
 
-                    <h1><div class="copy-text"> <a href="http://localhost/b_phpProject/fogetpass.php">ลืมรหัสผ่าน</a></div><h1>
             </div>
 
             <div class="col-md-8 banner-sec">

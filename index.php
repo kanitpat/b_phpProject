@@ -77,7 +77,7 @@ if (!$_SESSION['userid']) { //check session
             require 'dashboard.php';
         }
         if ($page == 'กราฟ') {
-            require 'chart-test.php';
+            require 'chart_test.php';
         }
         if ($page == 'ตาราง') {
             require 'tables.php';
