@@ -33,11 +33,12 @@
       <div class="modal-footer">
         <button class="btn btn-danger" type="button" data-dismiss="modal">ไม่ใช่</button>
         <button type="submit" class="btn btn-success" name="saveon">ใช่</button>
-        <?php if (isset($_POST['saveon'])) {
-    $sqlNN = 'INSERT INTO  statuses( `numstatus`, `detail`,`date`, `time`) VALUES ( 1,"เปิด",NOW(),NOW())';
-    $queryNN = mysqli_query($connect, $sqlNN, MYSQLI_STORE_RESULT) or die('DIE');
-}
-
+        <?php 
+        $userid = $_SESSION['userid'];
+        if (isset($_POST['saveon'])) {
+            $sqlNN = "INSERT INTO  statuses( `numstatus`, `detail`,`date`, `time`, `idUser`) VALUES ( 1,'เปิด',NOW(),NOW(),'$userid')";
+            $queryNN = mysqli_query($connect, $sqlNN, MYSQLI_STORE_RESULT) or die('DIE');
+        }
 ?>
 
       </div>
@@ -60,7 +61,7 @@
         <button class="btn btn-danger" type="button" data-dismiss="modal">ไม่ใช่</button>
         <button type="submit" class="btn btn-success" name="saveoff">ใช่</button>
         <?php if (isset($_POST['saveoff'])) {
-    $sqlFF = 'INSERT INTO  statuses( `numstatus`, `detail`,`date`, `time`) VALUES ( 0,"ปิด",NOW(),NOW())';
+    $sqlFF = "INSERT INTO  statuses( `numstatus`, `detail`,`date`, `time`, `idUser`) VALUES ( 0,'ปิด',NOW(),NOW(),'$userid')";
     $queryFF = mysqli_query($connect, $sqlFF, MYSQLI_STORE_RESULT) or die('DIE');
 }
 
