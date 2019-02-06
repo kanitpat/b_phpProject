@@ -15,6 +15,8 @@ const char* pass = "52123401"; //สร้างตัวแปรไว้เ�
 int dst = 0;
 ESP8266WiFiMulti WiFiMulti;
 int timezone = 7 * 3600;
+double duration, cm;
+HTTPClient http;
 
 void setup() {
   pinMode(D4, OUTPUT);
@@ -35,7 +37,9 @@ void setup() {
     Serial.print(".");
     delay(1000);
   }
+
 }//close setup
+
 int value = 0;
 void Line_Notify(String message) {
   axTLS::WiFiClientSecure client;
@@ -70,14 +74,29 @@ void Line_Notify(String message) {
   Serial.println("-------------");
 }
 
+
+//  Serial.print("connecting to ");
+//  Serial.println(host);
+//  double duration, cm;
+//  pinMode(pingPin, OUTPUT);
+//  digitalWrite(pingPin, LOW);
+//  delayMicroseconds(2);
+//  digitalWrite(pingPin, HIGH);
+//  delayMicroseconds(5);
+//  digitalWrite(pingPin, LOW);
+//  pinMode(inPin, INPUT);
+//  duration = pulseIn(inPin, HIGH);
+//  cm = microsecondsToCentimeters(duration);
+//  Serial.print(cm);
+//  Serial.println("cm");
+//  delay(2000);
+
+
+
 void loop()
-{ 
-  json();
-  delay(2000);
-  ++value;
+{
   Serial.print("connecting to ");
   Serial.println(host);
-  double duration, cm;
   pinMode(pingPin, OUTPUT);
   digitalWrite(pingPin, LOW);
   delayMicroseconds(2);
@@ -87,84 +106,18 @@ void loop()
   pinMode(inPin, INPUT);
   duration = pulseIn(inPin, HIGH);
   cm = microsecondsToCentimeters(duration);
-  Serial.print(cm);
-  Serial.println("cm");
-  delay(2000);
-  
+
   if ((WiFiMulti.run() == WL_CONNECTED)) {
+    //    ดึงค่าจากฐานข้อมูลมา ide
+    config_formbase();
+    //    ตั้งค่าไลน์เด้งๆ
+    setup_line();
+
+    // เพิ่มระยะทางเซนเซอร์เข้าฐานข้อมูล
+    insert_sensorToBase();
     
-    //    message_cm = 200 - cm;
-    //    if (cm <= 150) {
-    //      comment = "ระดับสูงขึ้น" ;
-    //      messagenoti = comment + "เหลือ : " + message_cm + " เซนติเมตร";
-    //      Line_Notify(messagenoti);
-    //
-    //      HTTPClient http;
-    //      String url_line = "http://192.168.43.104/b_phpProject/addNotiLine.php?sensor=" + String(cm) + "&message=" + comment;
-    //      Serial.println(url_line);
-    //      http.begin(url_line); //HTTP4
-    //
-    //      int httpCode = http.GET();
-    //      if (httpCode > 0) {
-    //        Serial.printf("[HTTP] GET... code: %d\n", httpCode);
-    //
-    //        if (httpCode == HTTP_CODE_OK) {
-    //          String payload = http.getString();
-    //          Serial.println(payload);
-    //
-    //        }
-    //      } else {
-    //        Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
-    //      }
-    //
-    //    } else {
-    //      comment = "ระดับน้ำลดลงเหลือ " ;
-    //      messagenoti = comment + "เหลือ : " + message_cm + " เซนติเมตร";
-    //      Line_Notify(messagenoti);
-    //
-    //      HTTPClient http;
-    //      String url_line = "http://192.168.43.104/b_phpProject/addNotiLine.php?sensor=" + String(cm) + "&message=" + comment ;
-    //      Serial.println(url_line);
-    //      http.begin(url_line); //HTTP
-    //
-    //      int httpCode = http.GET();
-    //      if (httpCode > 0) {
-    //        Serial.printf("[HTTP] GET... code: %d\n", httpCode);
-    //
-    //        if (httpCode == HTTP_CODE_OK) {
-    //          String payload = http.getString();
-    //          Serial.println(payload);
-    //
-    //        }
-    //      } else {
-    //        Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
-    //      }
-    //
-    //    }
+    http.end();
 
-
-    ////      insert to database
-    //      HTTPClient http;
-    //      String url = "http://192.168.43.104/b_phpProject/addbase.php?level=" + String(cm) ;
-    //      Serial.println(url);
-    //      http.begin(url); //HTTP
-    //
-    //      int httpCode = http.GET();
-    //      if (httpCode > 0) {
-    //        Serial.printf("[HTTP] GET... code: %d\n", httpCode);
-    //
-    //        if (httpCode == HTTP_CODE_OK) {
-    //          String payload = http.getString();
-    //          Serial.println(payload);
-    //
-    //        }
-    //      } else {
-    //        Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
-    //      }
-    //
-    //
-    //
-    //      http.end();
   }
 
   configTime(timezone, dst, "pool.ntp.org", "time.nist.gov"); //ดีงเวลาปัจจุบันจาก Server
@@ -179,7 +132,95 @@ void loop()
   delay(2000);
 
 }
-void json() {
+void setup_line() {
+  
+  message_cm = 200 - cm;
+  if (cm < 150) {
+    comment = "ระดับสูงขึ้น" ;
+    messagenoti = comment + "เหลือ : " + message_cm + " เซนติเมตร";
+    Line_Notify(messagenoti);
+
+    HTTPClient http;
+    String url_line = "http://192.168.43.104/b_phpProject/addNotiLine.php?sensor=" + String(cm) + "&message=" + comment;
+    Serial.println(url_line);
+    http.begin(url_line); //HTTP4
+
+    int httpCode = http.GET();
+    if (httpCode > 0) {
+      Serial.printf("[HTTP] GET... code: %d\n", httpCode);
+
+      if (httpCode == HTTP_CODE_OK) {
+        String payload = http.getString();
+        Serial.println(payload);
+
+      }
+    } else {
+      Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
+    }
+
+  } else {
+    comment = "ระดับน้ำลดลงเหลือ " ;
+    messagenoti = comment + "เหลือ : " + message_cm + " เซนติเมตร";
+    Line_Notify(messagenoti);
+
+    HTTPClient http;
+    String url_line = "http://192.168.43.104/b_phpProject/addNotiLine.php?sensor=" + String(cm) + "&message=" + comment ;
+    Serial.println(url_line);
+    http.begin(url_line); //HTTP
+
+    int httpCode = http.GET();
+    if (httpCode > 0) {
+      Serial.printf("[HTTP] GET... code: %d\n", httpCode);
+
+      if (httpCode == HTTP_CODE_OK) {
+        String payload = http.getString();
+        Serial.println(payload);
+
+      }
+    } else {
+      Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
+    }
+
+  }
+
+}
+
+void insert_sensorToBase() {
+  //  insert to database
+
+  double duration, cm;
+  pinMode(pingPin, OUTPUT);
+  digitalWrite(pingPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(pingPin, HIGH);
+  delayMicroseconds(5);
+  digitalWrite(pingPin, LOW);
+  pinMode(inPin, INPUT);
+
+  duration = pulseIn(inPin, HIGH);
+  cm = microsecondsToCentimeters(duration);
+  HTTPClient http;
+  String url = "http://192.168.43.104/b_phpProject/addbase.php?level=" + String(cm) ;
+  Serial.println(url);
+  http.begin(url); //HTTP
+
+  int httpCode = http.GET();
+  if (httpCode > 0) {
+    Serial.printf("[HTTP] GET... code: %d\n", httpCode);
+
+    if (httpCode == HTTP_CODE_OK) {
+      String payload = http.getString();
+      Serial.println(payload);
+
+    }
+  } else {
+    Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
+  }
+
+
+}
+
+void config_formbase() {
   ++value;
   Serial.print("connecting to ");
   Serial.println(host);
@@ -196,8 +237,8 @@ void json() {
   Serial.println(url);
 
   client.print(String("GET ") + url + " HTTP/1.1\r\n" +
-              "Host: " + host + "\r\n" + 
-              "Connection: close\r\n\r\n");
+               "Host: " + host + "\r\n" +
+               "Connection: close\r\n\r\n");
   unsigned long timeout = millis();
   while (client.available() == 0) {
     if (millis() - timeout > 5000) {
@@ -206,14 +247,14 @@ void json() {
       return;
     }
   }
-// ในส่วนของการดึง Json โดยการดึง ตัวแปรที่ชื่อว่าตัวแปรมาใช้งาน
-// ยกตัวอย่าง ตัวแปร ch1 ค่าที่ได้จะเป็น 1 แสดงออกมา เราสามารถนำ ตัว แปร ch1 ไปใช้งานต่างๆได้เช่นการแสดงข้อความออกจอ LCD เปิดปิดไฟตามกำหนด
-  if(client.find("")){
-      client.find("ch1");  // 
-      ch1 = client.parseFloat();
-     }
+  // ในส่วนของการดึง Json โดยการดึง ตัวแปรที่ชื่อว่าตัวแปรมาใช้งาน
+  // ยกตัวอย่าง ตัวแปร ch1 ค่าที่ได้จะเป็น 1 แสดงออกมา เราสามารถนำ ตัว แปร ch1 ไปใช้งานต่างๆได้เช่นการแสดงข้อความออกจอ LCD เปิดปิดไฟตามกำหนด
+  if (client.find("")) {
+    client.find("ch1");  //
+    ch1 = client.parseFloat();
+  }
   Serial.print("Output = ");
-  Serial.println(ch1); 
+  Serial.println(ch1);
   Serial.println();
   Serial.println("closing connection");
 }
