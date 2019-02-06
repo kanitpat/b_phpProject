@@ -23,7 +23,7 @@ if (!empty($_POST['texConfirmpassword'])) {
 		              alert ('ท่านใส่ Password ไม่ตรงกัน ');
                       location.replace('http://localhost/b_phpProject/index.php?cont=สมาชิก');
         </script>";
-        // exit();
+        exit();
         // echo "<script>
         // location.replace('http://localhost/b_phpProject/Register.php');
         // </script>";
@@ -41,11 +41,7 @@ if (!empty($_POST['texlastname'])) {
 } else {
     $valid = false;
 }
-if (!empty($_POST['texauth'])) {
-    $auth_t = mysqli_escape_string($connect, $_POST['texauth']);
-} else {
-    $valid = false;
-}
+
 if (!empty($_POST['texemail'])) {
     // check if e-mail address is well-formed
     if (!filter_var($_POST['texemail'], FILTER_VALIDATE_EMAIL)) {
@@ -57,11 +53,18 @@ if (!empty($_POST['texemail'])) {
         $email = mysqli_escape_string($connect, $_POST['texemail']);
     }
 }
+if (!empty($_POST['texauth'])) {
+    $auth_t = mysqli_escape_string($connect, $_POST['texauth']);
+} else {
+    $valid = false;
+}
+// echo  $email; echo  $auth_t;
 
     if ($valid == true) {
+        // echo 'เข้า';
         if (isset($_POST['submit'])) {
             $date = date('Y-m-d H:i:s');
-            // echo 'เข้า';
+
             // เช็คอีเมลซ้ำไหม
             $sql_chk_email = "SELECT *
         FROM users
@@ -72,10 +75,10 @@ if (!empty($_POST['texemail'])) {
                       window.location='http://localhost/b_phpProject/index.php?cont=สมาชิก';</script>";
                 exit();
             } else {
-                $trnfer_password = base64_encode('$conpassword');
+                $trnfer_password = base64_encode($conpassword);
                 $strsql = "INSERT INTO  users( `email`, `password`, `name`, `lastname`, `api_token`, `isadmin`, `created_at`, `updated_at`)
-            VALUES
-            ( '$email', ('$trnfer_password'), '$name', '$lastname',Null,'$auth_t',NOW(),NOW())";
+                VALUES
+                ( '$email', ('$trnfer_password'), '$name', '$lastname',Null,'$auth_t',NOW(),NOW())";
 
                 $result = mysqli_query($connect, $strsql, MYSQLI_STORE_RESULT) or die(mysqli_error($connect));
                 // echo $result;
@@ -85,7 +88,6 @@ if (!empty($_POST['texemail'])) {
                     echo "<script> alert('ลงทะเบียนสำเร็จ');
                       location.replace('http://localhost/b_phpProject/index.php?cont=สมาชิก');
                       </script>";
-                // }
                 } else {
                     echo "<script> alert('ขออภัยไม่มารถเพิ่มสมาชิกได้');
                       window.location='http://localhost/b_phpProject/index.php?cont=สมาชิก';</script>";
@@ -135,8 +137,9 @@ if (!empty($_POST['texemail'])) {
                 <label class="my-1 mr-2" for="inlineFormCustomSelectPref">สิทธิ์การใช้งาน</label>
                 <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref"  name="texauth">
                     <option selected>เลือก...</option>                 
-                    <option value="0">ผู้ใช้งานทั่วไป</option>  
                     <option value="1">Admin</option>
+                    <option value="2">ผู้ใช้งานทั่วไป</option>
+
                 </select> <br /> <br />
 
         <input type="hidden" name="_token" >
@@ -207,10 +210,6 @@ if (!empty($_POST['texemail'])) {
 
        return valid;
     }
-
-
-
-
     </script>
      <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
       <script src="vendor/jquery/jquery.min.js"></script>

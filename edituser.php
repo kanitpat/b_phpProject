@@ -113,14 +113,14 @@ if ($valid == true) {
 }
 $validpass = true;
 if (!empty($_POST['password'])) {
-    $password = mysqli_escape_string($connect, md5($_POST['password']));
+    $password = mysqli_escape_string($connect, ($_POST['password']));
 } else {
     $validpass = false;
 }
 if (!empty($_POST['Confirmpassword'])) {
     if ($_POST['password'] === $_POST['Confirmpassword']) {
         // success!
-        $conpassword = mysqli_escape_string($connect, md5($_POST['Confirmpassword']));
+        $conpassword = mysqli_escape_string($connect, ($_POST['Confirmpassword']));
     } else {
         echo "<script>
                             alert ('ท่านใส่ Password ไม่ตรงกัน ');
@@ -130,9 +130,10 @@ if (!empty($_POST['Confirmpassword'])) {
     $validpass = false;
 }
 if ($validpass == true) {
+    $trnfer_password = base64_encode($conpassword);
     $date = date('Y-m-d H:i:s');
     $sqlpass = "UPDATE  users SET
-                    password = '$conpassword' ,              
+                    password = '$trnfer_password' ,              
                     created_at = NOW(),
                     updated_at = NOW()
                     WHERE users.id = '$_id' ";

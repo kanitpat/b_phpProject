@@ -17,7 +17,7 @@ if (!empty($_POST['texpassword'])) {
     $valid = false;
 }
 if ($valid) {
-    $trnfer_password = base64_encode('$password');
+    $trnfer_password = base64_encode($password);
     // $trnfer_password = md5('$password');
 
     echo $trnfer_password;
@@ -81,7 +81,7 @@ if ($valid) {
                 }
                 //Close connect
                 curl_close($chOne);
-            } elseif ($row['isadmin'] == 0) {
+            } elseif ($row['isadmin'] == 2) {
                 $_SESSION['userid'] = $row['id'];
                 $_SESSION['email'] = $row['email'];
                 $_SESSION['Status'] = $row['isadmin'];

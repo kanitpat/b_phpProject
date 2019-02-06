@@ -67,7 +67,7 @@ if (!$_SESSION['userid']) { //check session
     <div class="container-fluid">
       <?php
 //login user
-    if (!empty($_GET['cont']) && $_SESSION['Status'] == 0) {
+    if (!empty($_GET['cont']) && $_SESSION['Status'] == 2) {
         $page = mysqli_escape_string($connect, $_GET['cont']);
 
         // if ($page == 'Home') {

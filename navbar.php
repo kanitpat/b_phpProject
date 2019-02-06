@@ -26,8 +26,16 @@
       <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="fas fa-user-circle fa-fw"></i>
       </a>
+      <?php $userid = $_SESSION['userid'];
+      $sql = "SELECT *
+  FROM users 
+  WHERE id = '$userid'";
+    $query = mysqli_query($connect, $sql, MYSQLI_STORE_RESULT) or die('Query error');
+    $resuelt = mysqli_fetch_assoc($query);
+    $email_q = $resuelt['email'];
+?>
       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-        <a class="dropdown-item" href="http://localhost/b_phpProject/index.php?cont=edit"><?php echo $_SESSION['email']; ?></a>
+        <a class="dropdown-item" href="http://localhost/b_phpProject/index.php?cont=edit"><?php echo $email_q; ?></a>
         <div class="dropdown-divider"></div>
         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
       </div>

@@ -27,6 +27,13 @@ if ($valid) {
         // echo $sql_remember;
         //เจอ
         if ($row) {
+            $pass = $row['password'];
+            $tran_pass = base64_decode($pass);
+            // echo base64_decode('MTI=');
+
+            // eval($tran_pass);
+            // echo $tran_pass;
+
             $to = 'demo@localhost.com'; /// email ที่จะส่งหาแต่ละคน
             $to_user = 'ผู้ใช้ Demo';
             $subject = 'ข้อมูลผู้ใช้งาน';
@@ -37,7 +44,7 @@ if ($valid) {
             $subject = '=?UTF-8?B?'.base64_encode($subject).'?=';
             $body = 'รายละเอียดข้อมูลผู้ใช้งาน <br>';
             $body .= 'Email : '.$row['email'].'<br>';
-            $body .= 'Password : '.$row['password'].'<br>';
+            $body .= 'Password : '.$tran_pass.'<br>';
 
             $headers   = array();
             $headers[] = 'MIME-Version: 1.0';
@@ -54,6 +61,7 @@ if ($valid) {
                 echo "<script> alert('ส่งอีเมลเรียบร้อยแล้ว!');
                 location.replace('http://localhost/b_phpProject/fogetpass.php');
                 </script>";
+            // echo $tran_pass.'<br>'.$pass;
             } else {
                 // echo 'เกิดข้อผิดพลาด...';
                 echo "<script> alert('เกิดข้อผิดพลาด...!');
