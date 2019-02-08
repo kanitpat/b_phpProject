@@ -5,6 +5,7 @@ session_start();
 if (!$_SESSION['userid']) { //check session
     header('Location: login.php');
 } else {
+    // require 'addstatus.php';
     $sql = 'SELECT *
   FROM waters
   ORDER BY id DESC';
@@ -106,7 +107,7 @@ if (!$_SESSION['userid']) { //check session
         if ($page == 'ตั้งค่า') {
             require 'adminConfig.php';
         }
-        if ($page == 'สมาชิก') {
+        if ($page == 'เพิ่มสมาชิก') {
             require 'addusers.php';
         }
     } ?>

@@ -53,11 +53,19 @@ if ($_SESSION['Status'] == 0) {
             <i class="fa fa-fw fa-wrench"></i>
             <span>ตั้งค่าระยะเซนเซอร์</span></a>
         </li>
-    <li class="nav-item">
-          <a class="nav-link" href="http://localhost/b_phpProject/index.php?cont=สมาชิก">
-            <i class="fa fa-fw fa-user"></i>
-            <span>เพิ่มสมาชิก</span></a>
+
+    <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <i class="fa fa-fw fa-user"></i>
+            <span>สมาชิก</span></a>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="http://localhost/b_phpProject/index.php?cont=เพิ่มสมาชิก">เพิ่มสมาชิก</a>  
+          <a class="dropdown-item" href="http://localhost/b_phpProject/index.php?cont=สมาชิก">รายชื่อสมาชิก</a>        
+      
+        </div>
         </li>
+
   </ul>
 
 <?php

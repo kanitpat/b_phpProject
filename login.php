@@ -20,7 +20,7 @@ if ($valid) {
     $trnfer_password = base64_encode($password);
     // $trnfer_password = md5('$password');
 
-    echo $trnfer_password;
+    // echo $trnfer_password;
     if (isset($_POST['submit'])) {
         $sql_remember = "SELECT * FROM users WHERE email = '$email' AND password = '$trnfer_password'";
         $query_remember = mysqli_query($connect, $sql_remember, MYSQLI_STORE_RESULT) or die(mysqli_error($connect));
@@ -61,6 +61,8 @@ if ($valid) {
                 //echo $_SESSION['u_username'];
                 header('location:http://localhost/b_phpProject/index.php?cont=Dashboard');
                 curl_setopt($chOne, CURLOPT_POSTFIELDS, "message=$email เข้าสู่ระบบ");
+                $nextRecord = $_SESSION['userid'];
+                // echo "<meta http-equiv='refresh' content='url=http://192.168.43.104/b_phpProject/addstatus.php?status=1&iduser=8".$nextRecord."' />";
                 //ถ้าต้องการใส่รุป ให้ใส่ 2 parameter imageThumbnail และimageFullsize
                 //curl_setopt( $chOne, CURLOPT_POSTFIELDS, "message=$mms&imageThumbnail=http://plusquotes.com/images/quotes-img/surprise-happy-birthday-gifts-5.jpg&imageFullsize=http://plusquotes.com/images/quotes-img/surprise-happy-birthday-gifts-5.jpg&stickerPackageId=1&stickerId=100");
                 // follow redirects
@@ -167,7 +169,7 @@ padding : 50px 0;
           <div class="row">
           <div class="col-md-4 login-sec">
               <h2 class="text-center">เข้าสู่ระบบ</h2>
-              <form class="login-form" name='login' id='login' method="POST"  >
+              <form class="login-form" name='login' id='login'  method="POST"  >
 
                   <div class="form-group" >
                     <label for="exampleInputEmail1" class="text-uppercase">Email</label>

@@ -1,5 +1,5 @@
 <?php require 'dbconnect.php';
-header('refresh: 10;'); ?>
+// header('refresh: 10;');?>
 <?php
 
 $sql_count = 'SELECT  count(*)
