@@ -61,7 +61,7 @@ if ($_SESSION['Status'] == 0) {
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="http://localhost/b_phpProject/index.php?cont=เพิ่มสมาชิก">เพิ่มสมาชิก</a>  
-          <a class="dropdown-item" href="http://localhost/b_phpProject/index.php?cont=สมาชิก">รายชื่อสมาชิก</a>        
+          <a class="dropdown-item" href="http://localhost/b_phpProject/index.php?cont=รายชื่อสมาชิก">รายชื่อสมาชิก</a>        
       
         </div>
         </li>

@@ -89,26 +89,37 @@ if (!$_SESSION['userid']) { //check session
     }
     //login admin
     else {
-        $page = mysqli_escape_string($connect, $_GET['cont']);
+        if (!empty($_GET['cont'])) {
+            $page = mysqli_escape_string($connect, $_GET['cont']);
 
-        if ($page == 'Dashboard') {
-            require 'dashboard.php';
+            if ($page == 'Dashboard') {
+                require 'dashboard.php';
+            }
+            if ($page == 'กราฟ') {
+                require 'chart_test.php';
+                // require 'index2.html';
+            }
+            if ($page == 'ตาราง') {
+                require 'tables.php';
+            }
+            if ($page == 'edit') {
+                require 'edituser.php';
+            }
+            if ($page == 'ตั้งค่า') {
+                require 'adminConfig.php';
+            }
+            if ($page == 'เพิ่มสมาชิก') {
+                require 'addusers.php';
+            }
+            if ($page == 'รายชื่อสมาชิก') {
+                require 'Allmember.php';
+            }
         }
-        if ($page == 'กราฟ') {
-            require 'chart_test.php';
-            // require 'index2.html';
-        }
-        if ($page == 'ตาราง') {
-            require 'tables.php';
-        }
-        if ($page == 'edit') {
-            require 'edituser.php';
-        }
-        if ($page == 'ตั้งค่า') {
-            require 'adminConfig.php';
-        }
-        if ($page == 'เพิ่มสมาชิก') {
-            require 'addusers.php';
+        if (!empty($_GET['edit'])) {
+            $page_edit = mysqli_escape_string($connect, $_GET['edit']);
+            if ($page_edit) {
+                require 'editTable.php';
+            }
         }
     } ?>
       <?php require 'footer.php'; ?>
@@ -164,55 +175,6 @@ if (!$_SESSION['userid']) { //check session
   </div>
 </body>
 
-<script type="text/javascript" >
-
-$(document).ready(function() {
-    var table = $('#example').DataTable( {
-        responsive: true,
-        "order": [],
-        // "pageLength": 5,
-        // "lengthMenu": [ 5, 25, 50, 75, 100 ],
-        "oLanguage": {
-                    "sProcessing":     "กำลังดำเนินการ...",
-                    "sInfoPostFix":    "",
-                    "sInfoThousands":  ",",
-                    "sEmptyTable":     "ไม่มีข้อมูลในตาราง",
-                    "sLengthMenu": "แสดง _MENU_ เร็คคอร์ด ต่อหน้า",
-                    "sZeroRecords": "ไม่เจอข้อมูลที่ค้นหา",
-                    "sInfo": "แสดง _START_ ถึง _END_ ของ _TOTAL_ เร็คคอร์ด",
-                    "sInfoEmpty": "แสดง 0 ถึง 0 ของ 0 เร็คคอร์ด",
-                    "sInfoFiltered": "(จากเร็คคอร์ดทั้งหมด _MAX_ เร็คคอร์ด)",
-                    "sSearch": "ค้นหา :",
-                    "oPaginate": {
-                                  "sFirst":    "หน้าแรก",
-                                  "sPrevious": "ก่อนหน้า",
-                                  "sNext":     "ถัดไป",
-                                  "sLast":     "หน้าสุดท้าย"
-                    },
-                    "oAria": {
-                              "sSortAscending":  ": เปิดใช้งานการเรียงข้อมูลจากน้อยไปมาก",
-                              "sSortDescending": ": เปิดใช้งานการเรียงข้อมูลจากมากไปน้อย"
-                              },
-                  },
-
-        // lengthChange: false,
-        buttons:
-        [
-            'copy',
-            'excel' ,
-            'pdf',
-            'print'
-        ]
-    } );
-
-
-    table.buttons().container()
-        .appendTo( '#example_wrapper .col-md-6:eq(0)' );
-
-} );
-
-
-</script>
 
 </html>
 

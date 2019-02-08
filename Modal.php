@@ -13,11 +13,30 @@
       <div class="modal-body">ต้องการ Logout หรือไม่</div>
       <div class="modal-footer">
         <button class="btn btn-secondary" type="button" data-dismiss="modal">ยกเลิก</button>
-        <a class="btn btn-primary" href="logout.php">Logout</a>
+        <a class="btn btn-danger" href="logout.php">Logout</a>
       </div>
     </div>
   </div>
 </div>
+
+<!-- delete Modal
+<div class="modal fade" id="DeleteModal<?php echo $id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">ลบสมาชิก ?</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">ต้องการ ลบสมากชิก หรือไม่</div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">ยกเลิก</button>
+        <a class="btn btn-danger" href="delete.php">ลบ</a>
+      </div>
+    </div>
+  </div>
+</div> -->
 
 <!-- turn on Modal-->
 <div class="modal fade" id="turnonModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

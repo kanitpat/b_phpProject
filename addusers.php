@@ -72,7 +72,7 @@ if (!empty($_POST['texauth'])) {
             $query_email = mysqli_query($connect, $sql_chk_email);
             if ((mysqli_num_rows($query_email) >= 1)) {
                 echo "<script> alert('ขออภัย Email ซ้ำ');
-                      window.location='http://localhost/b_phpProject/index.php?cont=สมาชิก';</script>";
+                      window.location='http://localhost/b_phpProject/index.php?cont=รายชื่อสมาชิก';</script>";
                 exit();
             } else {
                 $trnfer_password = base64_encode($conpassword);
@@ -86,11 +86,11 @@ if (!empty($_POST['texauth'])) {
                 // เข้า login page
                 if ($result) {
                     echo "<script> alert('ลงทะเบียนสำเร็จ');
-                      location.replace('http://localhost/b_phpProject/index.php?cont=สมาชิก');
+                      location.replace('http://localhost/b_phpProject/index.php?cont=รายชื่อสมาชิก');
                       </script>";
                 } else {
                     echo "<script> alert('ขออภัยไม่มารถเพิ่มสมาชิกได้');
-                      window.location='http://localhost/b_phpProject/index.php?cont=สมาชิก';</script>";
+                      window.location='http://localhost/b_phpProject/index.php?cont=รายชื่อสมาชิก';</script>";
                 }
             }
         }
@@ -133,15 +133,19 @@ if (!empty($_POST['texauth'])) {
                 </div>
                 </div>
                 </div>
-
+                <div class="form-group">
+                <div class="form-row">
+                <div class="col-md-6">
                 <label class="my-1 mr-2" for="inlineFormCustomSelectPref">สิทธิ์การใช้งาน</label>
                 <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref"  name="texauth">
                     <option selected>เลือก...</option>                 
                     <option value="1">Admin</option>
                     <option value="2">ผู้ใช้งานทั่วไป</option>
 
-                </select> <br /> <br />
-
+                </select> 
+                </div>
+                </div>
+                </div>
         <input type="hidden" name="_token" >
       <input type="submit" name="submit" value="บันทึก" class="btn btn-primary">
       <input type="reset" value="Reset" class="btn btn-danger">
