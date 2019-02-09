@@ -121,6 +121,12 @@ if (!$_SESSION['userid']) { //check session
                 require 'editTable.php';
             }
         }
+        if (!empty($_GET['delete'])) {
+            $page_delete = mysqli_escape_string($connect, $_GET['delete']);
+            if ($page_delete) {
+                require 'delete.php';
+            }
+        }
     } ?>
       <?php require 'footer.php'; ?>
   </div>

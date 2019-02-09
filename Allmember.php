@@ -71,8 +71,16 @@
                             <button type="button" class="btn btn-success btn-sm">แก้ไข</button>
                         </a>
 
-                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#DeleteModal">ลบ</button> </td>
-                        
+                      
+                        <a href="http://localhost/b_phpProject/index.php?cont=รายชื่อสมากชิก&delete=<?php echo $id; ?>">
+                            <button type="button" class="btn btn-danger btn-sm ">ลบ</button>
+                        </a> 
+                        </td>
+
+                        <!-- <a href='#?php echo $id; ?' type="button" class="btn btn-danger btn-sm delete" data-id="?php echo $id; ?" data-toggle="modal" data-target="#DeleteModal_{{ $id->id }}" >ลบ</a></td> -->
+                      
+                        <!-- <button type="button" class="btn btn-danger btn-sm " data-toggle="modal" data-target="#DeleteModal">ลบ</button> </td> -->
+
                     </tr>                
         <?php
                 } ?>
@@ -99,9 +107,15 @@
       </div>
       <div class="modal-body">ต้องการ ลบสมาชิก หรือไม่</div>
       <div class="modal-footer">
+          <!-- <form action="delete.php" method="GET"> -->
         <button class="btn btn-secondary" type="button" data-dismiss="modal">ยกเลิก</button>
-        <a class="btn btn-danger" href="delete.php">ลบ</a>
+        <!-- <button class="btn btn-danger" type="submit">ลบ</button> -->
+
+        <a class="btn btn-danger" href="delete.php?id=<?php echo $id; ?>">ลบ</a>
+
+
       </div>
+      <!-- </form> -->
     </div>
   </div>
 </div>
@@ -152,5 +166,9 @@ $(document).ready(function() {
 
 } );
 
-
+$(document).ready(function(){
+    $("#submitButton").click(function(){
+        $("#DeleteModal").modal();
+    });
+});
 </script>
