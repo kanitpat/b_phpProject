@@ -14,7 +14,7 @@
               <a href="http://localhost/b_phpProject/index.php?cont=Dashboard">Dashboard</a>
             </li>
             <li class="breadcrumb-item active">กราฟ</li>
-           test
+           
           </ol>
 <?php
 require 'dbconnect.php';
@@ -110,10 +110,11 @@ if (isset($_POST['submit'])) {
     // WHERE member_date BETWEEN date('YYYY-MM-DD') AND date('YYYY-MM-DD')//  DATE_FORMAT(date, '%D%M%Y') AS date
     // echo '  s '.$date_S.'  E   '.$date_E;   WHERE date BETWEEN $newS AND $newE
     echo ' ช่วงเวลาวันที่ : '.$date_S.'  ถึง   '.$date_E;
+
     $query =
         "SELECT DATE_FORMAT(date, '%D%M%Y')AS date,waterLevel
 FROM `waters`
-WHERE date BETWEEN '$newS' and '$newE'
+WHERE date BETWEEN '$newS' and '$newE' 
 GROUP BY id DESC";
     $resultchart = mysqli_query($connect, $query) or die(mysqli_error($connect));
     // echo  "Q: $query";
@@ -133,9 +134,11 @@ GROUP BY id DESC";
 }
 //     echo '1'.$date_start;
 else {
+    $now = date('m');
     $query =
     "SELECT DATE_FORMAT(date, '%D%M%Y')AS date,waterLevel
 FROM `waters`
+WHERE MONTH(date) = $now 
 GROUP BY id DESC";
     $resultchart = mysqli_query($connect, $query) or die(mysqli_error($connect));
     // echo  "Q: $query";
