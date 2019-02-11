@@ -22,12 +22,15 @@ HTTPClient http;
 int relay = 0;
 int status_device = 0;
 int userid = 0;
-
-
+void Line_Notify(String message) ;
+#define LINE_TOKEN "eIUiqHOHmcPIEOC5uetSxY1lOTfEBubHDI7yz9qy8Zf"
+String message_cm , comment, messagenoti, ment = "line"; // ArduinoIDE เวอร์ชั่นใหม่ ๆ ใส่ภาษาไทยลงไปได้เลย
+int cm_0 = 0 ;
 WiFiServer server(80);
 
 void setup() {
   Serial.begin(9600);
+  pinMode(D4, OUTPUT);
 
   // ประกาศขา เป็น Output
   pinMode(ledPin1, OUTPUT);
@@ -60,41 +63,71 @@ void loop() {
 
   // Check if a client has connected
   if ((WiFiMulti.run() == WL_CONNECTED)) {
-
+    duration_sensor();//ข้อมลูระยะทาง
+    config_formbase_user();//ดึงข้อมูลฟิกค่าเซนเซอร์จากฐานข้อมูล
     config_formbase_status();//ดึงข้อมูลฟิกค่า status จากฐานข้อมูล
-    //เครื่องเปิดอยู่
-    if (status_device == 1) {
-      digitalWrite(ledPin1, LOW);//ไฟเปิด
-      duration_sensor();//ข้อมลูระยะทาง
-      config_formbase_user();//ดึงข้อมูลฟิกค่าเซนเซอร์จากฐานข้อมูล
-      //ถ้าระยะเซนเซอร์มากกว่า ค่าที่กำหนดให้และคนเปิดให้เครื่องทำงาน
-      if ((cm >= ch1) && (userid != NULL)) {
-        digitalWrite(ledPin1, LOW); // Pin D0 is LOW เปิดไฟ
-        datadase_satatus_1();//ลงเบสสถานะ
-        insert_sensorToBase();//ลงเบสระดับน้ำ
-        //กำหนดระยะเซนเซอร์ไม่ให้ต่ำกว่าท้องร่องให้หยุดการทำงาน
-        if ((cm >= 180) && (cm <= 179)) {
-          digitalWrite(ledPin1, HIGH); // Pin D0 is LOW ปิดไฟ
-          datadase_satatus_0();//ลงเบสสถานะ
-          insert_sensorToBase();//ลงเบสระดับน้ำ
-        }
-        delay(5000);
-      }
 
-    }//เครื่องเปิดอยู่ status_device == 1
-
-    //ถ้าสถานะเป็น 0 เครื่องไม่ทำงาน
-    else {
-      digitalWrite(ledPin1, HIGH); // Pin D0 is LOW ปิดไฟ
-      insert_sensorToBase();//ลงเบสระดับน้ำ
-      delay(5000);
-    }
-    //      ถ้าระยะน้ำสูงกว่าค่าที่กำหนด เครื่องทำงาน Auto
+    //ถ้าระยะน้ำสูงกว่าค่าที่กำหนด เครื่องทำงาน Auto
     if (cm <= ch1) {
       digitalWrite(ledPin1, LOW); // Pin D0 is LOW เปิดไฟ
-      datadase_satatus_1();//ลงเบสสถานะ
+
+      datadase_satatus_1_auto();//ลงเบสสถานะ
+      setup_line() ;//ลงเบส Line
       insert_sensorToBase();//ลงเบสระดับน้ำ
-    }
+
+      //เครื่องเปิดอยู่
+      if (status_device == 1) {
+        digitalWrite(ledPin1, LOW);//ไฟเปิด
+        datadase_satatus_1_auto();//ลงเบสสถานะ
+      }//end เครื่องเปิดอยู่ status_device == 1
+
+      //ถ้าสถานะเป็น 0 เครื่องไม่ทำงาน
+      else {
+        digitalWrite(ledPin1, HIGH); // Pin D0 is LOW ปิดไฟ
+        //datadase_satatus_0();//ลงเบสสถานะ
+        datadase_satatus_0_auto();//ลงเบสสถานะ
+        insert_sensorToBase();//ลงเบสระดับน้ำ
+        //        delay(5000);
+      }
+      delay(2000);
+
+    }//end auto cm <= ch1
+
+    //น้ำต่ำกว่าที่กำหนด //auto stop process
+    if ((cm >= ch1) && (userid == 0)) {
+      digitalWrite(ledPin1, HIGH); // Pin D0 is LOW ปิดไฟ
+      insert_sensorToBase();//ลงเบสระดับน้ำ
+      datadase_satatus_0_auto();//ลงเบสสถานะ
+      delay(2000);
+
+    }//end //auto stop process
+
+    if ((cm >= ch1) && (userid != 0)) {
+      if (status_device == 1) {
+
+        digitalWrite(ledPin1, LOW); // Pin D0 is LOW เปิดไฟ
+        //datadase_satatus_1();//ลงเบสสถานะ
+        datadase_satatus_1_auto();//ลงเบสสถานะ
+        insert_sensorToBase();//ลงเบสระดับน้ำ
+        //setup_line() ;//ลงเบส Line
+
+        //กำหนดระยะเซนเซอร์ไม่ให้ต่ำกว่าท้องร่องให้หยุดการทำงาน
+        //        if ((cm >= 180) ) {
+        //          digitalWrite(ledPin1, HIGH); // Pin D0 is LOW ปิดไฟ
+        //          //datadase_satatus_0();//ลงเบสสถานะ
+        //          datadase_satatus_0_auto();//ลงเบสสถานะ
+        //          insert_sensorToBase();//ลงเบสระดับน้ำ
+        //        }
+      }//end (status_device == 1)
+      if (status_device == 0) {
+        digitalWrite(ledPin1, HIGH); // Pin D0 is LOW ปิดไฟ
+        insert_sensorToBase();//ลงเบสระดับน้ำ
+        datadase_satatus_0_auto();//ลงเบสสถานะ
+      }
+      delay(60000);
+    }// if ((cm >= ch1) && (userid != 0)) {
+
+
 
   }//end WiFiMulti
 
@@ -171,7 +204,7 @@ void duration_sensor()
 void datadase_satatus_0() {
   HTTPClient http;
 
-  String ur_status = "http://192.168.43.104/b_phpProject/addstatus.php?status=" + String(0) ;
+  String ur_status = "http://192.168.43.104/b_phpProject/addstatus.php?status=" + String(2)+"&level=" + String(cm) ;
   Serial.println(ur_status);
   http.begin(ur_status); //HTTP
 
@@ -193,9 +226,81 @@ void datadase_satatus_0() {
 void datadase_satatus_1() {
   HTTPClient http;
 
-  String ur_status = "http://192.168.43.104/b_phpProject/addstatus.php?status=" + String(1) ;
+  String ur_status = "http://192.168.43.104/b_phpProject/addstatus.php?status=" + String(1)+"&level=" + String(cm) ;
   Serial.println(ur_status);
   http.begin(ur_status); //HTTP
+
+  int httpCode = http.GET();
+  if (httpCode > 0) {
+    Serial.printf("[HTTP] GET... code: %d\n", httpCode);
+
+    if (httpCode == HTTP_CODE_OK) {
+      String payload = http.getString();
+      Serial.println(payload);
+
+    }
+  } else {
+    Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
+  }
+  http.end();
+
+}
+void datadase_satatus_1_auto() {
+  HTTPClient http;
+
+  String ur_status = "http://192.168.43.104/b_phpProject/addstatus.php?status=" + String(1) + "&iduser=" + String(5)+"&level=" + String(cm);
+  Serial.println(ur_status);
+  http.begin(ur_status); //HTTP
+
+
+
+  int httpCode = http.GET();
+  if (httpCode > 0) {
+    Serial.printf("[HTTP] GET... code: %d\n", httpCode);
+
+    if (httpCode == HTTP_CODE_OK) {
+      String payload = http.getString();
+      Serial.println(payload);
+
+    }
+  } else {
+    Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
+  }
+  http.end();
+
+}
+void datadase_satatus_1_user() {
+  HTTPClient http;
+
+  String ur_status = "http://192.168.43.104/b_phpProject/addstatus.php?status=" + String(1) + "&iduser=" + String(8)+"&level=" + String(cm);
+  Serial.println(ur_status);
+  http.begin(ur_status); //HTTP
+
+
+
+  int httpCode = http.GET();
+  if (httpCode > 0) {
+    Serial.printf("[HTTP] GET... code: %d\n", httpCode);
+
+    if (httpCode == HTTP_CODE_OK) {
+      String payload = http.getString();
+      Serial.println(payload);
+
+    }
+  } else {
+    Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
+  }
+  http.end();
+
+}
+void datadase_satatus_0_auto() {
+  HTTPClient http;
+
+  String ur_status = "http://192.168.43.104/b_phpProject/addstatus.php?status=" + String(2) + "&iduser=" + String(5)+"&level=" + String(cm);
+  Serial.println(ur_status);
+  http.begin(ur_status); //HTTP
+
+
 
   int httpCode = http.GET();
   if (httpCode > 0) {
@@ -268,5 +373,76 @@ void insert_sensorToBase() {
   } else {
     Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
   }
+}
+void Line_Notify(String message) {
+  axTLS::WiFiClientSecure client;
+
+  if (!client.connect("notify-api.line.me", 443)) {
+    Serial.println("connection failed");
+    return;
+  }
+
+  String req = "";
+  req += "POST /api/notify HTTP/1.1\r\n";
+  req += "Host: notify-api.line.me\r\n";
+  req += "Authorization: Bearer " + String(LINE_TOKEN) + "\r\n";
+  req += "Cache-Control: no-cache\r\n";
+  req += "User-Agent: ESP8266\r\n";
+  req += "Content-Type: application/x-www-form-urlencoded\r\n";
+  req += "Content-Length: " + String(String("message=" + message).length()) + "\r\n";
+  req += "\r\n";
+  req += "message=" + message;
+  Serial.println(req);
+  client.print(req);
+  delay(2000);
+
+  Serial.println("-------------");
+  while (client.connected()) {
+    String line = client.readStringUntil('\n');
+    if (line == "\r") {
+      break;
+    }
+    Serial.println(line);
+  }
+  Serial.println("-------------");
+}
+void setup_line() {
+  HTTPClient http;
+
+  cm_0 = 200 - cm;
+  comment = "ระดับน้ำผิดปกติสูงขึ้น" ;
+  //ถ้าค่าติดลบ ให้เซ็ตค่าเป็น 0
+  if (cm_0 < 0) {
+    cm_0 = 0;
+    message_cm = cm_0;
+    messagenoti = comment + "เหลือ : " + message_cm + " เซนติเมตร";
+    Line_Notify(messagenoti);//เตือนไลน์เวลาระดับน้ำสูงผิดปกติ
+  }
+  else {
+    message_cm = cm_0;
+    messagenoti = comment + "เหลือ : " + message_cm + " เซนติเมตร";
+    Line_Notify(messagenoti);//เตือนไลน์เวลาระดับน้ำสูงผิดปกติ
+  }
+
+  String url_line = "http://192.168.43.104/b_phpProject/addNotiLine.php?sensor=" + String(cm) + "&message=" + comment;
+  Serial.println(url_line);
+  http.begin(url_line); //HTTP
+
+
+
+  int httpCode = http.GET();
+  if (httpCode > 0) {
+    Serial.printf("[HTTP] GET... code: %d\n", httpCode);
+
+    if (httpCode == HTTP_CODE_OK) {
+      String payload = http.getString();
+      Serial.println(payload);
+
+    }
+  } else {
+    Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
+  }
+  http.end();
+
 }
 

@@ -179,10 +179,51 @@ $_id = $_SESSION['userid'];
        return valid;
     }
 
-    
-    
-
+ 
     </script>
 <!-- // script datatable -->
       <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
       <script src="vendor/jquery/jquery.min.js"></script>
+      <script type="text/javascript" >
+
+$(document).ready(function() {
+    var table = $('#example').DataTable( {
+        responsive: true,
+        "order": [],
+        // "pageLength": 5,
+        // "lengthMenu": [ 5, 25, 50, 75, 100 ],
+        "oLanguage": {
+                    "sProcessing":     "กำลังดำเนินการ...",
+                    "sInfoPostFix":    "",
+                    "sInfoThousands":  ",",
+                    "sEmptyTable":     "ไม่มีข้อมูลในตาราง",
+                    "sLengthMenu": "แสดง _MENU_ เร็คคอร์ด ต่อหน้า",
+                    "sZeroRecords": "ไม่เจอข้อมูลที่ค้นหา",
+                    "sInfo": "แสดง _START_ ถึง _END_ ของ _TOTAL_ เร็คคอร์ด",
+                    "sInfoEmpty": "แสดง 0 ถึง 0 ของ 0 เร็คคอร์ด",
+                    "sInfoFiltered": "(จากเร็คคอร์ดทั้งหมด _MAX_ เร็คคอร์ด)",
+                    "sSearch": "ค้นหา :",
+                    "oPaginate": {
+                                  "sFirst":    "หน้าแรก",
+                                  "sPrevious": "ก่อนหน้า",
+                                  "sNext":     "ถัดไป",
+                                  "sLast":     "หน้าสุดท้าย"
+                    },
+                    "oAria": {
+                              "sSortAscending":  ": เปิดใช้งานการเรียงข้อมูลจากน้อยไปมาก",
+                              "sSortDescending": ": เปิดใช้งานการเรียงข้อมูลจากมากไปน้อย"
+                              },
+                  },
+
+        // lengthChange: false,
+      
+    } );
+
+
+    table.buttons().container()
+        .appendTo( '#example_wrapper .col-md-6:eq(0)' );
+
+} );
+
+
+</script>

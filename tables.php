@@ -76,8 +76,7 @@
                     JOIN statuses ON report.idStatus = statuses.id 
                     JOIN pumps ON report.idPump = pumps.id 
                     JOIN users ON statuses.idUser = users.id 
-
-                    ORDER BY report.date DESC';
+                    ORDER BY report.id DESC';
                     $result3 = mysqli_query($connect, $sql3, MYSQLI_STORE_RESULT) or die(mysqli_error($connect));
                     $newtime; $datetime;
                 while ($row_report = mysqli_fetch_assoc($result3)) {
