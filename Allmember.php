@@ -46,7 +46,8 @@
                 $sql3 = 'SELECT *
                     FROM users
                     ORDER BY users.id DESC';
-                    $result3 = mysqli_query($connect, $sql3, MYSQLI_STORE_RESULT) or die('Query error');
+                    $result3 = mysqli_query($connect, $sql3, MYSQLI_STORE_RESULT) or die(mysqli_error($connect));
+                    // echo  $result_page;
                 while ($row = mysqli_fetch_assoc($result3)) {
                     $id = $row['id'];
                     $name = $row['name'];

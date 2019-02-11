@@ -1,3 +1,27 @@
+  <?php
+  require 'dbconnect.php';
+
+                $sql3 = 'SELECT *
+                FROM statuses
+                WHERE numstatus = 1
+                ORDER BY statuses.id ASC';
+
+                  $result3 = mysqli_query($connect, $sql3, MYSQLI_STORE_RESULT) or die(mysqli_error($connect));
+                  while ($row = mysqli_fetch_assoc($result3)) {
+                      // $input_array = array($row['waterLevel']);
+                      // print_r(array_chunk($input_array, 2));
+                      $data_date = $row['date'];
+                      $data_time = $row['time'];
+                      $status = $row['numstatus'];
+                      $idUsers = $row['idUser'];
+                      $id_status = $row['id'];
+
+                      $strsql = "INSERT INTO  `report`(  `idStatus`, `idPump`, `date`, `time`)
+    VALUES('$id_status',1,'$data_date','$data_time')";
+                      $result_test = mysqli_query($connect, $strsql, MYSQLI_STORE_RESULT) or die(mysqli_error($connect));
+                  }
+  ?>
+  
   <!-- Breadcrumbs-->
 <style type="text/css">
 .card.mb-3 .card-body .table-responsive #example {
@@ -47,31 +71,24 @@
               <tbody>                
                 <?php 
 
-                $sql3 = 'SELECT *
-                    FROM process_statuses
-                    ORDER BY process_statuses.updated_at DESC';
-                    $result3 = mysqli_query($connect, $sql3, MYSQLI_STORE_RESULT) or die('Query error');
-                    $row = mysqli_fetch_array($result3, MYSQLI_ASSOC);
-                    $datetime = $row['created_at'];
-                    $time = $row['created_at'];
+                $sql3 = 'SELECT users.name,statuses.waterLevel,pumps.address,statuses.numstatus,report.date,report.time
+                    FROM report
+                    JOIN statuses ON report.idStatus = statuses.id 
+                    JOIN pumps ON report.idPump = pumps.id 
+                    JOIN users ON statuses.idUser = users.id 
+
+                    ORDER BY report.date DESC';
+                    $result3 = mysqli_query($connect, $sql3, MYSQLI_STORE_RESULT) or die(mysqli_error($connect));
+                    $newtime; $datetime;
+                while ($row_report = mysqli_fetch_assoc($result3)) {
+                    $datetime = $row_report['date'];
+                    $time = $row_report['time'];
                     $newtime = date('g:i a', strtotime($time));
-                    $datetime = date('d-M-Y', strtotime($datetime));
-                 $sql2 = 'SELECT *
-                 FROM process_statuses
-                  JOIN users ON process_statuses.idUsers = users.id
-                  JOIN pumps ON process_statuses.idPumps = pumps.id 
-                  JOIN statuses ON process_statuses.idStatus = statuses.id 
-                  JOIN waters ON process_statuses.idWaters = waters.id ORDER BY process_statuses.id DESC';
-                $result2 = mysqli_query($connect, $sql2, MYSQLI_STORE_RESULT) or die('Query error');
-                while ($process_statuses = mysqli_fetch_assoc($result2)) {
-                    $name = $process_statuses['name'];
-                    $waterlevel = $process_statuses['waterLevel'];
-                    $address = $process_statuses['address'];
-                    $status = $process_statuses['numstatus'];
-                    $date = $process_statuses['date'];
-                    $newdate = date('d-M-Y', strtotime($date));
-                    $time = $process_statuses['time'];
-                    $newtime = date('g:i a', strtotime($time)); ?> 
+                    $newdate = date('d-M-Y', strtotime($datetime));
+                    $name = $row_report['name'];
+                    $waterlevel = $row_report['waterLevel'];
+                    $address = $row_report['address'];
+                    $status = $row_report['numstatus']; ?> 
                     <tr>
                       <td><?php echo $name; ?></td>
                       <td><?php echo $waterlevel; ?></td>

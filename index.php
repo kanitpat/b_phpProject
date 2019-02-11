@@ -1,5 +1,7 @@
 <?php
 require 'dbconnect.php';
+require 'addanalysis.php';
+
 session_start();
 
 if (!$_SESSION['userid']) { //check session
