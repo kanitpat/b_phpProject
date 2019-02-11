@@ -112,24 +112,32 @@ if (isset($_POST['submit'])) {
     echo ' ช่วงเวลาวันที่ : '.$date_S.'  ถึง   '.$date_E;
 
     $query =
-        "SELECT DATE_FORMAT(date, '%D%M%Y')AS date,waterLevel
+        "SELECT DATE_FORMAT(date, '%D%M%Y')AS date,waterLevel,time as times
 FROM `waters`
 WHERE date BETWEEN '$newS' and '$newE' 
 GROUP BY id DESC";
+
+    $newtime = 0;
+    $newdatetime = 0;
+
     $resultchart = mysqli_query($connect, $query) or die(mysqli_error($connect));
     // echo  "Q: $query";
     //for chart
     $date = array();
     $waterLevel = array();
+    $time = array();
 
     while ($rs = mysqli_fetch_array($resultchart)) {
         $date[] = '"'.$rs['date'].'"';
         $waterLevel[] = '"'.$rs['waterLevel'].'"';
+        $time[] = '"'.$rs['times'].'"';
 
         // echo ':-'.$rs['date'];
     }
     $date = implode(',', $date);
     $waterLevel = implode(',', $waterLevel);
+    $time = implode(',', $time);
+
     mysqli_close($connect);
 }
 //     echo '1'.$date_start;
@@ -161,7 +169,83 @@ GROUP BY id DESC";
 
   <canvas id="myChart" ></canvas>
    <!-- charts -->
+   <div class="card mb-3">
+        <div class="card-header">
+          <i class="fas fa-table"></i>
+          ตารางแสดงระดับน้ำที่ผิดปกติ
+          </div>
+          
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-striped table-bordered dt-responsive nowrap" id="example" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                  <th>วันที่</th>
+                  <th>เวลา</th>
+                
+                </tr>
+              </thead>
+              <tfoot>
+              <tr>
+                  <th>วันที่</th>
+                  <th>เวลา</th>
+                </tr>
+              </tfoot>
 
+              <tbody>                
+              <?php 
+    require 'dbconnect.php';
+    if (isset($_POST['submit'])) {
+        $today = isset($_POST['datepickerS']) ? $_POST['datepickerS'] : (new DateTime())->format('Y-m-d');
+        $date2 = date('Y-m-d', strtotime($today));
+        $date_S = $_POST['datepickerS'];
+        $date_E = $_POST['datepickerE'];
+        $newS = date('Y-m-d', strtotime($date_S));
+        $newE = date('Y-m-d', strtotime($date_E));
+
+        $sql3_analysis = "SELECT *
+            FROM analysis      
+            WHERE `start_date` BETWEEN '$newS' and '$newE' 
+            ORDER BY  analysis.id DESC";
+        $result_analysis = mysqli_query($connect, $sql3_analysis, MYSQLI_STORE_RESULT) or die(mysqli_error($connect));
+
+        while ($row_analysis = mysqli_fetch_assoc($result_analysis)) {
+            $datetime = $row_analysis['start_date'];
+            $time = $row_analysis['start_time'];
+            $timeanalysis = date('g:i a', strtotime($time));
+            $datetimeanalysis = date('d-M-Y', strtotime($datetime)); ?> 
+    <tr>
+      <td><?php echo $datetimeanalysis; ?></td>
+      <td><?php echo $timeanalysis; ?></td>
+    </tr>                
+<?php
+        }
+    } else {
+        $sql3_analysis = 'SELECT *
+        FROM analysis             
+        ORDER BY  analysis.id DESC';
+        $result_analysis = mysqli_query($connect, $sql3_analysis, MYSQLI_STORE_RESULT) or die(mysqli_error($connect));
+
+        while ($row_analysis = mysqli_fetch_assoc($result_analysis)) {
+            $datetime = $row_analysis['start_date'];
+            $time = $row_analysis['start_time'];
+            $timeanalysis = date('g:i a', strtotime($time));
+            $datetimeanalysis = date('d-M-Y', strtotime($datetime)); ?> 
+<tr>
+  <td><?php echo $datetimeanalysis; ?></td>
+  <td><?php echo $timeanalysis; ?></td>
+</tr>                
+   <?php
+        }
+    }?>
+
+
+
+       
+              </tbody>
+            </table>
+          </div>
+        </div></div>
    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.js"></script>
    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
@@ -215,6 +299,46 @@ GROUP BY id DESC";
     });
 
 
+$(document).ready(function() {
+    var table = $('#example').DataTable( {
+        responsive: true,
+        "order": [],
+        // "pageLength": 5,
+        // "lengthMenu": [ 5, 25, 50, 75, 100 ],
+        "oLanguage": {
+                    "sProcessing":     "กำลังดำเนินการ...",
+                    "sInfoPostFix":    "",
+                    "sInfoThousands":  ",",
+                    "sEmptyTable":     "ไม่มีข้อมูลในตาราง",
+                    "sLengthMenu": "แสดง _MENU_ เร็คคอร์ด ต่อหน้า",
+                    "sZeroRecords": "ไม่เจอข้อมูลที่ค้นหา",
+                    "sInfo": "แสดง _START_ ถึง _END_ ของ _TOTAL_ เร็คคอร์ด",
+                    "sInfoEmpty": "แสดง 0 ถึง 0 ของ 0 เร็คคอร์ด",
+                    "sInfoFiltered": "(จากเร็คคอร์ดทั้งหมด _MAX_ เร็คคอร์ด)",
+                    "sSearch": "ค้นหา :",
+                    "oPaginate": {
+                                  "sFirst":    "หน้าแรก",
+                                  "sPrevious": "ก่อนหน้า",
+                                  "sNext":     "ถัดไป",
+                                  "sLast":     "หน้าสุดท้าย"
+                    },
+                    "oAria": {
+                              "sSortAscending":  ": เปิดใช้งานการเรียงข้อมูลจากน้อยไปมาก",
+                              "sSortDescending": ": เปิดใช้งานการเรียงข้อมูลจากมากไปน้อย"
+                              },
+                  },
+
+        // lengthChange: false,
+       
+    } );
+
+
+    table.buttons().container()
+        .appendTo( '#example_wrapper .col-md-6:eq(0)' );
+
+} );
+
+
 
 
     $('#datepickerS').datepicker({
@@ -236,14 +360,23 @@ GROUP BY id DESC";
 
 
   </script>
+  
 
     </div>
-        <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+    <?php 
+
+    $query_wateradate = 'SELECT * FROM `waters`
+    GROUP BY waters.id DESC';
+$result_query_wateradate = mysqli_query($connect, $query_wateradate, MYSQLI_STORE_RESULT) or die(mysqli_error($connect));
+$row = mysqli_fetch_array($result_query_wateradate, MYSQLI_ASSOC);
+
+        $newtime = $row['time'];
+        $newdatetime = $row['date'];
+        $newtime = date('g:i a', strtotime($newtime));
+        $newdatetime = date('d-M-Y', strtotime($newdatetime)); ?>
+        <div class="card-footer small text-muted">Updated <?php echo $newdatetime; ?>  at <?php echo $newtime; ?> </div>
       </div>
 
-
-
-      <!-- Scripts -->
       <script src="datepicker-master/js/datepicker.js"></script>
 
   <script src="datepicker-master/js/main.js"></script>
