@@ -113,7 +113,7 @@ if (isset($_POST['submit'])) {
 
     $query =
         "SELECT DATE_FORMAT(date, '%D%M%Y')AS date,waterLevel,time as times
-FROM `waters`
+FROM `statuses`
 WHERE date BETWEEN '$newS' and '$newE' 
 GROUP BY id DESC";
 
@@ -145,7 +145,7 @@ else {
     $now = date('m');
     $query =
     "SELECT DATE_FORMAT(date, '%D%M%Y')AS date,waterLevel
-FROM `waters`
+FROM `statuses`
 WHERE MONTH(date) = $now 
 GROUP BY id DESC";
     $resultchart = mysqli_query($connect, $query) or die(mysqli_error($connect));

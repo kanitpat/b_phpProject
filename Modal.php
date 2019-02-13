@@ -61,7 +61,8 @@
           $water = $row['waterLevel'];
           $userid = $_SESSION['userid'];
         if (isset($_POST['saveon'])) {
-            $sqlNN = "INSERT INTO  statuses( `numstatus`,  `waterLevel`,`detail`,`date`, `time`, `idUser`) VALUES ( 1,'$water','เปิด',NOW(),NOW(),'$userid')";
+            $sqlNN = "INSERT INTO  statuses( `numstatus`,  `waterLevel`,`detail`,`date`, `time`, `idUser`) 
+            VALUES ( 1,'$water','เปิด',NOW(),NOW(),'$userid')";
             $queryNN = mysqli_query($connect, $sqlNN, MYSQLI_STORE_RESULT) or die('DIE');
         }
 ?>
@@ -85,10 +86,19 @@
       <div class="modal-footer">
         <button class="btn btn-danger" type="button" data-dismiss="modal">ไม่ใช่</button>
         <button type="submit" class="btn btn-success" name="saveoff">ใช่</button>
-        <?php if (isset($_POST['saveoff'])) {
-    $sqlFF = "INSERT INTO  statuses( `numstatus`,  `waterLevel`, `detail`,`date`, `time`, `idUser`) VALUES ( 0,'$water','ปิด',NOW(),NOW(),'$userid')";
-    $queryFF = mysqli_query($connect, $sqlFF, MYSQLI_STORE_RESULT) or die('DIE');
-}
+        <?php 
+         $sql3 = 'SELECT waterLevel
+         FROM waters       
+         ORDER BY waters.id DESC';
+         $result3 = mysqli_query($connect, $sql3, MYSQLI_STORE_RESULT) or die(mysqli_error($connect));
+         $row = mysqli_fetch_array($result3, MYSQLI_ASSOC);
+         $water = $row['waterLevel'];
+         $userid = $_SESSION['userid'];
+        if (isset($_POST['saveoff'])) {
+            $sqlFF = "INSERT INTO  statuses( `numstatus`,  `waterLevel`, `detail`,`date`, `time`, `idUser`) 
+            VALUES ( 0,'$water','ปิด',NOW(),NOW(),'$userid')";
+            $queryFF = mysqli_query($connect, $sqlFF, MYSQLI_STORE_RESULT) or die('DIE');
+        }
 
 ?>
       </div>

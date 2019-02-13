@@ -10,8 +10,8 @@ WHERE start_date = start_date';
                 $sql3 = 'TRUNCATE analysis';
                 $result3 = mysqli_query($connect, $sql3, MYSQLI_STORE_RESULT) or die('Query error');
                 $sql3 = 'SELECT *
-                FROM waters
-                ORDER BY waters.id ASC';
+                FROM statuses
+                ORDER BY statuses.id ASC';
                 $data1 = null;
                 $data2 = null;
                 $data_date1 = null;
@@ -74,8 +74,8 @@ WHERE start_date = start_date';
                 }
             } else {
                 $sql3 = 'SELECT *
-                FROM waters
-                ORDER BY waters.id ASC';
+                FROM statuses
+                ORDER BY statuses.id ASC';
                 $data1 = null;
                 $data2 = null;
                 $data_date1 = null;
