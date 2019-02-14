@@ -1,3 +1,4 @@
+
 <?php
 require 'dbconnect.php';
 $now = date('m');
@@ -20,6 +21,8 @@ $date = implode(',', $date);
 $waterLevel = implode(',', $waterLevel);
 
 ?>
+<meta http-equiv="refresh" content="20"/>
+
 <!-- Breadcrumbs-->
 <style type="text/css">
 .card.mb-3 .card-body .table-responsive #example {
