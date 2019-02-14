@@ -13,6 +13,8 @@ $obj = json_decode($result, true);
 
     echo $obj['cod'].','.
      $obj['city']['name'].', '.
+     $obj['dt']['list'].', '.
+
             $obj['city']['id'].', ---- ';
 
 //}
