@@ -4,6 +4,7 @@ session_start();
 ?>
 <?php
 require 'dbconnect.php';
+
 $valid = true;
 
 if (!empty($_POST['texemail'])) {

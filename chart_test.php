@@ -29,7 +29,7 @@ $date2 = date('Y-m-d', strtotime($today));
 $formatResult = ": $date2";
 
 ?>
-<meta http-equiv="refresh" content="60"/>
+<meta http-equiv="refresh" content="20"/>
 
 <div class="card mb-3">
         <div class="card-header">

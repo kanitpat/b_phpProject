@@ -1,7 +1,7 @@
  <!-- Sidebar -->
  <?php
 
-if ($_SESSION['Status'] == 0) {
+if ($_SESSION['Status'] == 2) {
     ?>
  <ul class="sidebar navbar-nav ">
     <li class="nav-item ">

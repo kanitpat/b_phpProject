@@ -7,7 +7,7 @@ session_start();
 if (!$_SESSION['userid']) { //check session
     header('Location: login.php');
 } else {
-    // require 'addstatus.php';
+    require 'addstatus.php';
     $sql = 'SELECT *
   FROM waters
   ORDER BY id DESC';
