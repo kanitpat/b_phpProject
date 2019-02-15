@@ -67,34 +67,39 @@ void loop() {
     config_formbase_user();//ดึงข้อมูลฟิกค่าเซนเซอร์จากฐานข้อมูล
     config_formbase_status();//ดึงข้อมูลฟิกค่า status จากฐานข้อมูล
 
+    //ตรวจอุปรกรณ์เอ๋ออ
+    if (cm > 450) {
+      setup_line_error();
+    }
+
     //ถ้าระยะน้ำสูงกว่าค่าที่กำหนด เครื่องทำงาน Auto
-    if (cm <= ch1) {
-      digitalWrite(ledPin1, LOW); // Pin D0 is LOW เปิดไฟ
-
-      datadase_satatus_1_auto();//ลงเบสสถานะ
-      setup_line() ;//ลงเบส Line
-      insert_sensorToBase();//ลงเบสระดับน้ำ
-
-      //เครื่องเปิดอยู่
-      if (status_device == 1) {
-        digitalWrite(ledPin1, LOW);//ไฟเปิด
-        datadase_satatus_1_auto();//ลงเบสสถานะ
-      }//end เครื่องเปิดอยู่ status_device == 1
-
-      //ถ้าสถานะเป็น 0 เครื่องไม่ทำงาน
-      else {
-        digitalWrite(ledPin1, HIGH); // Pin D0 is LOW ปิดไฟ
-        //datadase_satatus_0();//ลงเบสสถานะ
-        datadase_satatus_0_auto();//ลงเบสสถานะ
-        insert_sensorToBase();//ลงเบสระดับน้ำ
-        //        delay(5000);
-      }
-      delay(2000);
-
-    }//end auto cm <= ch1
+        if ((cm <= ch1) && (userid == 65)||(cm <= ch1) &&(userid != 65)) {
+          digitalWrite(ledPin1, LOW); // Pin D0 is LOW เปิดไฟ
+    
+          datadase_satatus_1_auto();//ลงเบสสถานะ
+          setup_line() ;//ลงเบส Line
+          insert_sensorToBase();//ลงเบสระดับน้ำ
+    
+          //เครื่องเปิดอยู่
+          if (status_device == 1) {
+            digitalWrite(ledPin1, LOW);//ไฟเปิด
+            datadase_satatus_1_auto();//ลงเบสสถานะ
+          }//end เครื่องเปิดอยู่ status_device == 1
+    
+          //ถ้าสถานะเป็น 0 เครื่องไม่ทำงาน
+          //       if(status_device == 0) {
+          //        digitalWrite(ledPin1, HIGH); // Pin D0 is LOW ปิดไฟ
+          //        //datadase_satatus_0();//ลงเบสสถานะ
+          //        datadase_satatus_0_auto();//ลงเบสสถานะ
+          //        insert_sensorToBase();//ลงเบสระดับน้ำ
+          //        //        delay(5000);
+          //      }
+          delay(2000);
+    
+        }//end auto cm <= ch1
 
     //น้ำต่ำกว่าที่กำหนด //auto stop process
-    if ((cm >= ch1) && (userid == 0)) {
+    if ((cm >= ch1) && (userid == 65)) {
       digitalWrite(ledPin1, HIGH); // Pin D0 is LOW ปิดไฟ
       insert_sensorToBase();//ลงเบสระดับน้ำ
       datadase_satatus_0_auto();//ลงเบสสถานะ
@@ -102,12 +107,12 @@ void loop() {
 
     }//end //auto stop process
 
-    if ((cm >= ch1) && (userid != 0)) {
+    if ((cm >= ch1) && (userid != 65)) {
       if (status_device == 1) {
 
         digitalWrite(ledPin1, LOW); // Pin D0 is LOW เปิดไฟ
         //datadase_satatus_1();//ลงเบสสถานะ
-        datadase_satatus_1_auto();//ลงเบสสถานะ
+        datadase_satatus_1_user();//ลงเบสสถานะ
         insert_sensorToBase();//ลงเบสระดับน้ำ
         //setup_line() ;//ลงเบส Line
 
@@ -118,331 +123,377 @@ void loop() {
         //          datadase_satatus_0_auto();//ลงเบสสถานะ
         //          insert_sensorToBase();//ลงเบสระดับน้ำ
         //        }
+        //        delay(60000);
+
       }//end (status_device == 1)
-      if (status_device == 0) {
-        digitalWrite(ledPin1, HIGH); // Pin D0 is LOW ปิดไฟ
-        insert_sensorToBase();//ลงเบสระดับน้ำ
-        datadase_satatus_0_auto();//ลงเบสสถานะ
-      }
-      delay(60000);
     }// if ((cm >= ch1) && (userid != 0)) {
 
+    if ((cm >= ch1) && (userid != 65)) {
+      if (status_device == 0) {   
+          digitalWrite(ledPin1, HIGH); // Pin D0 is LOW ปิดไฟ
+          insert_sensorToBase();//ลงเบสระดับน้ำ
+          datadase_satatus_0_user();//ลงเบสสถานะ
+        }
+      }// if ((cm >= ch1) && (userid != 0)) {
 
 
-  }//end WiFiMulti
 
-}//end loop
+    }//end WiFiMulti
 
-void config_formbase_status() {
-  // put your main code here, to run repeatedly:
-  Serial.print("connecting to ");
-  Serial.println(host);
+  }//end loop
 
-  WiFiClient client;
-  const int httpPort = 80;
-  if (!client.connect(host, httpPort)) {
-    Serial.println("connection failed");
-    return;
-  }
-  String url = "/b_phpProject/jsonOnOff.php";    //ดึงค่าจากไฟล์ http://9arduino.nisit.net/api/json.php
-  Serial.print("Requesting URL: ");
-  Serial.println(url);
+  void config_formbase_status() {
+    // put your main code here, to run repeatedly:
+    Serial.print("connecting to ");
+    Serial.println(host);
 
-  client.print(String("GET ") + url + " HTTP/1.1\r\n" +
-               "Host: " + host + "\r\n" +
-               "Connection: close\r\n\r\n");
-  unsigned long timeout = millis();
-  while (client.available() == 0) {
-    if (millis() - timeout > 5000) {
-      Serial.println(">>> Client Timeout !");
-      client.stop();
+    WiFiClient client;
+    const int httpPort = 80;
+    if (!client.connect(host, httpPort)) {
+      Serial.println("connection failed");
       return;
     }
-  }
-  // ในส่วนของการดึง Json โดยการดึง ตัวแปรที่ชื่อว่าตัวแปรมาใช้งาน
-  // ยกตัวอย่าง ตัวแปร ch1 ค่าที่ได้จะเป็น 1 แสดงออกมา เราสามารถนำ ตัว แปร ch1 ไปใช้งานต่างๆได้เช่นการแสดงข้อความออกจอ LCD เปิดปิดไฟตามกำหนด
-  if (client.find("")) {
-    client.find("status_device");  //
-    status_device = client.parseFloat();
+    String url = "/b_phpProject/jsonOnOff.php";    //ดึงค่าจากไฟล์ http://9arduino.nisit.net/api/json.php
+    Serial.print("Requesting URL: ");
+    Serial.println(url);
 
-    client.find("userid");  //
-    userid = client.parseFloat();
-  }
-  Serial.print("Output status device = ");
-  Serial.println(status_device);
-  Serial.print("Output userid = ");
-  Serial.println(userid);
-  //  Serial.println();
-  //  Serial.println("closing connection");
-}
-
-long microsecondsToCentimeters(long microseconds)
-{
-  // ความเร็วเสียงในอากาศประมาณ 340 เมตร/วินาที หรือ 29 ไมโครวินาที/เซนติเมตร
-  // ระยะทางที่ส่งเสียงออกไปจนเสียงสะท้อนกลับมาสามารถใช้หาระยะทางของวัตถุได้
-  // เวลาที่ใช้คือ ระยะทางไปกลับ ดังนั้นระยะทางคือ ครึ่งหนึ่งของที่วัดได้
-  return microseconds / 29 / 2;
-}
-void duration_sensor()
-{
-  Serial.print("connecting to ");
-  Serial.println(host);
-  pinMode(pingPin, OUTPUT);
-  digitalWrite(pingPin, LOW);
-  delayMicroseconds(2);
-  digitalWrite(pingPin, HIGH);
-  delayMicroseconds(5);
-  digitalWrite(pingPin, LOW);
-  pinMode(inPin, INPUT);
-  duration = pulseIn(inPin, HIGH);
-  cm = microsecondsToCentimeters(duration);
-  Serial.print(cm);
-  Serial.println("cm");
-
-
-}
-void datadase_satatus_0() {
-  HTTPClient http;
-
-  String ur_status = "http://192.168.43.104/b_phpProject/addstatus.php?status=" + String(2)+"&level=" + String(cm) ;
-  Serial.println(ur_status);
-  http.begin(ur_status); //HTTP
-
-  int httpCode = http.GET();
-  if (httpCode > 0) {
-    Serial.printf("[HTTP] GET... code: %d\n", httpCode);
-
-    if (httpCode == HTTP_CODE_OK) {
-      String payload = http.getString();
-      Serial.println(payload);
-
+    client.print(String("GET ") + url + " HTTP/1.1\r\n" +
+                 "Host: " + host + "\r\n" +
+                 "Connection: close\r\n\r\n");
+    unsigned long timeout = millis();
+    while (client.available() == 0) {
+      if (millis() - timeout > 5000) {
+        Serial.println(">>> Client Timeout !");
+        client.stop();
+        return;
+      }
     }
-  } else {
-    Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
-  }
-  http.end();
+    // ในส่วนของการดึง Json โดยการดึง ตัวแปรที่ชื่อว่าตัวแปรมาใช้งาน
+    // ยกตัวอย่าง ตัวแปร ch1 ค่าที่ได้จะเป็น 1 แสดงออกมา เราสามารถนำ ตัว แปร ch1 ไปใช้งานต่างๆได้เช่นการแสดงข้อความออกจอ LCD เปิดปิดไฟตามกำหนด
+    if (client.find("")) {
+      client.find("status_device");  //
+      status_device = client.parseFloat();
 
-}
-void datadase_satatus_1() {
-  HTTPClient http;
-
-  String ur_status = "http://192.168.43.104/b_phpProject/addstatus.php?status=" + String(1)+"&level=" + String(cm) ;
-  Serial.println(ur_status);
-  http.begin(ur_status); //HTTP
-
-  int httpCode = http.GET();
-  if (httpCode > 0) {
-    Serial.printf("[HTTP] GET... code: %d\n", httpCode);
-
-    if (httpCode == HTTP_CODE_OK) {
-      String payload = http.getString();
-      Serial.println(payload);
-
+      client.find("userid");  //
+      userid = client.parseFloat();
     }
-  } else {
-    Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
+    Serial.print("Output status device = ");
+    Serial.println(status_device);
+    Serial.print("Output userid = ");
+    Serial.println(userid);
+    //  Serial.println();
+    //  Serial.println("closing connection");
   }
-  http.end();
 
-}
-void datadase_satatus_1_auto() {
-  HTTPClient http;
+  long microsecondsToCentimeters(long microseconds)
+  {
+    // ความเร็วเสียงในอากาศประมาณ 340 เมตร/วินาที หรือ 29 ไมโครวินาที/เซนติเมตร
+    // ระยะทางที่ส่งเสียงออกไปจนเสียงสะท้อนกลับมาสามารถใช้หาระยะทางของวัตถุได้
+    // เวลาที่ใช้คือ ระยะทางไปกลับ ดังนั้นระยะทางคือ ครึ่งหนึ่งของที่วัดได้
+    return microseconds / 29 / 2;
+  }
+  void duration_sensor()
+  {
+    Serial.print("connecting to ");
+    Serial.println(host);
+    pinMode(pingPin, OUTPUT);
+    digitalWrite(pingPin, LOW);
+    delayMicroseconds(2);
+    digitalWrite(pingPin, HIGH);
+    delayMicroseconds(5);
+    digitalWrite(pingPin, LOW);
+    pinMode(inPin, INPUT);
+    duration = pulseIn(inPin, HIGH);
+    cm = microsecondsToCentimeters(duration);
+    Serial.print(cm);
+    Serial.println("cm");
 
-  String ur_status = "http://192.168.43.104/b_phpProject/addstatus.php?status=" + String(1) + "&iduser=" + String(5)+"&level=" + String(cm);
-  Serial.println(ur_status);
-  http.begin(ur_status); //HTTP
 
+  }
+  void datadase_satatus_0() {
+    HTTPClient http;
 
+    String ur_status = "http://192.168.43.104/b_phpProject/addstatus.php?status=" + String(2) + "&level=" + String(cm) ;
+    Serial.println(ur_status);
+    http.begin(ur_status); //HTTP
 
-  int httpCode = http.GET();
-  if (httpCode > 0) {
-    Serial.printf("[HTTP] GET... code: %d\n", httpCode);
+    int httpCode = http.GET();
+    if (httpCode > 0) {
+      Serial.printf("[HTTP] GET... code: %d\n", httpCode);
 
-    if (httpCode == HTTP_CODE_OK) {
-      String payload = http.getString();
-      Serial.println(payload);
+      if (httpCode == HTTP_CODE_OK) {
+        String payload = http.getString();
+        Serial.println(payload);
 
+      }
+    } else {
+      Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
     }
-  } else {
-    Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
+    http.end();
+
   }
-  http.end();
+  void datadase_satatus_1() {
+    HTTPClient http;
 
-}
-void datadase_satatus_1_user() {
-  HTTPClient http;
+    String ur_status = "http://192.168.43.104/b_phpProject/addstatus.php?status=" + String(1) + "&level=" + String(cm) ;
+    Serial.println(ur_status);
+    http.begin(ur_status); //HTTP
 
-  String ur_status = "http://192.168.43.104/b_phpProject/addstatus.php?status=" + String(1) + "&iduser=" + String(8)+"&level=" + String(cm);
-  Serial.println(ur_status);
-  http.begin(ur_status); //HTTP
+    int httpCode = http.GET();
+    if (httpCode > 0) {
+      Serial.printf("[HTTP] GET... code: %d\n", httpCode);
 
+      if (httpCode == HTTP_CODE_OK) {
+        String payload = http.getString();
+        Serial.println(payload);
 
-
-  int httpCode = http.GET();
-  if (httpCode > 0) {
-    Serial.printf("[HTTP] GET... code: %d\n", httpCode);
-
-    if (httpCode == HTTP_CODE_OK) {
-      String payload = http.getString();
-      Serial.println(payload);
-
+      }
+    } else {
+      Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
     }
-  } else {
-    Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
+    http.end();
+
   }
-  http.end();
+  void datadase_satatus_1_auto() {
+    HTTPClient http;
 
-}
-void datadase_satatus_0_auto() {
-  HTTPClient http;
-
-  String ur_status = "http://192.168.43.104/b_phpProject/addstatus.php?status=" + String(2) + "&iduser=" + String(5)+"&level=" + String(cm);
-  Serial.println(ur_status);
-  http.begin(ur_status); //HTTP
+    String ur_status = "http://192.168.43.104/b_phpProject/addstatus.php?status=" + String(1) + "&iduser=" + String(5) + "&level=" + String(cm);
+    Serial.println(ur_status);
+    http.begin(ur_status); //HTTP
 
 
 
-  int httpCode = http.GET();
-  if (httpCode > 0) {
-    Serial.printf("[HTTP] GET... code: %d\n", httpCode);
+    int httpCode = http.GET();
+    if (httpCode > 0) {
+      Serial.printf("[HTTP] GET... code: %d\n", httpCode);
 
-    if (httpCode == HTTP_CODE_OK) {
-      String payload = http.getString();
-      Serial.println(payload);
+      if (httpCode == HTTP_CODE_OK) {
+        String payload = http.getString();
+        Serial.println(payload);
 
+      }
+    } else {
+      Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
     }
-  } else {
-    Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
+    http.end();
+
   }
-  http.end();
+  void datadase_satatus_1_user() {
+    HTTPClient http;
 
-}
-void config_formbase_user() {
-  Serial.print("connecting to ");
-  Serial.println(host);
+    String ur_status = "http://192.168.43.104/b_phpProject/addstatus.php?status=" + String(1) + "&iduser=" + String(8) + "&level=" + String(cm);
+    Serial.println(ur_status);
+    http.begin(ur_status); //HTTP
 
-  WiFiClient client;
-  const int httpPort = 80;
-  if (!client.connect(host, httpPort)) {
-    Serial.println("connection failed");
-    return;
+
+
+    int httpCode = http.GET();
+    if (httpCode > 0) {
+      Serial.printf("[HTTP] GET... code: %d\n", httpCode);
+
+      if (httpCode == HTTP_CODE_OK) {
+        String payload = http.getString();
+        Serial.println(payload);
+
+      }
+    } else {
+      Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
+    }
+    http.end();
+
   }
+  void datadase_satatus_0_user() {
+    HTTPClient http;
 
-  String url = "/b_phpProject/json.php";    //ดึงค่าจากไฟล์ http://9arduino.nisit.net/api/json.php
-  Serial.print("Requesting URL: ");
-  Serial.println(url);
+    String ur_status = "http://192.168.43.104/b_phpProject/addstatus.php?status=" + String(0) + "&iduser=" + String(8) + "&level=" + String(cm);
+    Serial.println(ur_status);
+    http.begin(ur_status); //HTTP
 
-  client.print(String("GET ") + url + " HTTP/1.1\r\n" +
-               "Host: " + host + "\r\n" +
-               "Connection: close\r\n\r\n");
-  unsigned long timeout = millis();
-  while (client.available() == 0) {
-    if (millis() - timeout > 5000) {
-      Serial.println(">>> Client Timeout !");
-      client.stop();
+
+
+    int httpCode = http.GET();
+    if (httpCode > 0) {
+      Serial.printf("[HTTP] GET... code: %d\n", httpCode);
+
+      if (httpCode == HTTP_CODE_OK) {
+        String payload = http.getString();
+        Serial.println(payload);
+
+      }
+    } else {
+      Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
+    }
+    http.end();
+
+  }
+  void datadase_satatus_0_auto() {
+    HTTPClient http;
+
+    String ur_status = "http://192.168.43.104/b_phpProject/addstatus.php?status=" + String(2) + "&iduser=" + String(5) + "&level=" + String(cm);
+    Serial.println(ur_status);
+    http.begin(ur_status); //HTTP
+
+
+
+    int httpCode = http.GET();
+    if (httpCode > 0) {
+      Serial.printf("[HTTP] GET... code: %d\n", httpCode);
+
+      if (httpCode == HTTP_CODE_OK) {
+        String payload = http.getString();
+        Serial.println(payload);
+
+      }
+    } else {
+      Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
+    }
+    http.end();
+
+  }
+  void config_formbase_user() {
+    Serial.print("connecting to ");
+    Serial.println(host);
+
+    WiFiClient client;
+    const int httpPort = 80;
+    if (!client.connect(host, httpPort)) {
+      Serial.println("connection failed");
       return;
     }
-  }
-  // ในส่วนของการดึง Json โดยการดึง ตัวแปรที่ชื่อว่าตัวแปรมาใช้งาน
-  // ยกตัวอย่าง ตัวแปร ch1 ค่าที่ได้จะเป็น 1 แสดงออกมา เราสามารถนำ ตัว แปร ch1 ไปใช้งานต่างๆได้เช่นการแสดงข้อความออกจอ LCD เปิดปิดไฟตามกำหนด
-  if (client.find("")) {
-    client.find("ch1");  //
-    ch1 = client.parseFloat();
-  }
-  Serial.print("Output sensor frombase = ");
-  Serial.println(ch1);
-  Serial.println();
-  Serial.println("closing connection");
-}
-void insert_sensorToBase() {
-  //  insert to database
 
-  HTTPClient http;
-  String url = "http://192.168.43.104/b_phpProject/addbase.php?level=" + String(cm) ;
-  Serial.println(url);
-  http.begin(url); //HTTP
+    String url = "/b_phpProject/json.php";    //ดึงค่าจากไฟล์ http://9arduino.nisit.net/api/json.php
+    Serial.print("Requesting URL: ");
+    Serial.println(url);
 
-  int httpCode = http.GET();
-  if (httpCode > 0) {
-    Serial.printf("[HTTP] GET... code: %d\n", httpCode);
-
-    if (httpCode == HTTP_CODE_OK) {
-      String payload = http.getString();
-      Serial.println(payload);
+    client.print(String("GET ") + url + " HTTP/1.1\r\n" +
+                 "Host: " + host + "\r\n" +
+                 "Connection: close\r\n\r\n");
+    unsigned long timeout = millis();
+    while (client.available() == 0) {
+      if (millis() - timeout > 5000) {
+        Serial.println(">>> Client Timeout !");
+        client.stop();
+        return;
+      }
     }
-  } else {
-    Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
-  }
-}
-void Line_Notify(String message) {
-  axTLS::WiFiClientSecure client;
-
-  if (!client.connect("notify-api.line.me", 443)) {
-    Serial.println("connection failed");
-    return;
-  }
-
-  String req = "";
-  req += "POST /api/notify HTTP/1.1\r\n";
-  req += "Host: notify-api.line.me\r\n";
-  req += "Authorization: Bearer " + String(LINE_TOKEN) + "\r\n";
-  req += "Cache-Control: no-cache\r\n";
-  req += "User-Agent: ESP8266\r\n";
-  req += "Content-Type: application/x-www-form-urlencoded\r\n";
-  req += "Content-Length: " + String(String("message=" + message).length()) + "\r\n";
-  req += "\r\n";
-  req += "message=" + message;
-  Serial.println(req);
-  client.print(req);
-  delay(2000);
-
-  Serial.println("-------------");
-  while (client.connected()) {
-    String line = client.readStringUntil('\n');
-    if (line == "\r") {
-      break;
+    // ในส่วนของการดึง Json โดยการดึง ตัวแปรที่ชื่อว่าตัวแปรมาใช้งาน
+    // ยกตัวอย่าง ตัวแปร ch1 ค่าที่ได้จะเป็น 1 แสดงออกมา เราสามารถนำ ตัว แปร ch1 ไปใช้งานต่างๆได้เช่นการแสดงข้อความออกจอ LCD เปิดปิดไฟตามกำหนด
+    if (client.find("")) {
+      client.find("ch1");  //
+      ch1 = client.parseFloat();
     }
-    Serial.println(line);
+    Serial.print("Output sensor frombase = ");
+    Serial.println(ch1);
+    Serial.println();
+    Serial.println("closing connection");
   }
-  Serial.println("-------------");
-}
-void setup_line() {
-  HTTPClient http;
+  void insert_sensorToBase() {
+    //  insert to database
 
-  cm_0 = 200 - cm;
-  comment = "ระดับน้ำผิดปกติสูงขึ้น" ;
-  //ถ้าค่าติดลบ ให้เซ็ตค่าเป็น 0
-  if (cm_0 < 0) {
-    cm_0 = 0;
-    message_cm = cm_0;
-    messagenoti = comment + "เหลือ : " + message_cm + " เซนติเมตร";
-    Line_Notify(messagenoti);//เตือนไลน์เวลาระดับน้ำสูงผิดปกติ
-  }
-  else {
-    message_cm = cm_0;
-    messagenoti = comment + "เหลือ : " + message_cm + " เซนติเมตร";
-    Line_Notify(messagenoti);//เตือนไลน์เวลาระดับน้ำสูงผิดปกติ
-  }
+    HTTPClient http;
+    String url = "http://192.168.43.104/b_phpProject/addbase.php?level=" + String(cm) ;
+    Serial.println(url);
+    http.begin(url); //HTTP
 
-  String url_line = "http://192.168.43.104/b_phpProject/addNotiLine.php?sensor=" + String(cm) + "&message=" + comment;
-  Serial.println(url_line);
-  http.begin(url_line); //HTTP
+    int httpCode = http.GET();
+    if (httpCode > 0) {
+      Serial.printf("[HTTP] GET... code: %d\n", httpCode);
 
-
-
-  int httpCode = http.GET();
-  if (httpCode > 0) {
-    Serial.printf("[HTTP] GET... code: %d\n", httpCode);
-
-    if (httpCode == HTTP_CODE_OK) {
-      String payload = http.getString();
-      Serial.println(payload);
-
+      if (httpCode == HTTP_CODE_OK) {
+        String payload = http.getString();
+        Serial.println(payload);
+      }
+    } else {
+      Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
     }
-  } else {
-    Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
   }
-  http.end();
+  void Line_Notify(String message) {
+    axTLS::WiFiClientSecure client;
 
-}
+    if (!client.connect("notify-api.line.me", 443)) {
+      Serial.println("connection failed");
+      return;
+    }
+
+    String req = "";
+    req += "POST /api/notify HTTP/1.1\r\n";
+    req += "Host: notify-api.line.me\r\n";
+    req += "Authorization: Bearer " + String(LINE_TOKEN) + "\r\n";
+    req += "Cache-Control: no-cache\r\n";
+    req += "User-Agent: ESP8266\r\n";
+    req += "Content-Type: application/x-www-form-urlencoded\r\n";
+    req += "Content-Length: " + String(String("message=" + message).length()) + "\r\n";
+    req += "\r\n";
+    req += "message=" + message;
+    Serial.println(req);
+    client.print(req);
+    delay(2000);
+
+    Serial.println("-------------");
+    while (client.connected()) {
+      String line = client.readStringUntil('\n');
+      if (line == "\r") {
+        break;
+      }
+      Serial.println(line);
+    }
+    Serial.println("-------------");
+  }
+  void setup_line() {
+    HTTPClient http;
+
+    cm_0 = 200 - cm;
+    comment = "ระดับน้ำผิดปกติสูงขึ้น" ;
+    //ถ้าค่าติดลบ ให้เซ็ตค่าเป็น 0
+    if (cm_0 < 0) {
+      cm_0 = 0;
+      message_cm = cm_0;
+      messagenoti = comment + "เหลือ : " + message_cm + " เซนติเมตร";
+      Line_Notify(messagenoti);//เตือนไลน์เวลาระดับน้ำสูงผิดปกติ
+    }
+    else {
+      message_cm = cm_0;
+      messagenoti = comment + "เหลือ : " + message_cm + " เซนติเมตร";
+      Line_Notify(messagenoti);//เตือนไลน์เวลาระดับน้ำสูงผิดปกติ
+    }
+
+    String url_line = "http://192.168.43.104/b_phpProject/addNotiLine.php?sensor=" + String(cm) + "&message=" + comment;
+    Serial.println(url_line);
+    http.begin(url_line); //HTTP
+
+
+
+    int httpCode = http.GET();
+    if (httpCode > 0) {
+      Serial.printf("[HTTP] GET... code: %d\n", httpCode);
+
+      if (httpCode == HTTP_CODE_OK) {
+        String payload = http.getString();
+        Serial.println(payload);
+
+      }
+    } else {
+      Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
+    }
+    http.end();
+
+  }
+  void setup_line_error() {
+    HTTPClient http;
+
+    comment = "อุปกรณ์เซ็นเซอร์ผิดปกติ" ;
+    //ถ้าค่าติดลบ ให้เซ็ตค่าเป็น 0
+    if (cm > 450) {
+      messagenoti = comment ;
+      Line_Notify(messagenoti);//เตือนไลน์เวลาระดับน้ำสูงผิดปกติ
+    }
+    else {
+      message_cm = cm_0;
+      messagenoti = comment + "เหลือ : " + message_cm + " เซนติเมตร";
+      Line_Notify(messagenoti);//เตือนไลน์เวลาระดับน้ำสูงผิดปกติ
+    }
+
+
+
+  }
 
