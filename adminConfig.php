@@ -27,10 +27,11 @@ $_id = $_SESSION['userid'];
         <li class="breadcrumb-item active">ตั้งค่าระยะเซนเซอร์</li>
       </ol>
 
+
 <div class="card mb-3">
   <div class="card-header">แก้ไขการตั้งค่าระยะเซนเซอร์</div>
     <div class="card-body">
-      <form method="POST" name = "editsensor" onSubmit="return sensor()" >
+      <form class="needs-validation" novalidate method="POST" name = "editsensor" onSubmit="return sensor()" >
       <!-- <form method="POST" action="#"> -->
       <div class="card border-dark">       
             <div class="card-body text-dark">
@@ -43,10 +44,12 @@ $_id = $_SESSION['userid'];
                     </div>
 
                     <div class="col-md-3">
-                      <label for="confirm_password">ระยะเซนเซอร์ที่ต้องการเปลี่ยน(ซม.)</label>
-                      <input class="form-control" id="text2" name="text2" type="text" placeholder="ระยะเซนเซอร์">               
+                      <label for="validationTooltip03">ระยะเซนเซอร์ที่ต้องการเปลี่ยน(ซม.)</label>
+                      <input class="form-control is-invalid" id="validationTooltip03"  name="text2" type="number" onkeypress="return event.charCode >= 48" min="1"  placeholder="ระยะเซนเซอร์"  >                                   
+                      <div class="invalid-tooltip">ตัวเลขเท่านั้น</div>
                     </div>
 
+                  
             <?php 
             require 'dbconnect.php';
             // $cm_value = $value / 100;
@@ -157,14 +160,32 @@ $_id = $_SESSION['userid'];
             }
         }
 ?>
+<script type="text/javascript">
+   $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+
+    $("a").tooltip();
+    $("input").tooltip();
+    $("button").tooltip();
+
+</script>
 <script>
+
                 function sensor()
     {
         var text2 = document.forms['editsensor']['text2'].value;
+        // var elem = document.getElementById('text2').value;
 
        var message = "ยังไม่ได้กรอกข้อมูล \n";
        var valid = true;
        
+    //    if(!elem.match(/^([0-9])+$/i))
+		// {
+		// 	alert("กรอกได้เฉพาะตัวเลขเท่านั้น");
+		// 	document.getElementById('test_txt').value = "";
+		// }
+
        if(text2 == null || text2=='')
        {
            valid = false;
