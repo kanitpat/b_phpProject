@@ -48,11 +48,11 @@ $waterLevel = implode(',', $waterLevel);
         <div class="card-body">ระดับน้ำในสวนตอนนี้
               <?php echo $waters['waterLevel'].' เซนติเมตร';
               $waters = $waters['waterLevel'];
-              if ($waters > 170) {
+              if ($waters >= 170) {
                   echo ' เสี่ยงน้ำท่วมสวน';
-              } if ($waters < 50) {
+              } if ($waters <= 50) {
                   echo ' เสี่ยงน้ำแห้ง';
-              } if (($waters > 50) && ($waters < 170)) {
+              } if (($waters >= 50) && ($waters <= 170)) {
                   echo ' ระดับน้ำปกติ';
               }?></div>
       </div>
@@ -66,22 +66,109 @@ $waterLevel = implode(',', $waterLevel);
       </div>
   </div>
 
-  <!-- <div class="col-6 col-md-4">
-        <div class="card   o-hidden h-100">
-        <a class="weatherwidget-io" href="https://forecast7.com/en/13d76100d50/bangkok/" data-label_1="BANGKOK" data-label_2="WEATHER" data-font="Trebuchet MS" data-icons="Climacons" data-days="5" data-theme="clear" >BANGKOK WEATHER</a>
+<?php
+
+$result = mysqli_query($connect, $query);
+$resultchart = mysqli_query($connect, $query);
+// $waters = $waters['waterLevel'];
+
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_URL, 'http://api.openweathermap.org/data/2.5/forecast?id=1606588&APPID=74a0529397f187dc4b6c0086aed3e3a1');
+$result = curl_exec($ch);
+curl_close($ch);
+
+$obj = json_decode($result, true);
+
+$i = 0;
+
+$datetoday = date('Y-m-d');
+// echo $datetoday;
+
+?>
+<div class="col-6 col-md-4">
+  <div class="card  o-hidden h-100">
+  <div class="card-body">ทำนายปริมาณฝนกับระดับน้ำในสวน :
+  <?php
+foreach ($obj['list'] as $key) {
+    foreach ($key as $keys => $val) {
+        switch ($keys) {
+        case 'dt_txt':
+        $timesub = substr($val, 11, 11);
+        $datesub = substr($val, 0, -9);
+        // echo 	$datesub;
+
+                    if ($datesub == $datetoday) {
+                        // echo '<br>'.$datesub;
+                        $valarrytime[] = $timesub;
+
+                        // echo 	 $timesub;
+                        foreach ($key as $keys => $val) {
+                            switch ($keys) {
+                                    case 'rain':
+                                    if (empty($val)) {
+                                        //  echo "$val empty  <br/>";
+                                        // $valarry[] = $val;
+                                        echo '<br>'.'  ไม่มีปริมาณฝน';
+                                    } else {
+                                        foreach ($val as $val2) {
+                                            //  echo 'Show '.$val2.'<br/>';
+
+                                            // $valarry[] = $val2;
+                                            if ($val2 <= 10.0) {
+                                                echo '<br>'.'ฝนเล็กน้อย'.'ปริมาณฝนอยู่ที่ : '.$val2.' มิลลิเมตร';
+                                                if ($waters <= 50) {
+                                                    echo '<br>'.'ระดับน้ำในสวนตอนนี้เสี่ยงน้ำแห้ง';
+                                                }
+                                            }
+                                            if (($val2 >= 10.1) && ($val2 <= 35.0)) {
+                                                echo '<br>'.'ฝนปานกลาง'.'ปริมาณฝนอยู่ที่ : '.$val2.' มิลลิเมตร';
+                                            }
+                                            if (($val2 >= 35.1) && ($val2 <= 90.0)) {
+                                                echo '<br>'.'ฝนหนัก'.'ปริมาณฝนอยู่ที่ : '.$val2.' มิลลิเมตร';
+                                                if ($waters >= 170) {
+                                                    echo '<br>'.'ระดับน้ำในสวนตอนนี้เสี่ยงน้ำท่วม';
+                                                }
+                                            }
+                                            if ($val2 >= 90.1) {
+                                                echo '<br>'.'ฝนหนักมาก'.'ปริมาณฝนอยู่ที่ : '.$val2.' มิลลิเมตร';
+                                                if ($waters >= 150) {
+                                                    echo '<br>'.'ระดับน้ำในสวนตอนนี้เสี่ยงน้ำท่วม';
+                                                }
+                                            }
+                                        }
+                                    }
+                                    break;
+                                }
+                        }
+                    }
+
+    break;
+        }
+    }
+}
+
+?>
+
 
       </div>
-  </div>
-  </div> -->
-     
-         <!-- <div class="col-xl-3 col-sm-6 mb-3">
-          <div class="card text-white bg-success o-hidden h-100">
-            <div class="card-body">
-              <div class="mr-5">การคำนายล่วงหน้า
-              </div>
-            </div>
-          </div> -->
+</div>
+</div>
+</div>
+
+
+  <!-- <div class="col-6 col-md-4">
+        <div class="card  o-hidden h-100">
+        <div class="card-body"><div class="mr-5">การคาดการณ์ปริมาณฝนและระดับน้ำในสวน</div>
+        
         </div>
+      </div>
+  </div> -->
+
+  
+    
+        <!-- </div> -->
         <br/>   
       <!-- Area Chart Example-->
       <div class="card mb-3">
