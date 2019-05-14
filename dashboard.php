@@ -105,7 +105,13 @@ foreach ($obj['list'] as $key) {
 
                         // echo 	 $timesub;
                         foreach ($key as $keys => $val) {
+                            if (($keys != 'main') && ($keys != 'weather') && ($keys != 'clouds') && ($keys != 'wind') && ($keys != 'rain') && ($keys != 'sys')) {
+                                 
+                                echo   '<br>'.'->  ไม่มีปริมาณฝน';
+                                break;
+                            } 
                             switch ($keys) {
+                                
                                     case 'rain':
                                     if (empty($val)) {
                                         //  echo "$val empty  <br/>";
@@ -141,6 +147,7 @@ foreach ($obj['list'] as $key) {
                                     }
                                     break;
                                 }
+                               
                         }
                     }
 
